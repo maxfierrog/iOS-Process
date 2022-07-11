@@ -11,6 +11,32 @@
 		505D6DC0287C1F9E005A28CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DBF287C1F9E005A28CB /* ContentView.swift */; };
 		505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 505D6DC1287C1F9F005A28CB /* Assets.xcassets */; };
 		505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */; };
+		505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD3287C2116005A28CB /* EditProjectParentView.swift */; };
+		505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD5287C2131005A28CB /* EditTaskParentView.swift */; };
+		505D6DD8287C2143005A28CB /* SelectSubtasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */; };
+		505D6DDA287C2155005A28CB /* SelectCollaboratorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */; };
+		505D6DDC287C215E005A28CB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDB287C215E005A28CB /* LoginView.swift */; };
+		505D6DDE287C216B005A28CB /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDD287C216B005A28CB /* RegistrationView.swift */; };
+		505D6DE0287C2187005A28CB /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDF287C2187005A28CB /* ProjectsView.swift */; };
+		505D6DE2287C2190005A28CB /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE1287C2190005A28CB /* TasksView.swift */; };
+		505D6DE4287C2199005A28CB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE3287C2199005A28CB /* ProfileView.swift */; };
+		505D6DE8287C21B7005A28CB /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE7287C21B7005A28CB /* ExportView.swift */; };
+		505D6DEA287C21CC005A28CB /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE9287C21CC005A28CB /* PreferencesView.swift */; };
+		505D6DED287C2218005A28CB /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEC287C2218005A28CB /* NotificationsView.swift */; };
+		505D6DEF287C2238005A28CB /* NewProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEE287C2238005A28CB /* NewProjectView.swift */; };
+		505D6DF2287C2247005A28CB /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF1287C2247005A28CB /* EditProjectView.swift */; };
+		505D6DF4287C2250005A28CB /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF3287C2250005A28CB /* ProjectView.swift */; };
+		505D6DF7287C227F005A28CB /* NewTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF6287C227F005A28CB /* NewTaskView.swift */; };
+		505D6DF9287C2289005A28CB /* EditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF8287C2289005A28CB /* EditTaskView.swift */; };
+		505D6DFB287C2290005A28CB /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFA287C2290005A28CB /* TaskView.swift */; };
+		505D6DFF287C22E7005A28CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFE287C22E7005A28CB /* User.swift */; };
+		505D6E01287C22F8005A28CB /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E00287C22F8005A28CB /* Project.swift */; };
+		505D6E03287C22FF005A28CB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E02287C22FF005A28CB /* Task.swift */; };
+		505D6E05287C23B8005A28CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505D6E04287C23B8005A28CB /* GoogleService-Info.plist */; };
+		505D6E08287C2499005A28CB /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E07287C2499005A28CB /* FirebaseAnalytics */; };
+		505D6E0A287C2499005A28CB /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E09287C2499005A28CB /* FirebaseAnalyticsSwift */; };
+		505D6E0C287C2499005A28CB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E0B287C2499005A28CB /* FirebaseAuth */; };
+		505D6E0E287C2499005A28CB /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E0D287C2499005A28CB /* FirebaseDatabaseSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +45,28 @@
 		505D6DBF287C1F9E005A28CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		505D6DC1287C1F9F005A28CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		505D6DD3287C2116005A28CB /* EditProjectParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectParentView.swift; sourceTree = "<group>"; };
+		505D6DD5287C2131005A28CB /* EditTaskParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskParentView.swift; sourceTree = "<group>"; };
+		505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSubtasksView.swift; sourceTree = "<group>"; };
+		505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollaboratorsView.swift; sourceTree = "<group>"; };
+		505D6DDB287C215E005A28CB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		505D6DDD287C216B005A28CB /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		505D6DDF287C2187005A28CB /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
+		505D6DE1287C2190005A28CB /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		505D6DE3287C2199005A28CB /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		505D6DE7287C21B7005A28CB /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
+		505D6DE9287C21CC005A28CB /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		505D6DEC287C2218005A28CB /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		505D6DEE287C2238005A28CB /* NewProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectView.swift; sourceTree = "<group>"; };
+		505D6DF1287C2247005A28CB /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
+		505D6DF3287C2250005A28CB /* ProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectView.swift; sourceTree = "<group>"; };
+		505D6DF6287C227F005A28CB /* NewTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskView.swift; sourceTree = "<group>"; };
+		505D6DF8287C2289005A28CB /* EditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskView.swift; sourceTree = "<group>"; };
+		505D6DFA287C2290005A28CB /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		505D6DFE287C22E7005A28CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		505D6E00287C22F8005A28CB /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		505D6E02287C22FF005A28CB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		505D6E04287C23B8005A28CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +74,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				505D6E0E287C2499005A28CB /* FirebaseDatabaseSwift in Frameworks */,
+				505D6E0A287C2499005A28CB /* FirebaseAnalyticsSwift in Frameworks */,
+				505D6E0C287C2499005A28CB /* FirebaseAuth in Frameworks */,
+				505D6E08287C2499005A28CB /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,9 +104,12 @@
 			isa = PBXGroup;
 			children = (
 				505D6DBD287C1F9E005A28CB /* progressApp.swift */,
-				505D6DBF287C1F9E005A28CB /* ContentView.swift */,
 				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
+				505D6E04287C23B8005A28CB /* GoogleService-Info.plist */,
 				505D6DC3287C1F9F005A28CB /* Preview Content */,
+				505D6DFC287C22C4005A28CB /* Utilities */,
+				505D6DFD287C22D8005A28CB /* Models */,
+				505D6DCB287C2029005A28CB /* Views */,
 			);
 			path = progress;
 			sourceTree = "<group>";
@@ -65,6 +120,105 @@
 				505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		505D6DCB287C2029005A28CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DBF287C1F9E005A28CB /* ContentView.swift */,
+				505D6DD2287C2054005A28CB /* ParentViews */,
+				505D6DD1287C2050005A28CB /* SelectionViews */,
+				505D6DD0287C204E005A28CB /* LoginViews */,
+				505D6DCF287C204A005A28CB /* HomeViews */,
+				505D6DCE287C2047005A28CB /* MiscViews */,
+				505D6DCD287C2044005A28CB /* ProjectViews */,
+				505D6DCC287C2041005A28CB /* TaskViews */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		505D6DCC287C2041005A28CB /* TaskViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DF6287C227F005A28CB /* NewTaskView.swift */,
+				505D6DF8287C2289005A28CB /* EditTaskView.swift */,
+				505D6DFA287C2290005A28CB /* TaskView.swift */,
+			);
+			path = TaskViews;
+			sourceTree = "<group>";
+		};
+		505D6DCD287C2044005A28CB /* ProjectViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DEE287C2238005A28CB /* NewProjectView.swift */,
+				505D6DF1287C2247005A28CB /* EditProjectView.swift */,
+				505D6DF3287C2250005A28CB /* ProjectView.swift */,
+			);
+			path = ProjectViews;
+			sourceTree = "<group>";
+		};
+		505D6DCE287C2047005A28CB /* MiscViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DE7287C21B7005A28CB /* ExportView.swift */,
+				505D6DE9287C21CC005A28CB /* PreferencesView.swift */,
+				505D6DEC287C2218005A28CB /* NotificationsView.swift */,
+			);
+			path = MiscViews;
+			sourceTree = "<group>";
+		};
+		505D6DCF287C204A005A28CB /* HomeViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DDF287C2187005A28CB /* ProjectsView.swift */,
+				505D6DE1287C2190005A28CB /* TasksView.swift */,
+				505D6DE3287C2199005A28CB /* ProfileView.swift */,
+			);
+			path = HomeViews;
+			sourceTree = "<group>";
+		};
+		505D6DD0287C204E005A28CB /* LoginViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DDB287C215E005A28CB /* LoginView.swift */,
+				505D6DDD287C216B005A28CB /* RegistrationView.swift */,
+			);
+			path = LoginViews;
+			sourceTree = "<group>";
+		};
+		505D6DD1287C2050005A28CB /* SelectionViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */,
+				505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */,
+			);
+			path = SelectionViews;
+			sourceTree = "<group>";
+		};
+		505D6DD2287C2054005A28CB /* ParentViews */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DD3287C2116005A28CB /* EditProjectParentView.swift */,
+				505D6DD5287C2131005A28CB /* EditTaskParentView.swift */,
+			);
+			path = ParentViews;
+			sourceTree = "<group>";
+		};
+		505D6DFC287C22C4005A28CB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		505D6DFD287C22D8005A28CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E00287C22F8005A28CB /* Project.swift */,
+				505D6E02287C22FF005A28CB /* Task.swift */,
+				505D6DFE287C22E7005A28CB /* User.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +237,12 @@
 			dependencies = (
 			);
 			name = progress;
+			packageProductDependencies = (
+				505D6E07287C2499005A28CB /* FirebaseAnalytics */,
+				505D6E09287C2499005A28CB /* FirebaseAnalyticsSwift */,
+				505D6E0B287C2499005A28CB /* FirebaseAuth */,
+				505D6E0D287C2499005A28CB /* FirebaseDatabaseSwift */,
+			);
 			productName = progress;
 			productReference = 505D6DBA287C1F9E005A28CB /* progress.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +271,9 @@
 				Base,
 			);
 			mainGroup = 505D6DB1287C1F9E005A28CB;
+			packageReferences = (
+				505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 505D6DBB287C1F9E005A28CB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +290,7 @@
 			files = (
 				505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */,
 				505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */,
+				505D6E05287C23B8005A28CB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +302,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				505D6DC0287C1F9E005A28CB /* ContentView.swift in Sources */,
+				505D6DF9287C2289005A28CB /* EditTaskView.swift in Sources */,
+				505D6DDC287C215E005A28CB /* LoginView.swift in Sources */,
+				505D6DFB287C2290005A28CB /* TaskView.swift in Sources */,
+				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
+				505D6DF7287C227F005A28CB /* NewTaskView.swift in Sources */,
+				505D6DD8287C2143005A28CB /* SelectSubtasksView.swift in Sources */,
+				505D6DEA287C21CC005A28CB /* PreferencesView.swift in Sources */,
+				505D6E01287C22F8005A28CB /* Project.swift in Sources */,
+				505D6DF4287C2250005A28CB /* ProjectView.swift in Sources */,
+				505D6DDA287C2155005A28CB /* SelectCollaboratorsView.swift in Sources */,
+				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
+				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
+				505D6DE0287C2187005A28CB /* ProjectsView.swift in Sources */,
+				505D6DF2287C2247005A28CB /* EditProjectView.swift in Sources */,
 				505D6DBE287C1F9E005A28CB /* progressApp.swift in Sources */,
+				505D6DE8287C21B7005A28CB /* ExportView.swift in Sources */,
+				505D6DDE287C216B005A28CB /* RegistrationView.swift in Sources */,
+				505D6DEF287C2238005A28CB /* NewProjectView.swift in Sources */,
+				505D6DE4287C2199005A28CB /* ProfileView.swift in Sources */,
+				505D6DE2287C2190005A28CB /* TasksView.swift in Sources */,
+				505D6DED287C2218005A28CB /* NotificationsView.swift in Sources */,
+				505D6DFF287C22E7005A28CB /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +524,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		505D6E07287C2499005A28CB /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		505D6E09287C2499005A28CB /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		505D6E0B287C2499005A28CB /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		505D6E0D287C2499005A28CB /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 505D6E06287C2499005A28CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 505D6DB2287C1F9E005A28CB /* Project object */;
 }
