@@ -8,13 +8,52 @@
 import SwiftUI
 
 struct RegistrationView: View {
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var email: String = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Register")
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                .padding(.bottom, 45)
+            
+            TextField("email", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .padding()
+                .padding(.bottom, 15)
+            
+            TextField("username", text: $username)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .padding()
+                .padding(.bottom, 15)
+            
+            SecureField("password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .padding()
+                .padding(.bottom, 30)
+            
+            HStack {
+                Button("Register") {
+                    
+                }
+                .frame(width: 100.0, height: 50.0)
+                .buttonStyle(BorderlessButtonStyle())
+            }
+        }
+        .padding()
     }
 }
 
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
         RegistrationView()
+            .previewInterfaceOrientation(.portrait)
     }
 }

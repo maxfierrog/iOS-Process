@@ -8,8 +8,46 @@
 import SwiftUI
 
 struct LoginView: View {
+    @State var username: String = ""
+    @State var password: String = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Progress")
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                .padding(.bottom, 45)
+            
+            TextField("username", text: $username)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .padding()
+                .padding(.bottom, 15)
+            
+            SecureField("password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .padding()
+                .padding(.bottom, 30)
+            
+            HStack {
+                Button("Register") {
+                    
+                }
+                .frame(width: 100.0, height: 50.0)
+                .buttonStyle(BorderlessButtonStyle())
+                
+                Spacer()
+                
+                Button("Log In") {
+                    // FIXME: Show RegistrationView()
+                }
+                .frame(width: 100.0, height: 50.0)
+                .buttonStyle(BorderlessButtonStyle())
+            }
+        }
+        .padding()
     }
 }
 
