@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/schemes/Shape/src/MDCShapeCategory.h

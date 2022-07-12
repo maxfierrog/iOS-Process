@@ -1,1 +1,0 @@
-../../../MotionInterchange/src/MDMSpringTimingCurveGenerator.h

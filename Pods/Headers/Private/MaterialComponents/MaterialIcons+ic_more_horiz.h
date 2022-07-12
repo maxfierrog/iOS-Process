@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/private/Icons/icons/ic_more_horiz/src/MaterialIcons+ic_more_horiz.h

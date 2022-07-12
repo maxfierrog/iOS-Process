@@ -1,1 +1,0 @@
-../../../../MDFInternationalization/Sources/NSLocale+MaterialRTL.h

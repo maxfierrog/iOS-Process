@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/ActivityIndicator/src/private/MDCActivityIndicatorMotionSpec.h

@@ -1,1 +1,0 @@
-../../../MotionInterchange/src/MDMAnimationTraits.h

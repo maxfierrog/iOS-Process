@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/private/Icons/icons/ic_settings/src/MaterialIcons+ic_settings.h

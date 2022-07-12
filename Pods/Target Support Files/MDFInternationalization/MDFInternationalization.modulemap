@@ -1,6 +1,0 @@
-module MDFInternationalization {
-  umbrella header "MDFInternationalization-umbrella.h"
-
-  export *
-  module * { export * }
-}

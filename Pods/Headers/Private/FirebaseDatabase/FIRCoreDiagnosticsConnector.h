@@ -1,1 +1,0 @@
-../../../FirebaseDatabase/FirebaseCore/Extension/FIRCoreDiagnosticsConnector.h

@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/private/Icons/icons/ic_color_lens/src/MaterialIcons+ic_color_lens.h

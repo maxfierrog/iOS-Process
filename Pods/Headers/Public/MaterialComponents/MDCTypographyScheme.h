@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/schemes/Typography/src/MDCTypographyScheme.h

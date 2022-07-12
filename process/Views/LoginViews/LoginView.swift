@@ -33,7 +33,7 @@ struct LoginView: View {
             
             HStack {
                 Button("Register") {
-                    
+                    // FIXME: Show RegistrationView()
                 }
                 .frame(width: 100.0, height: 50.0)
                 .buttonStyle(BorderlessButtonStyle())
@@ -41,7 +41,7 @@ struct LoginView: View {
                 Spacer()
                 
                 Button("Log In") {
-                    // FIXME: Show RegistrationView()
+                    
                 }
                 .frame(width: 100.0, height: 50.0)
                 .buttonStyle(BorderlessButtonStyle())

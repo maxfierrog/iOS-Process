@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/Shadow/src/MDCShadowsCollection.h

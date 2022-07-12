@@ -1,1 +1,0 @@
-../../../MotionInterchange/src/MDMMotionCurve.h

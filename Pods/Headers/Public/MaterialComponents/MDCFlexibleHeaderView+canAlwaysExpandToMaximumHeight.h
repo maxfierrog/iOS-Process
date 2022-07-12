@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/FlexibleHeader/src/CanAlwaysExpandToMaximumHeight/MDCFlexibleHeaderView+canAlwaysExpandToMaximumHeight.h

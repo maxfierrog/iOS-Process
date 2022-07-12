@@ -1,1 +1,0 @@
-../../../MotionAnimator/src/private/MDMDragCoefficient.h

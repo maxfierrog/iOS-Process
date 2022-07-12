@@ -1,1 +1,0 @@
-../../../MaterialComponents/components/BottomNavigation/src/private/MDCBottomNavigationLargeItemDialogView.h
