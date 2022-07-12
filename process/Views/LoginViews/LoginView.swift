@@ -6,48 +6,69 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
-    @State var username: String = ""
+    
+    @State var email: String = ""
     @State var password: String = ""
-    var body: some View {
-        VStack {
-            Text("Process!")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .padding(.bottom, 45)
-            
-            TextField("username", text: $username)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .padding()
-                .padding(.bottom, 15)
-            
-            SecureField("password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .padding()
-                .padding(.bottom, 30)
-            
-            HStack {
-                Button("Register") {
-                    // FIXME: Show RegistrationView()
+    
+    private func didTapLogin() -> (Void) {
+        if (!credentialsInvalid()) {
+            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                if (error == nil) {
+                    // TODO: Show ProjectsView
+                } else {
+                    // TODO: Show alert saying why sign in failed
                 }
-                .frame(width: 100.0, height: 50.0)
-                .buttonStyle(BorderlessButtonStyle())
-                
-                Spacer()
-                
-                Button("Log In") {
-                    
-                }
-                .frame(width: 100.0, height: 50.0)
-                .buttonStyle(BorderlessButtonStyle())
             }
         }
-        .padding()
+    }
+    
+    private func credentialsInvalid() -> (Bool) {
+        // TODO: Check credentials are valid, and do side effects if they are not
+        return false
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Process!")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .padding()
+                    .padding(.bottom, 30)
+                
+                TextField("email", text: $email)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .padding()
+                    .padding(.bottom, 15)
+                
+                SecureField("password", text: $password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .padding()
+                    .padding(.bottom, 30)
+                
+                HStack {
+                    NavigationLink(destination: RegistrationView()) {
+                        Text("Register")
+                    }
+                    .padding()
+                    
+                    Spacer()
+                    
+                    Button("Log In", action: didTapLogin)
+                        .padding()
+                }
+            }
+            .padding()
+            .navigationTitle("Login")
+            .navigationBarHidden(true)
+        }
     }
 }
 

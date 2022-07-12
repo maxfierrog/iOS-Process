@@ -6,11 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct RegistrationView: View {
+    
     @State var username: String = ""
     @State var password: String = ""
     @State var email: String = ""
+    
+    private func didTapRegister() {
+        // FIXME: Ensure credentials are valid, give error otherwise
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            
+        }
+    }
+    
     var body: some View {
         VStack {
             Text("Register")
@@ -18,14 +28,14 @@ struct RegistrationView: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 45)
             
-            TextField("email", text: $email)
+            TextField("username", text: $username)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .padding()
                 .padding(.bottom, 15)
             
-            TextField("username", text: $username)
+            TextField("email", text: $email)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
@@ -40,12 +50,10 @@ struct RegistrationView: View {
                 .padding(.bottom, 30)
             
             HStack {
-                Button("Register") {
-                    
-                }
-                .frame(width: 100.0, height: 50.0)
-                .buttonStyle(BorderlessButtonStyle())
+                Button("Register", action: didTapRegister)
+                    .padding()
             }
+            .padding(.bottom, 40)
         }
         .padding()
     }
