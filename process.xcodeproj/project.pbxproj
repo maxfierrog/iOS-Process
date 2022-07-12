@@ -36,7 +36,7 @@
 		505D6E0A287C2499005A28CB /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E09287C2499005A28CB /* FirebaseAnalyticsSwift */; };
 		505D6E0C287C2499005A28CB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E0B287C2499005A28CB /* FirebaseAuth */; };
 		505D6E0E287C2499005A28CB /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E0D287C2499005A28CB /* FirebaseDatabaseSwift */; };
-		98F07322287D27CC00AAAB32 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98F07321287D27CC00AAAB32 /* GoogleService-Info.plist */; };
+		98F07326287D290E00AAAB32 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98F07325287D290E00AAAB32 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,7 +66,7 @@
 		505D6DFE287C22E7005A28CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		505D6E00287C22F8005A28CB /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		505D6E02287C22FF005A28CB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		98F07321287D27CC00AAAB32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		98F07325287D290E00AAAB32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +105,7 @@
 			children = (
 				505D6DBD287C1F9E005A28CB /* processApp.swift */,
 				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
-				98F07321287D27CC00AAAB32 /* GoogleService-Info.plist */,
+				98F07325287D290E00AAAB32 /* GoogleService-Info.plist */,
 				505D6DC3287C1F9F005A28CB /* Preview Content */,
 				505D6DFC287C22C4005A28CB /* Utilities */,
 				505D6DFD287C22D8005A28CB /* Models */,
@@ -290,7 +290,7 @@
 			files = (
 				505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */,
 				505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */,
-				98F07322287D27CC00AAAB32 /* GoogleService-Info.plist in Resources */,
+				98F07326287D290E00AAAB32 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
