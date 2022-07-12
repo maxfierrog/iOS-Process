@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/BottomNavigation/src/Theming/MDCBottomNavigationBar+MaterialTheming.h

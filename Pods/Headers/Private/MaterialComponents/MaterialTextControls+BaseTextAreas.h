@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/TextControls/src/BaseTextAreas/MaterialTextControls+BaseTextAreas.h

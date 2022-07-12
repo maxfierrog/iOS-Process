@@ -1,0 +1,6 @@
+module MDFTextAccessibility {
+  umbrella header "MDFTextAccessibility-umbrella.h"
+
+  export *
+  module * { export * }
+}

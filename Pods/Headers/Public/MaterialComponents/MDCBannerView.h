@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/Banner/src/MDCBannerView.h

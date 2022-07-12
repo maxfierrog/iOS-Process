@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/private/TextControlsPrivate/src/Shared/UIBezierPath+MDCTextControlStyle.h

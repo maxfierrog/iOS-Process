@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/FlexibleHeader/src/private/MDCFlexibleHeaderHairline.h

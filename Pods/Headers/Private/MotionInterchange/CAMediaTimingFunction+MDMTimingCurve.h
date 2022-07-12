@@ -1,0 +1,1 @@
+../../../MotionInterchange/src/CAMediaTimingFunction+MDMTimingCurve.h

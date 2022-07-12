@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/private/Icons/icons/ic_feedback/src/MaterialIcons+ic_feedback.h

@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/FlexibleHeader/src/ShiftBehavior/MaterialFlexibleHeader+ShiftBehavior.h

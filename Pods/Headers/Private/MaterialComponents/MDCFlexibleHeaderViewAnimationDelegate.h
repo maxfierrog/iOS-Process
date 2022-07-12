@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/FlexibleHeader/src/MDCFlexibleHeaderViewAnimationDelegate.h

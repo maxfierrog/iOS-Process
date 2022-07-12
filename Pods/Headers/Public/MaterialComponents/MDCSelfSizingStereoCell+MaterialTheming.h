@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/List/src/Theming/MDCSelfSizingStereoCell+MaterialTheming.h

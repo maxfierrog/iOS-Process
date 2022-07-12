@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/FlexibleHeader/src/MDCFlexibleHeaderView+ShiftBehavior.h

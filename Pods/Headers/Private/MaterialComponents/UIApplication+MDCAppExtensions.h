@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/private/Application/src/UIApplication+MDCAppExtensions.h

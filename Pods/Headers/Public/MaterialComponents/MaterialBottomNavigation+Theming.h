@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/BottomNavigation/src/Theming/MaterialBottomNavigation+Theming.h

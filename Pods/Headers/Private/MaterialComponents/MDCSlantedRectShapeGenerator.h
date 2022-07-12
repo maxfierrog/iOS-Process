@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/ShapeLibrary/src/MDCSlantedRectShapeGenerator.h

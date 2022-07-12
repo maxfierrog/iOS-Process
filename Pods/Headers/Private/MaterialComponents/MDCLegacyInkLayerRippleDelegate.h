@@ -1,0 +1,1 @@
+../../../MaterialComponents/components/Ink/src/private/MDCLegacyInkLayerRippleDelegate.h
