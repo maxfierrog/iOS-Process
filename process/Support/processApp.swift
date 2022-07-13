@@ -24,7 +24,7 @@ struct processApp: App {
     var body: some Scene {
         WindowGroup {
             // TODO: Decide if user's login is should be persisted
-            ContentView()
+            LoginView()
         }
     }
 }

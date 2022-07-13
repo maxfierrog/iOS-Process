@@ -1,5 +1,5 @@
 //
-//  LoginView.swift
+//  Login.swift
 //  process
 //
 //  Created by Maximo Fierro on 7/11/22.
@@ -9,20 +9,23 @@ import SwiftUI
 import ActionButton
 import Combine
 import FirebaseAuth
-import SwiftUIX
-import CoreAudio
+
 
 enum FocusableLoginField: Hashable {
     case emailField
     case passwordField
 }
 
+
 struct LoginView: View {
+    
+    /* Struct fields */
     
     @StateObject private var model = LoginViewModel()
     @FocusState private var focus: FocusableLoginField?
-    
     @State private var didTapRegister: Bool? = nil
+    
+    /* View declaration */
     
     var body: some View {
         NavigationView {
@@ -72,14 +75,15 @@ struct LoginView: View {
     }
 }
 
+
 class LoginViewModel: ObservableObject {
+    
+    /* Class fields */
     
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
-    
     @Published var loginButtonState: ActionButtonState = ValidationUtils.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
-    
     private var cancellables: Set<AnyCancellable> = []
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
@@ -95,6 +99,8 @@ class LoginViewModel: ObservableObject {
             }
             .eraseToAnyPublisher()
     }
+    
+    /* Methods */
     
     init() {
         emailIsValidPublisher
@@ -119,10 +125,12 @@ class LoginViewModel: ObservableObject {
                 self?.loginButtonState = ValidationUtils.failedLoginButtonState
             } else {
                 self?.loginButtonState = ValidationUtils.successLoginButtonState
+                //FIXME: Show ProjectsView
             }
         }
     }
 }
+
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

@@ -8,27 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		505D6DBE287C1F9E005A28CB /* processApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DBD287C1F9E005A28CB /* processApp.swift */; };
-		505D6DC0287C1F9E005A28CB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DBF287C1F9E005A28CB /* ContentView.swift */; };
 		505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 505D6DC1287C1F9F005A28CB /* Assets.xcassets */; };
-		505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */; };
 		505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD3287C2116005A28CB /* EditProjectParentView.swift */; };
 		505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD5287C2131005A28CB /* EditTaskParentView.swift */; };
-		505D6DD8287C2143005A28CB /* SelectSubtasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */; };
-		505D6DDA287C2155005A28CB /* SelectCollaboratorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */; };
-		505D6DDC287C215E005A28CB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDB287C215E005A28CB /* LoginView.swift */; };
-		505D6DDE287C216B005A28CB /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDD287C216B005A28CB /* RegistrationView.swift */; };
-		505D6DE0287C2187005A28CB /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDF287C2187005A28CB /* ProjectsView.swift */; };
-		505D6DE2287C2190005A28CB /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE1287C2190005A28CB /* TasksView.swift */; };
-		505D6DE4287C2199005A28CB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE3287C2199005A28CB /* ProfileView.swift */; };
-		505D6DE8287C21B7005A28CB /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE7287C21B7005A28CB /* ExportView.swift */; };
-		505D6DEA287C21CC005A28CB /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE9287C21CC005A28CB /* PreferencesView.swift */; };
-		505D6DED287C2218005A28CB /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEC287C2218005A28CB /* NotificationsView.swift */; };
-		505D6DEF287C2238005A28CB /* NewProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEE287C2238005A28CB /* NewProjectView.swift */; };
-		505D6DF2287C2247005A28CB /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF1287C2247005A28CB /* EditProjectView.swift */; };
-		505D6DF4287C2250005A28CB /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF3287C2250005A28CB /* ProjectView.swift */; };
-		505D6DF7287C227F005A28CB /* NewTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF6287C227F005A28CB /* NewTaskView.swift */; };
-		505D6DF9287C2289005A28CB /* EditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF8287C2289005A28CB /* EditTaskView.swift */; };
-		505D6DFB287C2290005A28CB /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFA287C2290005A28CB /* TaskView.swift */; };
+		505D6DD8287C2143005A28CB /* SelectSubtasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD7287C2143005A28CB /* SelectSubtasks.swift */; };
+		505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DD9287C2154005A28CB /* SelectCollaborators.swift */; };
+		505D6DDC287C215E005A28CB /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDB287C215E005A28CB /* Login.swift */; };
+		505D6DDE287C216B005A28CB /* Registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDD287C216B005A28CB /* Registration.swift */; };
+		505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DDF287C2187005A28CB /* ProjectsHome.swift */; };
+		505D6DE2287C2190005A28CB /* TasksHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE1287C2190005A28CB /* TasksHome.swift */; };
+		505D6DE4287C2199005A28CB /* ProfileHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE3287C2199005A28CB /* ProfileHome.swift */; };
+		505D6DE8287C21B7005A28CB /* ExportTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE7287C21B7005A28CB /* ExportTasks.swift */; };
+		505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE9287C21CC005A28CB /* UserPreferences.swift */; };
+		505D6DED287C2218005A28CB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEC287C2218005A28CB /* Notifications.swift */; };
+		505D6DEF287C2238005A28CB /* NewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEE287C2238005A28CB /* NewProject.swift */; };
+		505D6DF2287C2247005A28CB /* EditProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF1287C2247005A28CB /* EditProject.swift */; };
+		505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF3287C2250005A28CB /* ProjectDetails.swift */; };
+		505D6DF7287C227F005A28CB /* NewTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF6287C227F005A28CB /* NewTask.swift */; };
+		505D6DF9287C2289005A28CB /* EditTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF8287C2289005A28CB /* EditTask.swift */; };
+		505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFA287C2290005A28CB /* TaskDetails.swift */; };
 		505D6DFF287C22E7005A28CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFE287C22E7005A28CB /* User.swift */; };
 		505D6E01287C22F8005A28CB /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E00287C22F8005A28CB /* Project.swift */; };
 		505D6E03287C22FF005A28CB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E02287C22FF005A28CB /* Task.swift */; };
@@ -37,6 +35,9 @@
 		505D6E16287EB061005A28CB /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E15287EB061005A28CB /* PasswordField.swift */; };
 		505D6E18287EB24A005A28CB /* EmailField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E17287EB24A005A28CB /* EmailField.swift */; };
 		505D6E1B287EC49B005A28CB /* ValidationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E1A287EC49B005A28CB /* ValidationUtils.swift */; };
+		505D6E21287EEDD3005A28CB /* Invite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E20287EEDD3005A28CB /* Invite.swift */; };
+		505D6E23287EEEA0005A28CB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 505D6E22287EEEA0005A28CB /* Preview Assets.xcassets */; };
+		505D6E26287EF262005A28CB /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E25287EF262005A28CB /* APIHandler.swift */; };
 		9863A22C287D41D7008616B2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22B287D41D7008616B2 /* FirebaseAnalytics */; };
 		9863A22E287D41D7008616B2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22D287D41D7008616B2 /* FirebaseAuth */; };
 		9863A230287D41D7008616B2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22F287D41D7008616B2 /* FirebaseDatabase */; };
@@ -46,27 +47,25 @@
 /* Begin PBXFileReference section */
 		505D6DBA287C1F9E005A28CB /* process.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = process.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		505D6DBD287C1F9E005A28CB /* processApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = processApp.swift; sourceTree = "<group>"; };
-		505D6DBF287C1F9E005A28CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		505D6DC1287C1F9F005A28CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		505D6DD3287C2116005A28CB /* EditProjectParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectParentView.swift; sourceTree = "<group>"; };
 		505D6DD5287C2131005A28CB /* EditTaskParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskParentView.swift; sourceTree = "<group>"; };
-		505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSubtasksView.swift; sourceTree = "<group>"; };
-		505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollaboratorsView.swift; sourceTree = "<group>"; };
-		505D6DDB287C215E005A28CB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		505D6DDD287C216B005A28CB /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
-		505D6DDF287C2187005A28CB /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
-		505D6DE1287C2190005A28CB /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
-		505D6DE3287C2199005A28CB /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		505D6DE7287C21B7005A28CB /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
-		505D6DE9287C21CC005A28CB /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
-		505D6DEC287C2218005A28CB /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
-		505D6DEE287C2238005A28CB /* NewProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectView.swift; sourceTree = "<group>"; };
-		505D6DF1287C2247005A28CB /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
-		505D6DF3287C2250005A28CB /* ProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectView.swift; sourceTree = "<group>"; };
-		505D6DF6287C227F005A28CB /* NewTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskView.swift; sourceTree = "<group>"; };
-		505D6DF8287C2289005A28CB /* EditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskView.swift; sourceTree = "<group>"; };
-		505D6DFA287C2290005A28CB /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		505D6DD7287C2143005A28CB /* SelectSubtasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSubtasks.swift; sourceTree = "<group>"; };
+		505D6DD9287C2154005A28CB /* SelectCollaborators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollaborators.swift; sourceTree = "<group>"; };
+		505D6DDB287C215E005A28CB /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		505D6DDD287C216B005A28CB /* Registration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registration.swift; sourceTree = "<group>"; };
+		505D6DDF287C2187005A28CB /* ProjectsHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsHome.swift; sourceTree = "<group>"; };
+		505D6DE1287C2190005A28CB /* TasksHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksHome.swift; sourceTree = "<group>"; };
+		505D6DE3287C2199005A28CB /* ProfileHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHome.swift; sourceTree = "<group>"; };
+		505D6DE7287C21B7005A28CB /* ExportTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTasks.swift; sourceTree = "<group>"; };
+		505D6DE9287C21CC005A28CB /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		505D6DEC287C2218005A28CB /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		505D6DEE287C2238005A28CB /* NewProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProject.swift; sourceTree = "<group>"; };
+		505D6DF1287C2247005A28CB /* EditProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProject.swift; sourceTree = "<group>"; };
+		505D6DF3287C2250005A28CB /* ProjectDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetails.swift; sourceTree = "<group>"; };
+		505D6DF6287C227F005A28CB /* NewTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTask.swift; sourceTree = "<group>"; };
+		505D6DF8287C2289005A28CB /* EditTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTask.swift; sourceTree = "<group>"; };
+		505D6DFA287C2290005A28CB /* TaskDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetails.swift; sourceTree = "<group>"; };
 		505D6DFE287C22E7005A28CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		505D6E00287C22F8005A28CB /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		505D6E02287C22FF005A28CB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -74,6 +73,9 @@
 		505D6E15287EB061005A28CB /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
 		505D6E17287EB24A005A28CB /* EmailField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailField.swift; sourceTree = "<group>"; };
 		505D6E1A287EC49B005A28CB /* ValidationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationUtils.swift; sourceTree = "<group>"; };
+		505D6E20287EEDD3005A28CB /* Invite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invite.swift; sourceTree = "<group>"; };
+		505D6E22287EEEA0005A28CB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		505D6E25287EF262005A28CB /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,96 +113,75 @@
 		505D6DBC287C1F9E005A28CB /* process */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DBD287C1F9E005A28CB /* processApp.swift */,
-				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
-				505D6E0F287E9317005A28CB /* GoogleService-Info.plist */,
-				505D6DC3287C1F9F005A28CB /* Preview Content */,
+				505D6E1D287EEBDD005A28CB /* Support */,
 				505D6DFC287C22C4005A28CB /* Utilities */,
-				505D6E1C287EC4AC005A28CB /* Components */,
 				505D6DFD287C22D8005A28CB /* Models */,
-				505D6DCB287C2029005A28CB /* Views */,
+				505D6DCB287C2029005A28CB /* Features */,
 			);
 			path = process;
 			sourceTree = "<group>";
 		};
-		505D6DC3287C1F9F005A28CB /* Preview Content */ = {
+		505D6DCB287C2029005A28CB /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DC4287C1F9F005A28CB /* Preview Assets.xcassets */,
+				505D6DD0287C204E005A28CB /* Verification */,
+				505D6DCF287C204A005A28CB /* Projects */,
+				505D6DD1287C2050005A28CB /* Collaboration */,
+				505D6DCE287C2047005A28CB /* Tasks */,
+				505D6DCD287C2044005A28CB /* Profile */,
 			);
-			path = "Preview Content";
+			path = Features;
 			sourceTree = "<group>";
 		};
-		505D6DCB287C2029005A28CB /* Views */ = {
+		505D6DCD287C2044005A28CB /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DBF287C1F9E005A28CB /* ContentView.swift */,
-				505D6DD1287C2050005A28CB /* SelectionViews */,
-				505D6DD0287C204E005A28CB /* LoginViews */,
-				505D6DCF287C204A005A28CB /* HomeViews */,
-				505D6DCE287C2047005A28CB /* MiscViews */,
-				505D6DCD287C2044005A28CB /* ProjectViews */,
-				505D6DCC287C2041005A28CB /* TaskViews */,
+				505D6DE3287C2199005A28CB /* ProfileHome.swift */,
+				505D6DE9287C21CC005A28CB /* UserPreferences.swift */,
 			);
-			path = Views;
+			path = Profile;
 			sourceTree = "<group>";
 		};
-		505D6DCC287C2041005A28CB /* TaskViews */ = {
+		505D6DCE287C2047005A28CB /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DF6287C227F005A28CB /* NewTaskView.swift */,
-				505D6DF8287C2289005A28CB /* EditTaskView.swift */,
-				505D6DFA287C2290005A28CB /* TaskView.swift */,
+				505D6DE1287C2190005A28CB /* TasksHome.swift */,
+				505D6DFA287C2290005A28CB /* TaskDetails.swift */,
+				505D6DF8287C2289005A28CB /* EditTask.swift */,
+				505D6DD7287C2143005A28CB /* SelectSubtasks.swift */,
+				505D6DF6287C227F005A28CB /* NewTask.swift */,
+				505D6DE7287C21B7005A28CB /* ExportTasks.swift */,
 			);
-			path = TaskViews;
+			path = Tasks;
 			sourceTree = "<group>";
 		};
-		505D6DCD287C2044005A28CB /* ProjectViews */ = {
+		505D6DCF287C204A005A28CB /* Projects */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DEE287C2238005A28CB /* NewProjectView.swift */,
-				505D6DF1287C2247005A28CB /* EditProjectView.swift */,
-				505D6DF3287C2250005A28CB /* ProjectView.swift */,
+				505D6DDF287C2187005A28CB /* ProjectsHome.swift */,
+				505D6DF3287C2250005A28CB /* ProjectDetails.swift */,
+				505D6DF1287C2247005A28CB /* EditProject.swift */,
+				505D6DEE287C2238005A28CB /* NewProject.swift */,
 			);
-			path = ProjectViews;
+			path = Projects;
 			sourceTree = "<group>";
 		};
-		505D6DCE287C2047005A28CB /* MiscViews */ = {
+		505D6DD0287C204E005A28CB /* Verification */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DE7287C21B7005A28CB /* ExportView.swift */,
-				505D6DE9287C21CC005A28CB /* PreferencesView.swift */,
-				505D6DEC287C2218005A28CB /* NotificationsView.swift */,
+				505D6DDB287C215E005A28CB /* Login.swift */,
+				505D6DDD287C216B005A28CB /* Registration.swift */,
 			);
-			path = MiscViews;
+			path = Verification;
 			sourceTree = "<group>";
 		};
-		505D6DCF287C204A005A28CB /* HomeViews */ = {
+		505D6DD1287C2050005A28CB /* Collaboration */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DDF287C2187005A28CB /* ProjectsView.swift */,
-				505D6DE1287C2190005A28CB /* TasksView.swift */,
-				505D6DE3287C2199005A28CB /* ProfileView.swift */,
+				505D6DD9287C2154005A28CB /* SelectCollaborators.swift */,
+				505D6DEC287C2218005A28CB /* Notifications.swift */,
 			);
-			path = HomeViews;
-			sourceTree = "<group>";
-		};
-		505D6DD0287C204E005A28CB /* LoginViews */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DDB287C215E005A28CB /* LoginView.swift */,
-				505D6DDD287C216B005A28CB /* RegistrationView.swift */,
-			);
-			path = LoginViews;
-			sourceTree = "<group>";
-		};
-		505D6DD1287C2050005A28CB /* SelectionViews */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DD7287C2143005A28CB /* SelectSubtasksView.swift */,
-				505D6DD9287C2154005A28CB /* SelectCollaboratorsView.swift */,
-			);
-			path = SelectionViews;
+			path = Collaboration;
 			sourceTree = "<group>";
 		};
 		505D6DD2287C2054005A28CB /* ParentViews */ = {
@@ -215,6 +196,7 @@
 		505D6DFC287C22C4005A28CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				505D6E1C287EC4AC005A28CB /* ViewComponents */,
 				505D6E19287EC484005A28CB /* Validation */,
 			);
 			path = Utilities;
@@ -226,34 +208,55 @@
 				505D6E00287C22F8005A28CB /* Project.swift */,
 				505D6E02287C22FF005A28CB /* Task.swift */,
 				505D6DFE287C22E7005A28CB /* User.swift */,
+				505D6E20287EEDD3005A28CB /* Invite.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		505D6E14287EB048005A28CB /* Fields */ = {
+		505D6E14287EB048005A28CB /* TextFields */ = {
 			isa = PBXGroup;
 			children = (
 				505D6E15287EB061005A28CB /* PasswordField.swift */,
 				505D6E17287EB24A005A28CB /* EmailField.swift */,
 			);
-			path = Fields;
+			path = TextFields;
 			sourceTree = "<group>";
 		};
 		505D6E19287EC484005A28CB /* Validation */ = {
 			isa = PBXGroup;
 			children = (
 				505D6E1A287EC49B005A28CB /* ValidationUtils.swift */,
+				505D6E25287EF262005A28CB /* APIHandler.swift */,
 			);
 			path = Validation;
 			sourceTree = "<group>";
 		};
-		505D6E1C287EC4AC005A28CB /* Components */ = {
+		505D6E1C287EC4AC005A28CB /* ViewComponents */ = {
 			isa = PBXGroup;
 			children = (
 				505D6DD2287C2054005A28CB /* ParentViews */,
-				505D6E14287EB048005A28CB /* Fields */,
+				505D6E14287EB048005A28CB /* TextFields */,
 			);
-			path = Components;
+			path = ViewComponents;
+			sourceTree = "<group>";
+		};
+		505D6E1D287EEBDD005A28CB /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E24287EEEAA005A28CB /* Preview Content */,
+				505D6DBD287C1F9E005A28CB /* processApp.swift */,
+				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
+				505D6E0F287E9317005A28CB /* GoogleService-Info.plist */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		505D6E24287EEEAA005A28CB /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E22287EEEA0005A28CB /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,8 +329,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */,
 				505D6E10287E9317005A28CB /* GoogleService-Info.plist in Resources */,
+				505D6E23287EEEA0005A28CB /* Preview Assets.xcassets in Resources */,
 				505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,31 +342,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				505D6DC0287C1F9E005A28CB /* ContentView.swift in Sources */,
-				505D6DF9287C2289005A28CB /* EditTaskView.swift in Sources */,
-				505D6DDC287C215E005A28CB /* LoginView.swift in Sources */,
-				505D6DFB287C2290005A28CB /* TaskView.swift in Sources */,
+				505D6DF9287C2289005A28CB /* EditTask.swift in Sources */,
+				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
+				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
-				505D6DF7287C227F005A28CB /* NewTaskView.swift in Sources */,
-				505D6DD8287C2143005A28CB /* SelectSubtasksView.swift in Sources */,
-				505D6DEA287C21CC005A28CB /* PreferencesView.swift in Sources */,
+				505D6E21287EEDD3005A28CB /* Invite.swift in Sources */,
+				505D6E26287EF262005A28CB /* APIHandler.swift in Sources */,
+				505D6DF7287C227F005A28CB /* NewTask.swift in Sources */,
+				505D6DD8287C2143005A28CB /* SelectSubtasks.swift in Sources */,
+				505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */,
 				505D6E01287C22F8005A28CB /* Project.swift in Sources */,
-				505D6DF4287C2250005A28CB /* ProjectView.swift in Sources */,
-				505D6DDA287C2155005A28CB /* SelectCollaboratorsView.swift in Sources */,
+				505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */,
+				505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */,
 				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
 				505D6E1B287EC49B005A28CB /* ValidationUtils.swift in Sources */,
-				505D6DE0287C2187005A28CB /* ProjectsView.swift in Sources */,
-				505D6DF2287C2247005A28CB /* EditProjectView.swift in Sources */,
+				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
+				505D6DF2287C2247005A28CB /* EditProject.swift in Sources */,
 				505D6DBE287C1F9E005A28CB /* processApp.swift in Sources */,
-				505D6DE8287C21B7005A28CB /* ExportView.swift in Sources */,
-				505D6DDE287C216B005A28CB /* RegistrationView.swift in Sources */,
-				505D6DEF287C2238005A28CB /* NewProjectView.swift in Sources */,
+				505D6DE8287C21B7005A28CB /* ExportTasks.swift in Sources */,
+				505D6DDE287C216B005A28CB /* Registration.swift in Sources */,
+				505D6DEF287C2238005A28CB /* NewProject.swift in Sources */,
 				505D6E18287EB24A005A28CB /* EmailField.swift in Sources */,
-				505D6DE4287C2199005A28CB /* ProfileView.swift in Sources */,
-				505D6DE2287C2190005A28CB /* TasksView.swift in Sources */,
-				505D6DED287C2218005A28CB /* NotificationsView.swift in Sources */,
+				505D6DE4287C2199005A28CB /* ProfileHome.swift in Sources */,
+				505D6DE2287C2190005A28CB /* TasksHome.swift in Sources */,
+				505D6DED287C2218005A28CB /* Notifications.swift in Sources */,
 				505D6DFF287C22E7005A28CB /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,7 +496,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"process/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"process/Support/Preview Content\"";
 				DEVELOPMENT_TEAM = TBMRNTARZF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -521,7 +525,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"process/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"process/Support/Preview Content\"";
 				DEVELOPMENT_TEAM = TBMRNTARZF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
