@@ -6,68 +6,120 @@
 //
 
 import SwiftUI
+import ActionButton
+import Combine
 import FirebaseAuth
+import SwiftUIX
+import CoreAudio
+
+enum FocusableLoginField: Hashable {
+    case emailField
+    case passwordField
+}
 
 struct LoginView: View {
     
-    @State var email: String = ""
-    @State var password: String = ""
+    @StateObject private var model = LoginViewModel()
+    @FocusState private var focus: FocusableLoginField?
     
-    private func didTapLogin() -> (Void) {
-        if (!credentialsInvalid()) {
-            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                if (error == nil) {
-                    // TODO: Show ProjectsView
-                } else {
-                    // TODO: Show alert saying why sign in failed
-                }
-            }
-        }
-    }
-    
-    private func credentialsInvalid() -> (Bool) {
-        // TODO: Check credentials are valid, and do side effects if they are not
-        return false
-    }
+    @State private var didTapRegister: Bool? = nil
     
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Process!")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .padding()
-                    .padding(.bottom, 30)
-                
-                TextField("email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .padding()
-                    .padding(.bottom, 15)
-                
-                SecureField("password", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .padding()
-                    .padding(.bottom, 30)
-                
-                HStack {
-                    NavigationLink(destination: RegistrationView()) {
-                        Text("Register")
-                    }
-                    .padding()
+            GroupBox {
+                VStack (alignment: .center, spacing: 10, content: {
+                    Image("login-image")
+                        .resizable()
+                        .scaledToFit()
                     
-                    Spacer()
+                    EmailField(title: "Email", text: $model.emailField)
+                        .padding(.bottom, 10)
+                        .submitLabel(.next)
+                        .focused($focus, equals: .emailField)
+                        .onSubmit {
+                            focus = .passwordField
+                        }
                     
-                    Button("Log In", action: didTapLogin)
-                        .padding()
+                    PasswordField(title: "Password", text: $model.passwordField)
+                        .padding(.bottom, 20)
+                        .focused($focus, equals: .passwordField)
+                        .submitLabel(.go)
+                        .onSubmit {
+                            model.login()
+                        }
+                })
+                
+                ActionButton(state: $model.loginButtonState, onTap: {
+                    model.login()
+                }, backgroundColor: .primary)
+                
+                Text("or")
+                    .bold()
+                    .font(.subheadline)
+                
+                NavigationLink(destination: RegistrationView(), tag: true, selection: $didTapRegister) {
+                    ActionButton(state: $model.registerButtonState, onTap: {
+                        didTapRegister = true
+                    }, backgroundColor: .primary)
                 }
+            } label: {
+                Label("Welcome!", systemImage: "person.fill")
             }
             .padding()
+            .textFieldStyle(.plain)
             .navigationTitle("Login")
-            .navigationBarHidden(true)
+        }
+    }
+}
+
+class LoginViewModel: ObservableObject {
+    
+    @Published var passwordField: String = ""
+    @Published var emailField: String = ""
+    
+    @Published var loginButtonState: ActionButtonState = ValidationUtils.invalidLoginButtonState
+    @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
+    
+    private var cancellables: Set<AnyCancellable> = []
+    private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
+        $emailField
+            .map { value in
+                ValidationUtils.isValidEmail(value)
+            }
+            .eraseToAnyPublisher()
+    }
+    private var passwordIsValidPublisher: AnyPublisher<Bool, Never> {
+        $passwordField
+            .map { value in
+                !value.isEmpty
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    init() {
+        emailIsValidPublisher
+            .combineLatest(passwordIsValidPublisher)
+            .map { emailValid, passwordValid in
+                emailValid && passwordValid
+            }
+            .map { fieldsValid -> ActionButtonState in
+                if fieldsValid {
+                    return ValidationUtils.enabledLoginButtonState
+                }
+                return ValidationUtils.invalidLoginButtonState
+            }
+            .assign(to: \.loginButtonState, on: self)
+            .store(in: &cancellables)
+    }
+    
+    func login() {
+        loginButtonState = ValidationUtils.loadingLoginButtonState
+        Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
+            if (error != nil) {
+                self?.loginButtonState = ValidationUtils.failedLoginButtonState
+            } else {
+                self?.loginButtonState = ValidationUtils.successLoginButtonState
+            }
         }
     }
 }

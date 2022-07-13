@@ -32,11 +32,15 @@
 		505D6DFF287C22E7005A28CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DFE287C22E7005A28CB /* User.swift */; };
 		505D6E01287C22F8005A28CB /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E00287C22F8005A28CB /* Project.swift */; };
 		505D6E03287C22FF005A28CB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E02287C22FF005A28CB /* Task.swift */; };
+		505D6E10287E9317005A28CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505D6E0F287E9317005A28CB /* GoogleService-Info.plist */; };
+		505D6E13287E9BE3005A28CB /* ActionButton in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E12287E9BE3005A28CB /* ActionButton */; };
+		505D6E16287EB061005A28CB /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E15287EB061005A28CB /* PasswordField.swift */; };
+		505D6E18287EB24A005A28CB /* EmailField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E17287EB24A005A28CB /* EmailField.swift */; };
+		505D6E1B287EC49B005A28CB /* ValidationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E1A287EC49B005A28CB /* ValidationUtils.swift */; };
 		9863A22C287D41D7008616B2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22B287D41D7008616B2 /* FirebaseAnalytics */; };
 		9863A22E287D41D7008616B2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22D287D41D7008616B2 /* FirebaseAuth */; };
 		9863A230287D41D7008616B2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A22F287D41D7008616B2 /* FirebaseDatabase */; };
 		9863A233287D425E008616B2 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A232287D425E008616B2 /* SwiftUIX */; };
-		98F07326287D290E00AAAB32 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98F07325287D290E00AAAB32 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,7 +70,10 @@
 		505D6DFE287C22E7005A28CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		505D6E00287C22F8005A28CB /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		505D6E02287C22FF005A28CB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		98F07325287D290E00AAAB32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		505D6E0F287E9317005A28CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		505D6E15287EB061005A28CB /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
+		505D6E17287EB24A005A28CB /* EmailField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailField.swift; sourceTree = "<group>"; };
+		505D6E1A287EC49B005A28CB /* ValidationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +83,7 @@
 			files = (
 				9863A230287D41D7008616B2 /* FirebaseDatabase in Frameworks */,
 				9863A22C287D41D7008616B2 /* FirebaseAnalytics in Frameworks */,
+				505D6E13287E9BE3005A28CB /* ActionButton in Frameworks */,
 				9863A22E287D41D7008616B2 /* FirebaseAuth in Frameworks */,
 				9863A233287D425E008616B2 /* SwiftUIX in Frameworks */,
 			);
@@ -105,9 +113,10 @@
 			children = (
 				505D6DBD287C1F9E005A28CB /* processApp.swift */,
 				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
-				98F07325287D290E00AAAB32 /* GoogleService-Info.plist */,
+				505D6E0F287E9317005A28CB /* GoogleService-Info.plist */,
 				505D6DC3287C1F9F005A28CB /* Preview Content */,
 				505D6DFC287C22C4005A28CB /* Utilities */,
+				505D6E1C287EC4AC005A28CB /* Components */,
 				505D6DFD287C22D8005A28CB /* Models */,
 				505D6DCB287C2029005A28CB /* Views */,
 			);
@@ -126,7 +135,6 @@
 			isa = PBXGroup;
 			children = (
 				505D6DBF287C1F9E005A28CB /* ContentView.swift */,
-				505D6DD2287C2054005A28CB /* ParentViews */,
 				505D6DD1287C2050005A28CB /* SelectionViews */,
 				505D6DD0287C204E005A28CB /* LoginViews */,
 				505D6DCF287C204A005A28CB /* HomeViews */,
@@ -207,6 +215,7 @@
 		505D6DFC287C22C4005A28CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				505D6E19287EC484005A28CB /* Validation */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -219,6 +228,32 @@
 				505D6DFE287C22E7005A28CB /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		505D6E14287EB048005A28CB /* Fields */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E15287EB061005A28CB /* PasswordField.swift */,
+				505D6E17287EB24A005A28CB /* EmailField.swift */,
+			);
+			path = Fields;
+			sourceTree = "<group>";
+		};
+		505D6E19287EC484005A28CB /* Validation */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E1A287EC49B005A28CB /* ValidationUtils.swift */,
+			);
+			path = Validation;
+			sourceTree = "<group>";
+		};
+		505D6E1C287EC4AC005A28CB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DD2287C2054005A28CB /* ParentViews */,
+				505D6E14287EB048005A28CB /* Fields */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +277,7 @@
 				9863A22D287D41D7008616B2 /* FirebaseAuth */,
 				9863A22F287D41D7008616B2 /* FirebaseDatabase */,
 				9863A232287D425E008616B2 /* SwiftUIX */,
+				505D6E12287E9BE3005A28CB /* ActionButton */,
 			);
 			productName = progress;
 			productReference = 505D6DBA287C1F9E005A28CB /* process.app */;
@@ -274,6 +310,7 @@
 			packageReferences = (
 				9863A22A287D41D7008616B2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				9863A231287D425E008616B2 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
+				505D6E11287E9BE3005A28CB /* XCRemoteSwiftPackageReference "action-button" */,
 			);
 			productRefGroup = 505D6DBB287C1F9E005A28CB /* Products */;
 			projectDirPath = "";
@@ -290,8 +327,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				505D6DC5287C1F9F005A28CB /* Preview Assets.xcassets in Resources */,
+				505D6E10287E9317005A28CB /* GoogleService-Info.plist in Resources */,
 				505D6DC2287C1F9F005A28CB /* Assets.xcassets in Resources */,
-				98F07326287D290E00AAAB32 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,12 +352,15 @@
 				505D6DDA287C2155005A28CB /* SelectCollaboratorsView.swift in Sources */,
 				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
+				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
+				505D6E1B287EC49B005A28CB /* ValidationUtils.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsView.swift in Sources */,
 				505D6DF2287C2247005A28CB /* EditProjectView.swift in Sources */,
 				505D6DBE287C1F9E005A28CB /* processApp.swift in Sources */,
 				505D6DE8287C21B7005A28CB /* ExportView.swift in Sources */,
 				505D6DDE287C216B005A28CB /* RegistrationView.swift in Sources */,
 				505D6DEF287C2238005A28CB /* NewProjectView.swift in Sources */,
+				505D6E18287EB24A005A28CB /* EmailField.swift in Sources */,
 				505D6DE4287C2199005A28CB /* ProfileView.swift in Sources */,
 				505D6DE2287C2190005A28CB /* TasksView.swift in Sources */,
 				505D6DED287C2218005A28CB /* NotificationsView.swift in Sources */,
@@ -527,6 +567,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		505D6E11287E9BE3005A28CB /* XCRemoteSwiftPackageReference "action-button" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftui-library/action-button";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		9863A22A287D41D7008616B2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -546,6 +594,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		505D6E12287E9BE3005A28CB /* ActionButton */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 505D6E11287E9BE3005A28CB /* XCRemoteSwiftPackageReference "action-button" */;
+			productName = ActionButton;
+		};
 		9863A22B287D41D7008616B2 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9863A22A287D41D7008616B2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
