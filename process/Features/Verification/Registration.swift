@@ -24,7 +24,7 @@ struct RegistrationView: View {
     /* Struct fields */
     
     @StateObject private var model = RegistrationViewModel()
-    @FocusState var focus: FocusableRegistrationField?
+    @FocusState private var focus: FocusableRegistrationField?
     
     /* View declaration */
     

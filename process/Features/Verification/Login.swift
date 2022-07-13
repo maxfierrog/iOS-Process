@@ -66,7 +66,7 @@ struct LoginView: View {
                     }, backgroundColor: .primary)
                 }
             } label: {
-                Label("Welcome!", systemImage: "person.fill")
+                Label("Welcome to Process!", systemImage: "person.fill")
             }
             .padding()
             .textFieldStyle(.plain)
