@@ -21,6 +21,7 @@ struct LoginView: View {
     
     /* Struct fields */
     
+    @Environment(\.colorScheme) private var colorScheme
     @StateObject private var model = LoginViewModel()
     @FocusState private var focus: FocusableLoginField?
     @State private var didTapRegister: Bool? = nil
@@ -48,13 +49,13 @@ struct LoginView: View {
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
                         .onSubmit {
-                            model.login()
+                            model.loginUser()
                         }
                 })
                 
                 ActionButton(state: $model.loginButtonState, onTap: {
-                    model.login()
-                }, backgroundColor: .primary)
+                    model.loginUser()
+                }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
                 
                 Text("or")
                     .bold()
@@ -63,13 +64,13 @@ struct LoginView: View {
                 NavigationLink(destination: RegistrationView(), tag: true, selection: $didTapRegister) {
                     ActionButton(state: $model.registerButtonState, onTap: {
                         didTapRegister = true
-                    }, backgroundColor: .primary)
+                    }, backgroundColor: colorScheme == .dark ? .brown : .primary)
                 }
                 
                 Button {
                     model.sendPasswordResetEmail()
                 } label: {
-                    Text("Reset password with email")
+                    Text("Reset password")
                 }
                 .font(.footnote)
                 .padding(.top, 5)
@@ -126,7 +127,7 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func login() {
+    func loginUser() {
         loginButtonState = ValidationUtils.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
             if (error != nil) {
@@ -157,5 +158,6 @@ class LoginViewModel: ObservableObject {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
+            .previewInterfaceOrientation(.portrait)
     }
 }

@@ -25,6 +25,7 @@ struct RegistrationView: View {
     
     @StateObject private var model = RegistrationViewModel()
     @FocusState private var focus: FocusableRegistrationField?
+    @Environment(\.colorScheme) private var colorScheme
     
     /* View declaration */
     
@@ -81,7 +82,7 @@ struct RegistrationView: View {
                 
                 ActionButton(state: $model.registerButtonState, onTap: {
                     model.register()
-                }, backgroundColor: .primary)
+                }, backgroundColor: colorScheme == .dark ? .brown : .primary)
             } label: {
                 Label("We'll just need a few things...", systemImage: "list.bullet.rectangle.fill")
             }
