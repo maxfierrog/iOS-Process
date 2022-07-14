@@ -31,6 +31,8 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             GroupBox {
+                NavigationLink(destination: RegistrationView(), tag: true, selection: $didTapRegister) { EmptyView() }
+                
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("login-image")
                         .resizable()
@@ -61,16 +63,16 @@ struct LoginView: View {
                     .bold()
                     .font(.subheadline)
                 
-                NavigationLink(destination: RegistrationView(), tag: true, selection: $didTapRegister) {
-                    ActionButton(state: $model.registerButtonState, onTap: {
-                        didTapRegister = true
-                    }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-                }
+                ActionButton(state: $model.registerButtonState, onTap: {
+                    didTapRegister = true
+                }, backgroundColor: colorScheme == .dark ? .brown : .primary)
+                .padding(.top, 8)
                 
                 Button {
                     model.sendPasswordResetEmail()
                 } label: {
                     Text("Reset password")
+                        .underline()
                 }
                 .font(.footnote)
                 .padding(.top, 5)
@@ -78,9 +80,9 @@ struct LoginView: View {
                 Label("Welcome to Process!", systemImage: "person.fill")
             }
             .padding()
-            .textFieldStyle(.plain)
             .navigationTitle("Login")
         }
+        .accentColor(Color(.label))
     }
 }
 

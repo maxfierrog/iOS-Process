@@ -40,7 +40,7 @@ struct RegistrationView: View {
                         .padding(.top, 15)
                     
                     TextField(text: $model.usernameField, prompt: Text("Username")) {
-                        Text("Username")
+                        Text("Unique username")
                     }
                     .padding(.bottom, 10)
                     .autocapitalization(.none)
@@ -51,8 +51,8 @@ struct RegistrationView: View {
                         focus = .screenNameField
                     }
                     
-                    TextField(text: $model.screenNameField, prompt: Text("Screen Name")) {
-                        Text("Screen Name")
+                    TextField(text: $model.screenNameField, prompt: Text("Name")) {
+                        Text("Screen name")
                     }
                     .padding(.bottom, 10)
                     .autocapitalization(.none)
@@ -87,9 +87,9 @@ struct RegistrationView: View {
                 Label("We'll just need a few things...", systemImage: "list.bullet.rectangle.fill")
             }
             .padding()
-            .textFieldStyle(.plain)
             .navigationTitle("Register")
         }
+        .accentColor(Color(.label))
     }
 }
 
@@ -152,26 +152,45 @@ class RegistrationViewModel: ObservableObject {
     }
     
     func register() {
-        registerButtonState = ValidationUtils.loadingLoginButtonState
-        Auth.auth().createUser(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
-            if (error == nil) {
-                let newUser: User = User(attributesDict: [
-                    "username": self!.usernameField,
-                    "screenName": self!.screenNameField,
-                    "email": self!.emailField
-                ])
-                APIHandler.uploadNewUser(newUser) { error in
+        registerButtonState = ValidationUtils.loadingRegisterButtonState
+        APIHandler.isUniqueUsername(usernameField) { querySnapshot, error in
+            if (error == nil && querySnapshot!.documents.isEmpty && ValidationUtils.isValidEmail(self.emailField)) {
+                Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
                     if (error == nil) {
-                        self!.registerButtonState = ValidationUtils.successLoginButtonState
-                        // TODO: Navigate to projects view
+                        let newUser: User = User(attributesDict: [
+                            "username": self!.usernameField,
+                            "screenName": self!.screenNameField,
+                            "email": self!.emailField
+                        ])
+                        APIHandler.uploadNewUser(newUser) { error in
+                            if (error == nil) {
+                                self!.registerButtonState = ValidationUtils.successLoginButtonState
+                                // TODO: Navigate to projects view
+                                print("Registered, uploaded, and logged in")
+                            } else {
+                                self!.registerButtonState = ValidationUtils.failedRegisterButtonState
+                                // TODO: Show banner with custom error
+                                print(error?.localizedDescription)
+                            }
+                        }
                     } else {
                         self!.registerButtonState = ValidationUtils.failedRegisterButtonState
-                        // TODO: Show banner with error
+                        // TODO: Show banner with custom error
+                        print(error?.localizedDescription)
                     }
                 }
+            } else if (!querySnapshot!.documents.isEmpty) {
+                self.registerButtonState = ValidationUtils.failedRegisterButtonState
+                // TODO: Show banner with repeated username error
+                print("Repreated username")
+            } else if (!ValidationUtils.isValidEmail(self.emailField)) {
+                self.registerButtonState = ValidationUtils.invalidRegisterButtonState
+                // TODO: Show banner with email format error
+                print("Bad email format")
             } else {
-                self!.registerButtonState = ValidationUtils.failedRegisterButtonState
-                // TODO: Show banner with error
+                self.registerButtonState = ValidationUtils.failedRegisterButtonState
+                // TODO: Show banner with custom error
+                print("query error")
             }
         }
     }

@@ -18,4 +18,13 @@ class APIHandler {
             completion(err)
         }
     }
+    
+    static func isUniqueUsername(_ username: String,
+                                 _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> ()) {
+        let usersCollection = Firestore.firestore().collection("users")
+        let query = usersCollection.whereField("username", isEqualTo: username)
+        query.getDocuments { querySnapshot, error in
+            completion(querySnapshot, error)
+        }
+    }
 }

@@ -12,12 +12,14 @@ class User {
     
     /* Fields */
     
-    static let availableUserAttributes: Array<String> = ["username",
-                                                         "screenName",
-                                                         "email"]
+    static let validUserAttributes: Array<String> = [
+        "username",
+        "screenName",
+        "email"
+    ]
     
-    public var id: String
-    public var attributes: Dictionary<String, String> = [:]
+    var id: String
+    var attributes: Dictionary<String, String> = [:]
     
     /* Methods */
     
@@ -37,7 +39,7 @@ class User {
     
     private func keysAreUserAttributes(_ dictionary: Dictionary<String, String>) -> (Bool) {
         for (key, _) in dictionary {
-            guard User.availableUserAttributes.contains(key) else {
+            guard User.validUserAttributes.contains(key) else {
                 return false
             }
         }
