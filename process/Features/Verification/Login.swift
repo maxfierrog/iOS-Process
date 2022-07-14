@@ -65,6 +65,14 @@ struct LoginView: View {
                         didTapRegister = true
                     }, backgroundColor: .primary)
                 }
+                
+                Button {
+                    model.sendPasswordResetEmail()
+                } label: {
+                    Text("Reset password with email")
+                }
+                .font(.footnote)
+                .padding(.top, 5)
             } label: {
                 Label("Welcome to Process!", systemImage: "person.fill")
             }
@@ -126,6 +134,20 @@ class LoginViewModel: ObservableObject {
             } else {
                 self?.loginButtonState = ValidationUtils.successLoginButtonState
                 //FIXME: Show ProjectsView
+            }
+        }
+    }
+    
+    func sendPasswordResetEmail() {
+        guard ValidationUtils.isValidEmail(emailField) else {
+            // FIXME: Show "invalid email" on banner
+            return
+        }
+        Auth.auth().sendPasswordReset(withEmail: emailField) { error in
+            if (error != nil) {
+                // FIXME: Show error on banner
+            } else {
+                // FIXME: Show success baner
             }
         }
     }

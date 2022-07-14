@@ -155,6 +155,7 @@ class RegistrationViewModel: ObservableObject {
         Auth.auth().createUser(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
             if (error != nil) {
                 self?.registerButtonState = ValidationUtils.failedRegisterButtonState
+                print(error?.localizedDescription)
                 // TODO: Show banner with error
             } else {
                 self?.registerButtonState = ValidationUtils.successLoginButtonState
