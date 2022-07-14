@@ -7,9 +7,15 @@
 
 import Foundation
 import FirebaseAuth
+import FirebaseFirestore
 
 class APIHandler {
     
-    /* Firebase Auth */
+    /* Firebase Firestore */
     
+    static func uploadNewUser(_ user: User, _ completion: @escaping(_ error: Error?) -> ()) {
+        Firestore.firestore().collection("users").document(user.id).setData(user.attributes) { err in
+            completion(err)
+        }
+    }
 }

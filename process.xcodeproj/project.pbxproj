@@ -207,9 +207,9 @@
 		505D6DFD287C22D8005A28CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				505D6DFE287C22E7005A28CB /* User.swift */,
 				505D6E00287C22F8005A28CB /* Project.swift */,
 				505D6E02287C22FF005A28CB /* Task.swift */,
-				505D6DFE287C22E7005A28CB /* User.swift */,
 				505D6E20287EEDD3005A28CB /* Invite.swift */,
 			);
 			path = Models;

@@ -154,13 +154,24 @@ class RegistrationViewModel: ObservableObject {
     func register() {
         registerButtonState = ValidationUtils.loadingLoginButtonState
         Auth.auth().createUser(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
-            if (error != nil) {
-                self?.registerButtonState = ValidationUtils.failedRegisterButtonState
-                print(error?.localizedDescription)
-                // TODO: Show banner with error
+            if (error == nil) {
+                let newUser: User = User(attributesDict: [
+                    "username": self!.usernameField,
+                    "screenName": self!.screenNameField,
+                    "email": self!.emailField
+                ])
+                APIHandler.uploadNewUser(newUser) { error in
+                    if (error == nil) {
+                        self!.registerButtonState = ValidationUtils.successLoginButtonState
+                        // TODO: Navigate to projects view
+                    } else {
+                        self!.registerButtonState = ValidationUtils.failedRegisterButtonState
+                        // TODO: Show banner with error
+                    }
+                }
             } else {
-                self?.registerButtonState = ValidationUtils.successLoginButtonState
-                // TODO: Show ProjectsView
+                self!.registerButtonState = ValidationUtils.failedRegisterButtonState
+                // TODO: Show banner with error
             }
         }
     }
