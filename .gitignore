@@ -1,2 +1,3 @@
 .DS_Store
-process/Support/GoogleService-Info.plist
+process/Secrets
+

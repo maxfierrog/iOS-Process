@@ -6,15 +6,15 @@
 //
 
 import Foundation
-import SwiftUI
 
 public struct User: Codable {
     
     var authID: String
     var username: String
     var screenName: String
+    var profilePictureID: String?
+    
     var assignedTasks: Array<String>
-    var profilePictureRef: String?
     var ownedProjects: Array<Project>
     var invitedProjects: Array<Project>
     var receivedInvites: Array<Invite>
@@ -24,7 +24,7 @@ public struct User: Codable {
         case username
         case screenName
         case assignedTasks
-        case profilePictureRef
+        case profilePictureID
         case ownedProjects
         case invitedProjects
         case receivedInvites

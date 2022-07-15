@@ -91,7 +91,7 @@ class LoginViewModel: ObservableObject {
     @Published var emailField: String = ""
     @Published var navigateToRegister: Bool? = nil
     
-    @Published var loginButtonState: ActionButtonState = ValidationUtils.invalidLoginButtonState
+    @Published var loginButtonState: ActionButtonState = VerificationUtils.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
     
     @Published var showErrorBanner:Bool = false
@@ -101,7 +101,7 @@ class LoginViewModel: ObservableObject {
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
             .map { value in
-                ValidationUtils.isValidEmail(value)
+                VerificationUtils.isValidEmail(value)
             }
             .eraseToAnyPublisher()
     }
@@ -123,28 +123,28 @@ class LoginViewModel: ObservableObject {
             }
             .map { fieldsValid -> ActionButtonState in
                 if fieldsValid {
-                    return ValidationUtils.enabledLoginButtonState
+                    return VerificationUtils.enabledLoginButtonState
                 }
-                return ValidationUtils.invalidLoginButtonState
+                return VerificationUtils.invalidLoginButtonState
             }
             .assign(to: \.loginButtonState, on: self)
             .store(in: &cancellables)
     }
     
     func loginUser() {
-        loginButtonState = ValidationUtils.loadingLoginButtonState
+        loginButtonState = VerificationUtils.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
             if (error != nil) {
-                self!.loginButtonState = ValidationUtils.failedLoginButtonState
+                self!.loginButtonState = VerificationUtils.failedLoginButtonState
             } else {
-                self!.loginButtonState = ValidationUtils.successLoginButtonState
+                self!.loginButtonState = VerificationUtils.successLoginButtonState
                 //FIXME: Show ProjectsView
             }
         }
     }
     
     func sendPasswordResetEmail() {
-        guard ValidationUtils.isValidEmail(emailField) else {
+        guard VerificationUtils.isValidEmail(emailField) else {
             setBannerToGenericError("Please enter a valid email address.")
             return
         }

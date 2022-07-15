@@ -105,7 +105,7 @@ class RegistrationViewModel: ObservableObject {
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     
-    @Published var registerButtonState: ActionButtonState = ValidationUtils.invalidRegisterButtonState
+    @Published var registerButtonState: ActionButtonState = VerificationUtils.invalidRegisterButtonState
     @Published var registrationHasError: Bool = false
     
     @Published var showErrorBanner:Bool = false
@@ -115,7 +115,7 @@ class RegistrationViewModel: ObservableObject {
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
             .map { value in
-                ValidationUtils.isValidEmail(value)
+                VerificationUtils.isValidEmail(value)
             }
             .eraseToAnyPublisher()
     }
@@ -151,40 +151,40 @@ class RegistrationViewModel: ObservableObject {
             }
             .map { fieldsValid -> ActionButtonState in
                 if fieldsValid {
-                    return ValidationUtils.enabledRegisterButtonState
+                    return VerificationUtils.enabledRegisterButtonState
                 }
-                return ValidationUtils.invalidRegisterButtonState
+                return VerificationUtils.invalidRegisterButtonState
             }
             .assign(to: \.registerButtonState, on: self)
             .store(in: &cancellables)
     }
     
     func register() {
-        registerButtonState = ValidationUtils.loadingRegisterButtonState
+        registerButtonState = VerificationUtils.loadingRegisterButtonState
         APIHandler.matchUsernameQuery(usernameField) { querySnapshot, error in
-            if (error == nil && querySnapshot!.documents.isEmpty && ValidationUtils.isValidEmail(self.emailField)) {
+            if (error == nil && querySnapshot!.documents.isEmpty && VerificationUtils.isValidEmail(self.emailField)) {
                 Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
                     if (error == nil) {
                         let newUser = User(username: self!.usernameField, screenName: self!.screenNameField)
                         APIHandler.uploadNewUser(newUser) { error in
                             if (error == nil) {
-                                self!.registerButtonState = ValidationUtils.successLoginButtonState
+                                self!.registerButtonState = VerificationUtils.successLoginButtonState
                                 // TODO: Navigate to projects view
                             } else {
-                                self!.registerButtonState = ValidationUtils.failedRegisterButtonState
+                                self!.registerButtonState = VerificationUtils.failedRegisterButtonState
                                 self!.setBannerToGenericError(error!.localizedDescription)
                             }
                         }
                     } else {
-                        self!.registerButtonState = ValidationUtils.failedRegisterButtonState
+                        self!.registerButtonState = VerificationUtils.failedRegisterButtonState
                         self!.setBannerToGenericError(error!.localizedDescription)
                     }
                 }
             } else if (!querySnapshot!.documents.isEmpty) {
-                self.registerButtonState = ValidationUtils.failedRegisterButtonState
+                self.registerButtonState = VerificationUtils.failedRegisterButtonState
                 self.setBannerToGenericError("Sorry, that username is already being used by someone else.")
             } else {
-                self.registerButtonState = ValidationUtils.failedRegisterButtonState
+                self.registerButtonState = VerificationUtils.failedRegisterButtonState
                 self.setBannerToGenericError(error!.localizedDescription)
             }
         }

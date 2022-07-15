@@ -8,7 +8,7 @@
 import Foundation
 import ActionButton
 
-class ValidationUtils {
+class VerificationUtils {
     
     /* Login button states */
     
