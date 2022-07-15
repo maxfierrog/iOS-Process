@@ -6,43 +6,39 @@
 //
 
 import Foundation
+import SwiftUI
 
+public struct User: Codable {
+    
+    var authID: String
+    var username: String
+    var screenName: String
+    var assignedTasks: Array<String>
+    var profilePictureRef: String?
+    var ownedProjects: Array<Project>
+    var invitedProjects: Array<Project>
+    var receivedInvites: Array<Invite>
+    
+    enum CodingKeys: String, CodingKey {
+        case authID
+        case username
+        case screenName
+        case assignedTasks
+        case profilePictureRef
+        case ownedProjects
+        case invitedProjects
+        case receivedInvites
+    }
+}
 
-class User {
-    
-    /* Fields */
-    
-    static let validUserAttributes: Array<String> = [
-        "username",
-        "screenName",
-        "email"
-    ]
-    
-    var id: String
-    var attributes: Dictionary<String, String> = [:]
-    
-    /* Methods */
-    
-    init() {
-        id = UUID.init().uuidString
-    }
-    
-    init(attributesDict: Dictionary<String, String>) {
-        id = UUID.init().uuidString
-        addAttributesWithDictionary(attributesDict)
-    }
-    
-    func addAttributesWithDictionary(_ attributesDict: Dictionary<String, String>) {
-        guard keysAreUserAttributes(attributesDict) else { return }
-        self.attributes = attributesDict
-    }
-    
-    private func keysAreUserAttributes(_ dictionary: Dictionary<String, String>) -> (Bool) {
-        for (key, _) in dictionary {
-            guard User.validUserAttributes.contains(key) else {
-                return false
-            }
-        }
-        return true
+extension User {
+    init(username: String, screenName: String) {
+        self.authID = APIHandler.currentUserAuthID()
+        self.username = username
+        self.screenName = screenName
+        self.assignedTasks = []
+        self.ownedProjects = []
+        self.invitedProjects = []
+        self.receivedInvites = []
     }
 }

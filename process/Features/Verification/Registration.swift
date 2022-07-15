@@ -161,15 +161,11 @@ class RegistrationViewModel: ObservableObject {
     
     func register() {
         registerButtonState = ValidationUtils.loadingRegisterButtonState
-        APIHandler.isUniqueUsername(usernameField) { querySnapshot, error in
+        APIHandler.matchUsernameQuery(usernameField) { querySnapshot, error in
             if (error == nil && querySnapshot!.documents.isEmpty && ValidationUtils.isValidEmail(self.emailField)) {
                 Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
                     if (error == nil) {
-                        let newUser: User = User(attributesDict: [
-                            "username": self!.usernameField,
-                            "screenName": self!.screenNameField,
-                            "email": self!.emailField
-                        ])
+                        let newUser = User(username: self!.usernameField, screenName: self!.screenNameField)
                         APIHandler.uploadNewUser(newUser) { error in
                             if (error == nil) {
                                 self!.registerButtonState = ValidationUtils.successLoginButtonState

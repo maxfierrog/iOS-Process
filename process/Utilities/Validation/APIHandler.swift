@@ -8,23 +8,31 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class APIHandler {
     
-    /* Firebase Firestore */
+    /* User requests */
     
     static func uploadNewUser(_ user: User, _ completion: @escaping(_ error: Error?) -> ()) {
-        Firestore.firestore().collection("users").document(user.id).setData(user.attributes) { err in
-            completion(err)
+        do {
+            try Firestore.firestore().collection("users").document(UUID().uuidString).setData(from: user)
+            completion(nil)
+        } catch let error {
+            completion(error)
         }
     }
     
-    static func isUniqueUsername(_ username: String,
-                                 _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> ()) {
+    static func matchUsernameQuery(_ username: String,
+                                   _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> ()) {
         let usersCollection = Firestore.firestore().collection("users")
         let query = usersCollection.whereField("username", isEqualTo: username)
         query.getDocuments { querySnapshot, error in
             completion(querySnapshot, error)
         }
+    }
+    
+    static func currentUserAuthID() -> String {
+        return Auth.auth().currentUser!.uid
     }
 }

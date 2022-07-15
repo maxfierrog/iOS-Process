@@ -8,7 +8,12 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseAnalytics
+import FirebaseAnalyticsSwift
 import FirebaseFirestore
+import FirebaseFirestoreSwift
+
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -17,6 +22,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     return true
   }
 }
+
 
 @main
 struct processApp: App {
