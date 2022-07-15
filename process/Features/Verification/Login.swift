@@ -24,14 +24,13 @@ struct LoginView: View {
     @Environment(\.colorScheme) private var colorScheme
     @StateObject private var model = LoginViewModel()
     @FocusState private var focus: FocusableLoginField?
-    @State private var didTapRegister: Bool? = nil
     
     /* View declaration */
     
     var body: some View {
         NavigationView {
             GroupBox {
-                NavigationLink(destination: RegistrationView(), tag: true, selection: $didTapRegister) { EmptyView() }
+                NavigationLink(destination: RegistrationView(), tag: true, selection: $model.navigateToRegister) { }
                 
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("login-image")
@@ -50,9 +49,6 @@ struct LoginView: View {
                         .padding(.bottom, 20)
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
-                        .onSubmit {
-                            model.loginUser()
-                        }
                 })
                 
                 ActionButton(state: $model.loginButtonState, onTap: {
@@ -64,14 +60,13 @@ struct LoginView: View {
                     .font(.subheadline)
                 
                 ActionButton(state: $model.registerButtonState, onTap: {
-                    didTapRegister = true
+                    model.didTapRegister()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-                .padding(.top, 8)
                 
                 Button {
                     model.sendPasswordResetEmail()
                 } label: {
-                    Text("Reset password")
+                    Text("Forgot password")
                         .underline()
                 }
                 .font(.footnote)
@@ -83,6 +78,7 @@ struct LoginView: View {
             .navigationTitle("Login")
         }
         .accentColor(Color(.label))
+        .banner(data: $model.bannerData, show: $model.showErrorBanner)
     }
 }
 
@@ -93,8 +89,14 @@ class LoginViewModel: ObservableObject {
     
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
+    @Published var navigateToRegister: Bool? = nil
+    
     @Published var loginButtonState: ActionButtonState = ValidationUtils.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
+    
+    @Published var showErrorBanner:Bool = false
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    
     private var cancellables: Set<AnyCancellable> = []
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
@@ -133,9 +135,9 @@ class LoginViewModel: ObservableObject {
         loginButtonState = ValidationUtils.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
             if (error != nil) {
-                self?.loginButtonState = ValidationUtils.failedLoginButtonState
+                self!.loginButtonState = ValidationUtils.failedLoginButtonState
             } else {
-                self?.loginButtonState = ValidationUtils.successLoginButtonState
+                self!.loginButtonState = ValidationUtils.successLoginButtonState
                 //FIXME: Show ProjectsView
             }
         }
@@ -143,16 +145,27 @@ class LoginViewModel: ObservableObject {
     
     func sendPasswordResetEmail() {
         guard ValidationUtils.isValidEmail(emailField) else {
-            // FIXME: Show "invalid email" on banner
+            setBannerToGenericError("Please enter a valid email address.")
             return
         }
         Auth.auth().sendPasswordReset(withEmail: emailField) { error in
-            if (error != nil) {
-                // FIXME: Show error on banner
-            } else {
-                // FIXME: Show success baner
-            }
+            self.bannerData.title = "Email sent"
+            self.bannerData.detail = "We have sent a recovery link to the account associated with that email address, if there is one."
+            self.bannerData.type = .Info
+            self.showErrorBanner = true
         }
+    }
+    
+    func didTapRegister() {
+        showErrorBanner = false
+        navigateToRegister = true
+    }
+    
+    private func setBannerToGenericError(_ message: String) {
+        bannerData.title = "Error"
+        bannerData.detail = message
+        bannerData.type = .Error
+        showErrorBanner = true
     }
 }
 

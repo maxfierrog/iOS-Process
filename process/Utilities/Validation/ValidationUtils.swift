@@ -41,10 +41,4 @@ class ValidationUtils {
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
-    
-    static func isValidUsername(_ username: String) -> Bool {
-        // FIXME: Check if there is someone with this username in database
-        return !username.isEmpty
-    }
-    
 }

@@ -39,6 +39,7 @@
 		505D6E26287EF262005A28CB /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E25287EF262005A28CB /* APIHandler.swift */; };
 		9863A233287D425E008616B2 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 9863A232287D425E008616B2 /* SwiftUIX */; };
 		9863A236287F64BE008616B2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9863A235287F64BE008616B2 /* Preview Assets.xcassets */; };
+		9879C1552880C385009A34D3 /* BannerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9879C1542880C385009A34D3 /* BannerModifier.swift */; };
 		98CBC6CE2880044F009D9F5D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 98CBC6CD2880044F009D9F5D /* FirebaseAnalytics */; };
 		98CBC6D02880044F009D9F5D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 98CBC6CF2880044F009D9F5D /* FirebaseAuth */; };
 		98CBC6D22880044F009D9F5D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 98CBC6D12880044F009D9F5D /* FirebaseFirestore */; };
@@ -77,6 +78,7 @@
 		505D6E20287EEDD3005A28CB /* Invite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invite.swift; sourceTree = "<group>"; };
 		505D6E25287EF262005A28CB /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		9863A235287F64BE008616B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9879C1542880C385009A34D3 /* BannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +222,7 @@
 			children = (
 				505D6E15287EB061005A28CB /* PasswordField.swift */,
 				505D6E17287EB24A005A28CB /* EmailField.swift */,
+				9879C1542880C385009A34D3 /* BannerModifier.swift */,
 			);
 			path = TextFields;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				505D6E01287C22F8005A28CB /* Project.swift in Sources */,
 				505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */,
 				505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */,
+				9879C1552880C385009A34D3 /* BannerModifier.swift in Sources */,
 				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
