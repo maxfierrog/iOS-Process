@@ -60,7 +60,7 @@ struct BannerModifier: ViewModifier {
                     Spacer()
                 }
                 .padding()
-                .animation(.easeInOut)
+                .animation(.easeInOut) // FIXME: Find replacement that works
                 .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                 .onTapGesture {
                     withAnimation {
@@ -76,7 +76,6 @@ struct BannerModifier: ViewModifier {
             }
         }
     }
-
 }
 
 extension View {

@@ -46,6 +46,7 @@
 		9879C16728813B5D009A34D3 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9879C16628813B5D009A34D3 /* FirebaseFirestore */; };
 		9879C16928813B5D009A34D3 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9879C16828813B5D009A34D3 /* FirebaseFirestoreSwift */; };
 		9879C16B28813B5D009A34D3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9879C16A28813B5D009A34D3 /* FirebaseStorage */; };
+		9879C16F28854896009A34D3 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9879C16E28854896009A34D3 /* Home.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,7 @@
 		505D6E25287EF262005A28CB /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		9863A235287F64BE008616B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9879C1542880C385009A34D3 /* BannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerModifier.swift; sourceTree = "<group>"; };
+		9879C16E28854896009A34D3 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,33 +135,32 @@
 		505D6DCB287C2029005A28CB /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				9879C16D2885482E009A34D3 /* Home */,
 				505D6DD0287C204E005A28CB /* Verification */,
 				505D6DCF287C204A005A28CB /* Projects */,
-				505D6DD1287C2050005A28CB /* Collaboration */,
 				505D6DCE287C2047005A28CB /* Tasks */,
-				505D6DCD287C2044005A28CB /* Profile */,
+				505D6DCD287C2044005A28CB /* Misc */,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
-		505D6DCD287C2044005A28CB /* Profile */ = {
+		505D6DCD287C2044005A28CB /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DE3287C2199005A28CB /* ProfileHome.swift */,
+				505D6DEC287C2218005A28CB /* Notifications.swift */,
+				505D6DE7287C21B7005A28CB /* ExportTasks.swift */,
 				505D6DE9287C21CC005A28CB /* UserPreferences.swift */,
 			);
-			path = Profile;
+			path = Misc;
 			sourceTree = "<group>";
 		};
 		505D6DCE287C2047005A28CB /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DE1287C2190005A28CB /* TasksHome.swift */,
 				505D6DFA287C2290005A28CB /* TaskDetails.swift */,
 				505D6DF8287C2289005A28CB /* EditTask.swift */,
 				505D6DD7287C2143005A28CB /* SelectSubtasks.swift */,
 				505D6DF6287C227F005A28CB /* NewTask.swift */,
-				505D6DE7287C21B7005A28CB /* ExportTasks.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -167,10 +168,10 @@
 		505D6DCF287C204A005A28CB /* Projects */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DDF287C2187005A28CB /* ProjectsHome.swift */,
 				505D6DF3287C2250005A28CB /* ProjectDetails.swift */,
 				505D6DF1287C2247005A28CB /* EditProject.swift */,
 				505D6DEE287C2238005A28CB /* NewProject.swift */,
+				505D6DD9287C2154005A28CB /* SelectCollaborators.swift */,
 			);
 			path = Projects;
 			sourceTree = "<group>";
@@ -182,15 +183,6 @@
 				505D6DDD287C216B005A28CB /* Registration.swift */,
 			);
 			path = Verification;
-			sourceTree = "<group>";
-		};
-		505D6DD1287C2050005A28CB /* Collaboration */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DD9287C2154005A28CB /* SelectCollaborators.swift */,
-				505D6DEC287C2218005A28CB /* Notifications.swift */,
-			);
-			path = Collaboration;
 			sourceTree = "<group>";
 		};
 		505D6DD2287C2054005A28CB /* ParentViews */ = {
@@ -274,6 +266,17 @@
 				505D6E0F287E9317005A28CB /* GoogleService-Info.plist */,
 			);
 			path = Secrets;
+			sourceTree = "<group>";
+		};
+		9879C16D2885482E009A34D3 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				9879C16E28854896009A34D3 /* Home.swift */,
+				505D6DE3287C2199005A28CB /* ProfileHome.swift */,
+				505D6DE1287C2190005A28CB /* TasksHome.swift */,
+				505D6DDF287C2187005A28CB /* ProjectsHome.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -365,6 +368,7 @@
 				505D6DF9287C2289005A28CB /* EditTask.swift in Sources */,
 				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
 				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
+				9879C16F28854896009A34D3 /* Home.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
 				505D6E21287EEDD3005A28CB /* Invite.swift in Sources */,
 				505D6E26287EF262005A28CB /* APIHandler.swift in Sources */,

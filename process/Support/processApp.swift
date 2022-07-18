@@ -10,9 +10,7 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseAnalytics
-import FirebaseAnalyticsSwift
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {

@@ -23,16 +23,20 @@ class APIHandler {
         }
     }
     
-    static func matchUsernameQuery(_ username: String,
-                                   _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> ()) {
+    static func matchUsernameQuery(_ username: String, _ completion: @escaping(_ querySnapshot: QuerySnapshot?) -> Void) {
         let usersCollection = Firestore.firestore().collection("users")
         let query = usersCollection.whereField("username", isEqualTo: username)
         query.getDocuments { querySnapshot, error in
-            completion(querySnapshot, error)
+            if (error != nil) {
+                print(error?.localizedDescription) // debugging
+            } else {
+                completion(querySnapshot)
+            }
         }
     }
     
     static func currentUserAuthID() -> String {
         return Auth.auth().currentUser!.uid
     }
+    
 }

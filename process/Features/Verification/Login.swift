@@ -31,6 +31,7 @@ struct LoginView: View {
         NavigationView {
             GroupBox {
                 NavigationLink(destination: RegistrationView(), tag: true, selection: $model.navigateToRegister) { }
+                NavigationLink(destination: HomeView(), tag: true, selection: $model.navigateToHome) { }
                 
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("login-image")
@@ -87,6 +88,8 @@ class LoginViewModel: ObservableObject {
     
     /* Class fields */
     
+    @Published var navigateToHome: Bool? = false
+    
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     @Published var navigateToRegister: Bool? = nil
@@ -94,7 +97,7 @@ class LoginViewModel: ObservableObject {
     @Published var loginButtonState: ActionButtonState = VerificationUtils.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
     
-    @Published var showErrorBanner:Bool = false
+    @Published var showErrorBanner: Bool = false
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     
     private var cancellables: Set<AnyCancellable> = []
@@ -138,7 +141,7 @@ class LoginViewModel: ObservableObject {
                 self!.loginButtonState = VerificationUtils.failedLoginButtonState
             } else {
                 self!.loginButtonState = VerificationUtils.successLoginButtonState
-                //FIXME: Show ProjectsView
+                self!.navigateToHome = true
             }
         }
     }

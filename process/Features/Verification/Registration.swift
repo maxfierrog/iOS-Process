@@ -15,7 +15,6 @@ enum FocusableRegistrationField: Hashable {
     case emailField
     case passwordField
     case screenNameField
-    case usernameField
 }
 
 
@@ -30,68 +29,54 @@ struct RegistrationView: View {
     /* View declaration */
     
     var body: some View {
-        NavigationView {
-            VStack {
-                GroupBox {
-                    VStack (alignment: .center, spacing: 10, content: {
-                        Image("register-image")
-                            .resizable()
-                            .scaledToFit()
-                            .padding(.bottom, 10)
-                            .padding(.top, 15)
-                        
-                        TextField(text: $model.usernameField, prompt: Text("Username")) {
-                            Text("Unique username")
-                        }
+        VStack {
+            GroupBox {
+                NavigationLink(destination: HomeView(), tag: true, selection: $model.navigateToHome) { }
+
+                VStack (alignment: .center, spacing: 10, content: {
+                    Image("register-image")
+                        .resizable()
+                        .scaledToFit()
                         .padding(.bottom, 10)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .submitLabel(.next)
-                        .focused($focus, equals: .usernameField)
-                        .onSubmit {
-                            focus = .screenNameField
-                        }
-                        
-                        TextField(text: $model.screenNameField, prompt: Text("Name")) {
-                            Text("Screen name")
-                        }
-                        .padding(.bottom, 10)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .submitLabel(.next)
-                        .focused($focus, equals: .screenNameField)
-                        .onSubmit {
-                            focus = .emailField
-                        }
-                        
-                        EmailField(title: "Email", text: $model.emailField)
-                            .padding(.bottom, 10)
-                            .submitLabel(.next)
-                            .focused($focus, equals: .emailField)
-                            .onSubmit {
-                                focus = .passwordField
-                            }
-                        
-                        PasswordField(title: "Password", text: $model.passwordField)
-                            .padding(.bottom, 20)
-                            .focused($focus, equals: .passwordField)
-                            .submitLabel(.go)
-                    })
+                        .padding(.top, 15)
                     
-                    ActionButton(state: $model.registerButtonState, onTap: {
-                        model.register()
-                    }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-                } label: {
-                    Label("We'll just need a few things...", systemImage: "list.bullet.rectangle.fill")
-                }
-                .padding()
-                .navigationTitle("Register")
+                    TextField(text: $model.nameField, prompt: Text("Name")) {
+                        Text("Screen name")
+                    }
+                    .padding(.bottom, 10)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .submitLabel(.next)
+                    .focused($focus, equals: .screenNameField)
+                    .onSubmit {
+                        focus = .emailField
+                    }
+                    
+                    EmailField(title: "Email", text: $model.emailField)
+                        .padding(.bottom, 10)
+                        .submitLabel(.next)
+                        .focused($focus, equals: .emailField)
+                        .onSubmit {
+                            focus = .passwordField
+                        }
+                    
+                    PasswordField(title: "Password", text: $model.passwordField)
+                        .padding(.bottom, 20)
+                        .focused($focus, equals: .passwordField)
+                        .submitLabel(.go)
+                })
+                
+                ActionButton(state: $model.registerButtonState, onTap: {
+                    model.register()
+                }, backgroundColor: colorScheme == .dark ? .brown : .primary)
+            } label: {
+                Label("We'll just need a few things...", systemImage: "list.bullet.rectangle.fill")
             }
-            
-            Spacer()
+            .padding()
         }
         .accentColor(Color(.label))
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
+        .navigationTitle("Register")
     }
 }
 
@@ -100,8 +85,9 @@ class RegistrationViewModel: ObservableObject {
     
     /* Class fields */
     
-    @Published var usernameField: String = ""
-    @Published var screenNameField: String = ""
+    @Published var navigateToHome: Bool? = false
+    
+    @Published var nameField: String = ""
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     
@@ -119,13 +105,6 @@ class RegistrationViewModel: ObservableObject {
             }
             .eraseToAnyPublisher()
     }
-    private var usernameIsValidPublisher: AnyPublisher<Bool, Never> {
-        $usernameField
-            .map { value in
-                !value.isEmpty
-            }
-            .eraseToAnyPublisher()
-    }
     private var passwordIsValidPublisher: AnyPublisher<Bool, Never> {
         $passwordField
             .map { value in
@@ -134,7 +113,7 @@ class RegistrationViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     private var screenNameIsValidPublisher: AnyPublisher<Bool, Never> {
-        $screenNameField
+        $nameField
             .map { value in
                 !value.isEmpty
             }
@@ -145,9 +124,9 @@ class RegistrationViewModel: ObservableObject {
     
     init() {
         emailIsValidPublisher
-            .combineLatest(passwordIsValidPublisher, screenNameIsValidPublisher, usernameIsValidPublisher)
-            .map { emailValid, passwordValid, screenNameIsValid, usernameIsValid in
-                emailValid && passwordValid && screenNameIsValid && usernameIsValid
+            .combineLatest(passwordIsValidPublisher, screenNameIsValidPublisher)
+            .map { emailValid, passwordValid, screenNameIsValid in
+                emailValid && passwordValid && screenNameIsValid
             }
             .map { fieldsValid -> ActionButtonState in
                 if fieldsValid {
@@ -161,15 +140,15 @@ class RegistrationViewModel: ObservableObject {
     
     func register() {
         registerButtonState = VerificationUtils.loadingRegisterButtonState
-        APIHandler.matchUsernameQuery(usernameField) { querySnapshot, error in
-            if (error == nil && querySnapshot!.documents.isEmpty && VerificationUtils.isValidEmail(self.emailField)) {
-                Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
+        Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
+            if (error == nil) {
+                Auth.auth().signIn(withEmail: self!.emailField, password: self!.passwordField) { [weak self] authResult, error in
                     if (error == nil) {
-                        let newUser = User(username: self!.usernameField, screenName: self!.screenNameField)
+                        let newUser = User(name: self!.nameField)
                         APIHandler.uploadNewUser(newUser) { error in
                             if (error == nil) {
                                 self!.registerButtonState = VerificationUtils.successLoginButtonState
-                                // TODO: Navigate to projects view
+                                self!.navigateToHome = true
                             } else {
                                 self!.registerButtonState = VerificationUtils.failedRegisterButtonState
                                 self!.setBannerToGenericError(error!.localizedDescription)
@@ -180,12 +159,9 @@ class RegistrationViewModel: ObservableObject {
                         self!.setBannerToGenericError(error!.localizedDescription)
                     }
                 }
-            } else if (!querySnapshot!.documents.isEmpty) {
-                self.registerButtonState = VerificationUtils.failedRegisterButtonState
-                self.setBannerToGenericError("Sorry, that username is already being used by someone else.")
             } else {
-                self.registerButtonState = VerificationUtils.failedRegisterButtonState
-                self.setBannerToGenericError(error!.localizedDescription)
+                self!.registerButtonState = VerificationUtils.failedRegisterButtonState
+                self!.setBannerToGenericError(error!.localizedDescription)
             }
         }
     }

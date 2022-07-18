@@ -41,4 +41,23 @@ class VerificationUtils {
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
+    
+    /* Registration */
+    
+    static func availableUsernameFromName(_ name: String) -> String {
+        var generatedUsername: String = String(name.filter { !" \n\t\r".contains($0) })
+        if (VerificationUtils.isRepeatedName(generatedUsername)) {  // FIXME: if should be while for username generation to work
+            generatedUsername = generatedUsername + String(Int.random(in: 0..<10))
+        }
+        print(generatedUsername)
+        return generatedUsername
+    }
+    
+    static func isRepeatedName(_ name: String) -> Bool {
+        var isRepeated: Bool = true
+        APIHandler.matchUsernameQuery(name) { query in
+                isRepeated = !query!.documents.isEmpty
+        }
+        return isRepeated
+    }
 }
