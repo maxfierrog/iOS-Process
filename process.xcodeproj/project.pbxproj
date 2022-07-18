@@ -123,7 +123,7 @@
 		505D6DBC287C1F9E005A28CB /* process */ = {
 			isa = PBXGroup;
 			children = (
-				9879C16C28816151009A34D3 /* Secrets */,
+				9879C16C28816151009A34D3 /* Identity */,
 				505D6E1D287EEBDD005A28CB /* Support */,
 				505D6DFC287C22C4005A28CB /* Utilities */,
 				505D6DFD287C22D8005A28CB /* Models */,
@@ -260,12 +260,12 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		9879C16C28816151009A34D3 /* Secrets */ = {
+		9879C16C28816151009A34D3 /* Identity */ = {
 			isa = PBXGroup;
 			children = (
 				505D6E0F287E9317005A28CB /* GoogleService-Info.plist */,
 			);
-			path = Secrets;
+			path = Identity;
 			sourceTree = "<group>";
 		};
 		9879C16D2885482E009A34D3 /* Home */ = {
