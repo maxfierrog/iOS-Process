@@ -5,30 +5,13 @@
 //  Created by maxfierro on 7/14/22.
 //
 
+
 import SwiftUI
 
 
-enum BannerType {
-    case Info
-    case Warning
-    case Success
-    case Error
-    
-    var tintColor: Color {
-            switch self {
-            case .Info:
-                return Color(red: 67/255, green: 154/255, blue: 215/255)
-            case .Success:
-                return Color.green
-            case .Warning:
-                return Color.yellow
-            case .Error:
-                return Color.red
-        }
-    }
-}
-
-
+/** View modifier displaying a banner suited for warnings, information, or
+ general communications. Not all mine, adapted from:
+ https://github.com/jboullianne/SwiftUIBanner */
 struct BannerModifier: ViewModifier {
     
     struct BannerData {
@@ -46,28 +29,28 @@ struct BannerModifier: ViewModifier {
             if show {
                 VStack {
                     HStack {
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: BannerConstant.titleAndDetailsSpacing) {
                             Text(data.title)
                                 .bold()
                             Text(data.detail)
-                                .font(Font.system(size: 12))
+                                .font(Font.system(size: BannerConstant.detailsFontSize))
                         }
                     }
-                    .foregroundColor(Color.white)
+                    .foregroundColor(BannerConstant.textColor)
                     .padding(12)
                     .background(data.type.tintColor)
-                    .cornerRadius(8)
+                    .cornerRadius(BannerConstant.bannerCornerRadius)
                     Spacer()
                 }
                 .padding()
-                .animation(.easeInOut) // FIXME: Find replacement that works
+                .animation(BannerConstant.animation) // FIXME: Find non-deprecated replacement that works
                 .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                 .onTapGesture {
                     withAnimation {
                         self.show = false
                     }
                 }.onAppear(perform: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + BannerConstant.secondsBeforeDisappear) {
                         withAnimation {
                             self.show = false
                         }
@@ -78,11 +61,13 @@ struct BannerModifier: ViewModifier {
     }
 }
 
+
 extension View {
     func banner(data: Binding<BannerModifier.BannerData>, show: Binding<Bool>) -> some View {
         self.modifier(BannerModifier(data: data, show: show))
     }
 }
+
 
 struct Banner_Previews: PreviewProvider {
     static var previews: some View {

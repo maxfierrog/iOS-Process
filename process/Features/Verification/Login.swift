@@ -5,27 +5,33 @@
 //  Created by Maximo Fierro on 7/11/22.
 //
 
+
 import SwiftUI
 import ActionButton
 import Combine
 import FirebaseAuth
 
 
+/** Ennumaeration of focusable areas on login screen, allowing for
+ quick traversal of fields using the 'next' button on keyboard. */
 enum FocusableLoginField: Hashable {
     case emailField
     case passwordField
 }
 
 
+/** Allows client to sign-in an existing user, handling credential verification
+ with API calls through the view model. Provides comprehensive error messages
+ through banners. */
 struct LoginView: View {
     
-    /* Struct fields */
+    /* MARK: Struct fields */
     
     @Environment(\.colorScheme) private var colorScheme
     @StateObject private var model = LoginViewModel()
     @FocusState private var focus: FocusableLoginField?
     
-    /* View declaration */
+    /* MARK: View declaration */
     
     var body: some View {
         GroupBox {
@@ -66,16 +72,16 @@ struct LoginView: View {
             Button {
                 model.sendPasswordResetEmail()
             } label: {
-                Text("Forgot password")
+                Text(LoginConstant.forgotPasswordButtonText)
                     .underline()
             }
             .font(.footnote)
             .padding(.top, 5)
         } label: {
-            Label("Welcome to Process!", systemImage: "person.fill")
+            Label(LoginConstant.welcomeMessage, systemImage: LoginConstant.welcomeIcon)
         }
         .padding()
-        .navigationTitle("Login")
+        .navigationTitle(LoginConstant.navigationTitle)
         .accentColor(Color(.label))
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
     }
@@ -84,21 +90,24 @@ struct LoginView: View {
 
 class LoginViewModel: ObservableObject {
     
-    /* Class fields */
+    /* MARK: Class fields */
     
+    // Navigation fields
     @Published var navigateToHome: Bool? = false
     @Published var verifiedUser: User = User(name: "", username: "", email: "")
     
+    // Data fields
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     @Published var navigateToRegister: Bool? = nil
     
-    @Published var loginButtonState: ActionButtonState = VerificationUtils.invalidLoginButtonState
-    @Published var registerButtonState: ActionButtonState = .enabled(title: "Register", systemImage: "list.bullet.rectangle")
-    
+    // UI state fields
+    @Published var loginButtonState: ActionButtonState = LoginConstant.invalidLoginButtonState
+    @Published var registerButtonState: ActionButtonState = .enabled(title: LoginConstant.registerButtonTitle, systemImage: LoginConstant.registerButtonIcon)
     @Published var showErrorBanner: Bool = false
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     
+    // Publisher fields
     private var cancellables: Set<AnyCancellable> = []
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
@@ -115,7 +124,7 @@ class LoginViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    /* Methods */
+    /* MARK: Methods */
     
     init() {
         emailIsValidPublisher
@@ -125,40 +134,44 @@ class LoginViewModel: ObservableObject {
             }
             .map { fieldsValid -> ActionButtonState in
                 if fieldsValid {
-                    return VerificationUtils.enabledLoginButtonState
+                    return LoginConstant.enabledLoginButtonState
                 }
-                return VerificationUtils.invalidLoginButtonState
+                return LoginConstant.invalidLoginButtonState
             }
             .assign(to: \.loginButtonState, on: self)
             .store(in: &cancellables)
     }
     
     func loginUser() {
-        loginButtonState = VerificationUtils.loadingLoginButtonState
+        loginButtonState = LoginConstant.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
-            if (error != nil) {
-                self!.loginButtonState = VerificationUtils.failedLoginButtonState
-            } else {
-                APIHandler.getUserFromEmail(self!.emailField) { user, error in
-                    if (error != nil) {
-                        self!.loginButtonState = VerificationUtils.failedLoginButtonState
-                        self!.setBannerToGenericError(error!.localizedDescription)
-                    } else {
-                        self!.verifiedUser = user!
-                        self!.loginButtonState = VerificationUtils.successLoginButtonState
-                        self!.navigateToHome = true
-                    }
+            guard error == nil else {
+                self?.loginButtonState = LoginConstant.failedLoginButtonState
+                return
+            }
+            APIHandler.getUserFromEmail(self!.emailField) { user, error in
+                guard error == nil else {
+                    self?.loginButtonState = LoginConstant.failedLoginButtonState
+                    self?.showBannerWithErrorMessage(error!.localizedDescription)
+                    return
                 }
+                self?.verifiedUser = user!
+                self?.loginButtonState = LoginConstant.successLoginButtonState
+                self?.navigateToHome = true
             }
         }
     }
     
     func sendPasswordResetEmail() {
         guard VerificationUtils.isValidEmail(emailField) else {
-            setBannerToGenericError("Please enter a valid email address.")
+            showBannerWithErrorMessage("Please enter a valid email address.")
             return
         }
         Auth.auth().sendPasswordReset(withEmail: emailField) { error in
+            guard error == nil else {
+                self.showBannerWithErrorMessage(error?.localizedDescription)
+                return
+            }
             self.bannerData.title = "Email sent"
             self.bannerData.detail = "We have sent a recovery link to the account associated with that email address, if there is one."
             self.bannerData.type = .Info
@@ -171,7 +184,10 @@ class LoginViewModel: ObservableObject {
         navigateToRegister = true
     }
     
-    private func setBannerToGenericError(_ message: String) {
+    /* MARK: Helper methods */
+    
+    private func showBannerWithErrorMessage(_ message: String?) {
+        guard let message = message else { return }
         bannerData.title = "Error"
         bannerData.detail = message
         bannerData.type = .Error

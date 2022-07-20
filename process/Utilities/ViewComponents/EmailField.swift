@@ -5,9 +5,12 @@
 //  Created by Maximo Fierro on 7/13/22.
 //
 
+
 import SwiftUI
 import ActionButton
 
+
+/** TextField component customized for writing emails. */
 struct EmailField: View {
     
     let title: String

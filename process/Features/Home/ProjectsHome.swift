@@ -10,10 +10,26 @@ import SwiftUI
 struct ProjectsHomeView: View {
     
     @Binding var user: User
+    @StateObject private var model = ProjectsHomeViewModel()
+    @FocusState private var focus: FocusableRegistrationField?
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        Text(user.name)
+        VStack {
+            Picker("Task category:", selection: $model.selectedTaskCategory) {
+                ForEach(0..<3) { index in
+                    Text(model.taskCategories[index])
+                }
+            }
+        }
     }
+}
+
+class ProjectsHomeViewModel: ObservableObject {
+    
+    @Published var taskCategories: [String] = ["New", "WIP", "Done"]
+    @Published var selectedTaskCategory: Int = 0
+    
 }
 
 struct ProjectsHomeView_Previews: PreviewProvider {

@@ -5,12 +5,15 @@
 //  Created by Maximo Fierro on 7/11/22.
 //
 
+
 import SwiftUI
 import ActionButton
 import Combine
 import FirebaseAuth
 
 
+/** Focusable areas on registration screen, allowing for quick traversal of
+ fields using the 'next' button on the iOS default keyboard. */
 enum FocusableRegistrationField: Hashable {
     case emailField
     case passwordField
@@ -18,15 +21,19 @@ enum FocusableRegistrationField: Hashable {
 }
 
 
+/** Allows client to sign-up and sign-in a new user, handling the necessary
+ backend requests, such as saving user data and generating usernames, with
+ helper class method or API calls thorugh the view model. Provides
+ comprehensive error messages through banners. */
 struct RegistrationView: View {
     
-    /* Struct fields */
+    /* MARK: Struct fields */
     
     @StateObject private var model = RegistrationViewModel()
     @FocusState private var focus: FocusableRegistrationField?
     @Environment(\.colorScheme) private var colorScheme
     
-    /* View declaration */
+    /* MARK: View declaration */
     
     var body: some View {
         VStack {
@@ -70,34 +77,38 @@ struct RegistrationView: View {
                     model.register()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
             } label: {
-                Label("We'll just need a few things...", systemImage: "list.bullet.rectangle.fill")
+                Label(RegistrationConstant.welcomeMessage, systemImage: RegistrationConstant.welcomeIcon)
             }
             .padding()
         }
         .accentColor(Color(.label))
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
-        .navigationTitle("Register")
+        .navigationTitle(RegistrationConstant.navigationTitle)
     }
 }
 
 
+/** State and functional model for RegistrationView. */
 class RegistrationViewModel: ObservableObject {
     
-    /* Class fields */
+    /* MARK: Class fields */
     
+    // Navigation fields
     @Published var navigateToHome: Bool? = false
-    @Published var registeredUser: User = User(name: "", username: "", email: "")
+    @Published var registeredUser: User = VerificationUtils.getNewUserModel(name: "", username: "", email: "")
     
+    // Data fields
     @Published var nameField: String = ""
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     
-    @Published var registerButtonState: ActionButtonState = VerificationUtils.invalidRegisterButtonState
+    // UI state fields
+    @Published var registerButtonState: ActionButtonState = RegistrationConstant.invalidRegisterButtonState
     @Published var registrationHasError: Bool = false
-    
-    @Published var showErrorBanner:Bool = false
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    @Published var showErrorBanner: Bool = false
     
+    // Publisher fields
     private var cancellables: Set<AnyCancellable> = []
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
@@ -121,7 +132,7 @@ class RegistrationViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    /* Class methods */
+    /* MARK: Class methods */
     
     init() {
         emailIsValidPublisher
@@ -131,46 +142,63 @@ class RegistrationViewModel: ObservableObject {
             }
             .map { fieldsValid -> ActionButtonState in
                 if fieldsValid {
-                    return VerificationUtils.enabledRegisterButtonState
+                    return RegistrationConstant.enabledRegisterButtonState
                 }
-                return VerificationUtils.invalidRegisterButtonState
+                return RegistrationConstant.invalidRegisterButtonState
             }
             .assign(to: \.registerButtonState, on: self)
             .store(in: &cancellables)
     }
     
     func register() {
-        registerButtonState = VerificationUtils.loadingRegisterButtonState
-        Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] authResult, error in
-            if (error == nil) {
-                Auth.auth().signIn(withEmail: self!.emailField, password: self!.passwordField) { [weak self] authResult, error in
-                    if (error == nil) {
-                        VerificationUtils.availableUsernameFromName(self!.nameField) { generatedUsername in
-                            let newUser = User(name: self!.nameField, username: generatedUsername, email: self!.emailField)
-                            APIHandler.uploadNewUser(newUser) { error in
-                                if (error == nil) {
-                                    self!.registerButtonState = VerificationUtils.successLoginButtonState
-                                    self!.registeredUser = newUser
-                                    self!.navigateToHome = true
-                                } else {
-                                    self!.registerButtonState = VerificationUtils.failedRegisterButtonState
-                                    self!.setBannerToGenericError(error!.localizedDescription)
-                                }
-                            }
+        registerButtonState = RegistrationConstant.loadingRegisterButtonState
+        Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] _, error in
+            guard error == nil else {
+                self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
+                self?.showBannerWithErrorMessage(error!.localizedDescription)
+                return
+            }
+            print("Created user")
+            Auth.auth().signIn(withEmail: self!.emailField, password: self!.passwordField) { [weak self] _, error in
+                guard error == nil else {
+                    self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
+                    self?.showBannerWithErrorMessage(error!.localizedDescription)
+                    return
+                }
+                print("Signed in user")
+                VerificationUtils.availableUsernameFromName(self!.nameField) { generatedUsername, error in
+                    guard error == nil else {
+                        self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
+                        self?.showBannerWithErrorMessage(error!.localizedDescription)
+                        return
+                    }
+                    let newUser = VerificationUtils.getNewUserModel(
+                        name: self!.nameField,
+                        username: generatedUsername!,
+                        email: self!.emailField
+                    )
+                    print("Created user model")
+                    APIHandler.uploadNewUser(newUser) { error in
+                        guard error == nil else {
+                            self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
+                            self?.showBannerWithErrorMessage(error!.localizedDescription)
+                            APIHandler.attemptToDeleteCurrentUser()
+                            return
                         }
-                    } else {
-                        self!.registerButtonState = VerificationUtils.failedRegisterButtonState
-                        self!.setBannerToGenericError(error!.localizedDescription)
+                        print("Uploaded user to database")
+                        self?.registerButtonState = RegistrationConstant.successRegisterButtonState
+                        self?.registeredUser = newUser
+                        self?.navigateToHome = true
                     }
                 }
-            } else {
-                self!.registerButtonState = VerificationUtils.failedRegisterButtonState
-                self!.setBannerToGenericError(error!.localizedDescription)
             }
         }
     }
     
-    private func setBannerToGenericError(_ message: String) {
+    /* MARK: Helper methods */
+    
+    private func showBannerWithErrorMessage(_ message: String?) {
+        guard let message = message else { return }
         bannerData.title = "Error"
         bannerData.detail = message
         bannerData.type = .Error
