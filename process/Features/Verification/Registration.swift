@@ -31,7 +31,7 @@ struct RegistrationView: View {
     var body: some View {
         VStack {
             GroupBox {
-                NavigationLink(destination: HomeView(), tag: true, selection: $model.navigateToHome) { }
+                NavigationLink(destination: HomeView(currentUser: $model.registeredUser), tag: true, selection: $model.navigateToHome) { }
 
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("register-image")
@@ -86,6 +86,7 @@ class RegistrationViewModel: ObservableObject {
     /* Class fields */
     
     @Published var navigateToHome: Bool? = false
+    @Published var registeredUser: User = User(name: "", username: "", email: "")
     
     @Published var nameField: String = ""
     @Published var passwordField: String = ""
@@ -144,14 +145,17 @@ class RegistrationViewModel: ObservableObject {
             if (error == nil) {
                 Auth.auth().signIn(withEmail: self!.emailField, password: self!.passwordField) { [weak self] authResult, error in
                     if (error == nil) {
-                        let newUser = User(name: self!.nameField)
-                        APIHandler.uploadNewUser(newUser) { error in
-                            if (error == nil) {
-                                self!.registerButtonState = VerificationUtils.successLoginButtonState
-                                self!.navigateToHome = true
-                            } else {
-                                self!.registerButtonState = VerificationUtils.failedRegisterButtonState
-                                self!.setBannerToGenericError(error!.localizedDescription)
+                        VerificationUtils.availableUsernameFromName(self!.nameField) { generatedUsername in
+                            let newUser = User(name: self!.nameField, username: generatedUsername, email: self!.emailField)
+                            APIHandler.uploadNewUser(newUser) { error in
+                                if (error == nil) {
+                                    self!.registerButtonState = VerificationUtils.successLoginButtonState
+                                    self!.registeredUser = newUser
+                                    self!.navigateToHome = true
+                                } else {
+                                    self!.registerButtonState = VerificationUtils.failedRegisterButtonState
+                                    self!.setBannerToGenericError(error!.localizedDescription)
+                                }
                             }
                         }
                     } else {

@@ -8,19 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @Binding var currentUser: User
+    
     var body: some View {
         TabView {
-            ProjectsHomeView()
+            ProjectsHomeView(user: $currentUser)
                 .tabItem {
                     Label("Projects", systemImage: "list.dash")
                 }
 
-            TasksHomeView()
+            TasksHomeView(user: $currentUser)
                 .tabItem {
                     Label("Tasks", systemImage: "checkmark.circle")
                 }
             
-            ProfileHomeView()
+            ProfileHomeView(user: $currentUser)
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
@@ -30,6 +33,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(currentUser: .constant(User(name: "Max Fierro", username: "", email: "")))
     }
 }

@@ -12,6 +12,7 @@ public struct User: Codable {
     var authID: String
     var username: String
     var name: String
+    var email: String
     var profilePictureID: String?
     
     var assignedTasks: Array<String>
@@ -23,6 +24,7 @@ public struct User: Codable {
         case authID
         case username
         case name
+        case email
         case assignedTasks
         case profilePictureID
         case ownedProjects
@@ -32,10 +34,11 @@ public struct User: Codable {
 }
 
 extension User {
-    init(name: String) {
+    init(name: String, username: String, email: String) {
         self.name = name
+        self.email = email
+        self.username = username
         self.authID = APIHandler.currentUserAuthID()
-        self.username = VerificationUtils.availableUsernameFromName(name)
         self.assignedTasks = []
         self.ownedProjects = []
         self.invitedProjects = []

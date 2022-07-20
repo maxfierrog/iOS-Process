@@ -44,20 +44,17 @@ class VerificationUtils {
     
     /* Registration */
     
-    static func availableUsernameFromName(_ name: String) -> String {
-        var generatedUsername: String = String(name.filter { !" \n\t\r".contains($0) })
-        if (VerificationUtils.isRepeatedName(generatedUsername)) {  // FIXME: if should be while for username generation to work
-            generatedUsername = generatedUsername + String(Int.random(in: 0..<10))
+    static func availableUsernameFromName(_ name: String, _ completion: @escaping(_ result: String) -> Void) {
+        let noWhitespaceName: String = String(name.filter { !" \n\t\r".contains($0) })
+        APIHandler.matchUsernameQuery(noWhitespaceName) { query in
+            if (!query!.documents.isEmpty) {
+                APIHandler.getUsernameRepeatCount { count in
+                    APIHandler.incrementUsernameRepeatCount()
+                    completion(noWhitespaceName + String(count))
+                }
+            } else {
+                completion(noWhitespaceName)
+            }
         }
-        print(generatedUsername)
-        return generatedUsername
-    }
-    
-    static func isRepeatedName(_ name: String) -> Bool {
-        var isRepeated: Bool = true
-        APIHandler.matchUsernameQuery(name) { query in
-                isRepeated = !query!.documents.isEmpty
-        }
-        return isRepeated
     }
 }

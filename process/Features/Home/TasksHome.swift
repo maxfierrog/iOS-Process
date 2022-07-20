@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct TasksHomeView: View {
+    
+    @Binding var user: User
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(user.name)
     }
 }
 
 struct TasksHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        TasksHomeView()
+        TasksHomeView(user: .constant(User(name: "Max Fierro", username: "", email: "")))
     }
 }

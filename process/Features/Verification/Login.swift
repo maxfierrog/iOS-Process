@@ -28,56 +28,54 @@ struct LoginView: View {
     /* View declaration */
     
     var body: some View {
-        NavigationView {
-            GroupBox {
-                NavigationLink(destination: RegistrationView(), tag: true, selection: $model.navigateToRegister) { }
-                NavigationLink(destination: HomeView(), tag: true, selection: $model.navigateToHome) { }
+        GroupBox {
+            NavigationLink(destination: RegistrationView(), tag: true, selection: $model.navigateToRegister) { }
+            NavigationLink(destination: HomeView(currentUser: $model.verifiedUser), tag: true, selection: $model.navigateToHome) { }
+            
+            VStack (alignment: .center, spacing: 10, content: {
+                Image("login-image")
+                    .resizable()
+                    .scaledToFit()
                 
-                VStack (alignment: .center, spacing: 10, content: {
-                    Image("login-image")
-                        .resizable()
-                        .scaledToFit()
-                    
-                    EmailField(title: "Email", text: $model.emailField)
-                        .padding(.bottom, 10)
-                        .submitLabel(.next)
-                        .focused($focus, equals: .emailField)
-                        .onSubmit {
-                            focus = .passwordField
-                        }
-                    
-                    PasswordField(title: "Password", text: $model.passwordField)
-                        .padding(.bottom, 20)
-                        .focused($focus, equals: .passwordField)
-                        .submitLabel(.go)
-                })
+                EmailField(title: "Email", text: $model.emailField)
+                    .padding(.bottom, 10)
+                    .submitLabel(.next)
+                    .focused($focus, equals: .emailField)
+                    .onSubmit {
+                        focus = .passwordField
+                    }
                 
-                ActionButton(state: $model.loginButtonState, onTap: {
-                    model.loginUser()
-                }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
-                
-                Text("or")
-                    .bold()
-                    .font(.subheadline)
-                
-                ActionButton(state: $model.registerButtonState, onTap: {
-                    model.didTapRegister()
-                }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-                
-                Button {
-                    model.sendPasswordResetEmail()
-                } label: {
-                    Text("Forgot password")
-                        .underline()
-                }
-                .font(.footnote)
-                .padding(.top, 5)
+                PasswordField(title: "Password", text: $model.passwordField)
+                    .padding(.bottom, 20)
+                    .focused($focus, equals: .passwordField)
+                    .submitLabel(.go)
+            })
+            
+            ActionButton(state: $model.loginButtonState, onTap: {
+                model.loginUser()
+            }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
+            
+            Text("or")
+                .bold()
+                .font(.subheadline)
+            
+            ActionButton(state: $model.registerButtonState, onTap: {
+                model.didTapRegister()
+            }, backgroundColor: colorScheme == .dark ? .brown : .primary)
+            
+            Button {
+                model.sendPasswordResetEmail()
             } label: {
-                Label("Welcome to Process!", systemImage: "person.fill")
+                Text("Forgot password")
+                    .underline()
             }
-            .padding()
-            .navigationTitle("Login")
+            .font(.footnote)
+            .padding(.top, 5)
+        } label: {
+            Label("Welcome to Process!", systemImage: "person.fill")
         }
+        .padding()
+        .navigationTitle("Login")
         .accentColor(Color(.label))
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
     }
@@ -89,6 +87,7 @@ class LoginViewModel: ObservableObject {
     /* Class fields */
     
     @Published var navigateToHome: Bool? = false
+    @Published var verifiedUser: User = User(name: "", username: "", email: "")
     
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
@@ -140,8 +139,16 @@ class LoginViewModel: ObservableObject {
             if (error != nil) {
                 self!.loginButtonState = VerificationUtils.failedLoginButtonState
             } else {
-                self!.loginButtonState = VerificationUtils.successLoginButtonState
-                self!.navigateToHome = true
+                APIHandler.getUserFromEmail(self!.emailField) { user, error in
+                    if (error != nil) {
+                        self!.loginButtonState = VerificationUtils.failedLoginButtonState
+                        self!.setBannerToGenericError(error!.localizedDescription)
+                    } else {
+                        self!.verifiedUser = user!
+                        self!.loginButtonState = VerificationUtils.successLoginButtonState
+                        self!.navigateToHome = true
+                    }
+                }
             }
         }
     }
