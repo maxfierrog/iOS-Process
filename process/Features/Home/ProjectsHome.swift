@@ -31,6 +31,8 @@ struct ProjectsHomeView: View {
             }
             .pickerStyle(.segmented)
             .padding()
+            
+            Spacer()
         }
     }
 }
