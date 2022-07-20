@@ -5,11 +5,19 @@
 //  Created by maxfierro on 7/18/22.
 //
 
+
 import SwiftUI
 
+
+/** Root tab bar controlling access to Projects, Tasks, and Profile views,
+ containing the model of the user currently signed in. */
 struct HomeView: View {
     
+    /* MARK: Struct fields */
+    
     @Binding var currentUser: User
+    
+    /* MARK: View declaration */
     
     var body: some View {
         TabView {
