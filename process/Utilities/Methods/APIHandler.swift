@@ -131,4 +131,27 @@ class APIHandler {
     static func attemptToDeleteCurrentUser() {
         Auth.auth().currentUser?.delete()
     }
+    
+    /** Constructs and returns the user model corresopnding to the current
+     authenticated user, if there is one. */
+    static func getCurrentUserModel(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+        if let email = Auth.auth().currentUser?.email {
+            APIHandler.getUserFromEmail(email) { user, error in
+                completion(user, error)
+            }
+        } else {
+            completion(nil, APIHandlerError.noAuthenticatedUser("No user is currently authenticated."))
+        }
+    }
+    
+    /** Ends the current API session to complete the log out process. Returns
+     true if successful. */
+    static func terminateAuthSession() -> Bool {
+        do {
+            try Auth.auth().signOut()
+            return true
+        } catch _ {
+            return false
+        }
+    }
 }

@@ -13,14 +13,14 @@ import ActionButton
 /** Centralized helper class for Register view and model constants. */
 class RegistrationConstant {
     
-    /* MARK: Register view constants */
+    /* MARK: RegistrationView */
     
+    // Text fields and icons
     static public let navigationTitle: String = "Register"
     static public let welcomeMessage: String = "We'll just need a few things..."
     static public let welcomeIcon: String = "list.bullet.rectangle.fill"
     
-    /* MARK: Register button states */
-    
+    // Register button states
     static public let loadingRegisterButtonState: ActionButtonState =
         .loading(title: "One second...", systemImage: "")
     static public let enabledRegisterButtonState: ActionButtonState =
@@ -31,5 +31,8 @@ class RegistrationConstant {
         .disabled(title: "Could not register user", systemImage: "person.fill.xmark")
     static public let successRegisterButtonState: ActionButtonState =
         .disabled(title: "Success!", systemImage: "person.fill.checkmark")
+
+    // Banner messages
+    public static let genericErrorBannerTitle: String = "Error"
 
 }

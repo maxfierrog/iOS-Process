@@ -60,4 +60,16 @@ public struct User: Codable {
             self.authID = UserConstant.noAuthIDMessage
         }
     }
+    
+    /** Initialize a placeholder user model. */
+    init() {
+        self.name = ""
+        self.email = ""
+        self.username = ""
+        self.authID = ""
+        self.assignedTasks = []
+        self.ownedProjects = []
+        self.invitedProjects = []
+        self.receivedInvites = []
+    }
 }

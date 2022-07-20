@@ -13,8 +13,9 @@ import ActionButton
 /** Centralized helper class for Login view and model constants. */
 class LoginConstant {
     
-    /* MARK: Login view constants */
+    /* MARK: LoginView */
     
+    // Text fields and icons
     public static let navigationTitle: String = "Login"
     public static let welcomeMessage: String = "Welcome to Process!"
     public static let welcomeIcon: String = "person.fill"
@@ -22,8 +23,7 @@ class LoginConstant {
     public static let registerButtonIcon: String = "list.bullet.rectangle"
     public static let forgotPasswordButtonText: String = "Forgot password"
     
-    /* MARK: Login button states */
-    
+    // Login button states
     static public let enabledLoginButtonState: ActionButtonState =
         .enabled(title: "Login", systemImage: "checkmark.circle")
     static public let invalidLoginButtonState: ActionButtonState =
@@ -35,4 +35,9 @@ class LoginConstant {
     static public let successLoginButtonState: ActionButtonState =
         .disabled(title: "Success!", systemImage: "person.fill.checkmark")
     
+    // Banner messages
+    public static let invalidEmailForResetText: String = "Please enter a valid email address."
+    public static let recoveryEmailSentText: String = "We have sent a recovery link to the account associated with that email address, if there is one."
+    public static let recoveryEmailSentBannerTitle: String = "Email sent"
+    public static let genericErrorBannerTitle: String = "Error"
 }

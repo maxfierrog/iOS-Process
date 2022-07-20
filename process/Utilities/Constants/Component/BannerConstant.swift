@@ -35,7 +35,7 @@ enum BannerType {
 /** Centralized static class for banner customization constants. */
 class BannerConstant {
     
-    /* MARK: Banner customization constants */
+    /* MARK: Customization */
     
     public static let animation: Animation = .easeInOut
     public static let textColor: Color = .white
