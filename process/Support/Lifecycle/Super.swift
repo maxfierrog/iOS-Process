@@ -42,6 +42,8 @@ class SuperViewModel: ObservableObject {
     
     /* MARK: Model methods */
     
+    /** Check for existing Authentication session, and extract current user's
+     model if there is one. */
     init() {
         self.signedInUser = User()
         self.userSignedIn = false
@@ -52,6 +54,9 @@ class SuperViewModel: ObservableObject {
         }
     }
     
+    /** Root logout. All child views' logout methods eventually call this
+     one. Returns true if successful, providing child views information for
+     displaying error banners. */
     func logOut() -> Bool {
         guard APIHandler.terminateAuthSession() else { return false }
         self.userSignedIn = false

@@ -22,7 +22,75 @@ struct ProfileHomeView: View {
     
     var body: some View {
         VStack {
-            // FIXME: Add profile page contents
+            GroupBox {
+                HStack {
+                    HStack {
+                        Spacer()
+                        Image(model.getProfilePicture())
+                            .resizable()
+                            .frame(width: 125, height: 125)
+                            .clipShape(Circle())
+                            .overlay {
+                                Circle().stroke(.gray, lineWidth: 4)
+                            }
+                            .shadow(radius: 7)
+                            .padding(.init(top: 8, leading: 0, bottom: 8, trailing: 10))
+                    }
+                    VStack {
+                        HStack {
+                            Text(model.user.name)
+                                .font(.title2)
+                                .bold()
+                            Spacer()
+                        }
+                        HStack {
+                            Text(model.user.username)
+                                .font(.title3)
+                                .padding(.bottom, 3)
+                            Spacer()
+                        }
+                        HStack {
+                            Button(action: {
+                                model.editing.toggle()
+                            }, label: {
+                                Text("Edit")
+                                    .font(.subheadline)
+                            })
+                            .buttonStyle(.bordered)
+                            Spacer()
+                        }
+                    }
+                    Spacer()
+                }
+            }
+            .padding()
+            
+            HStack {
+                Text("User Analytics")
+                    .font(.title2)
+                    .bold()
+                    .padding(.leading, 24)
+                
+                Spacer()
+            }
+            
+            ScrollView(.horizontal) {
+                HStack(spacing: 20) {
+                    ForEach(0..<10) { _ in
+                        GroupBox {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .frame(width: 200, height: 200)
+                    }
+                }
+            }
+            
+            Spacer()
         }
         .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showBanner)
@@ -34,7 +102,6 @@ struct ProfileHomeView: View {
                     Label(ProfileConstant.preferencesAccessibilityText, systemImage: ProfileConstant.preferencesButtonIcon)
                 }
             }
-                
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
                     withAnimation {
@@ -64,11 +131,18 @@ class ProfileHomeViewModel: ObservableObject {
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
     
+    // Editing
+    @Published var editing: Bool = false
+    
     /* MARK: Model methods */
     
     init(_ model: HomeViewModel) {
         self.homeViewModel = model
         self.user = model.currentUser
+    }
+    
+    func getProfilePicture() -> String {
+        return ProfileConstant.defaultProfilePicture
     }
     
     func tappedPreferences() {

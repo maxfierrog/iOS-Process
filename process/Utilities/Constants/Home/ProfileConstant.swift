@@ -13,6 +13,9 @@ class ProfileConstant {
     
     /* MARK: ProfileView */
     
+    // Profile page
+    public static let defaultProfilePicture: String = "default-profile-picture"
+    
     // Navigation bar
     public static let preferencesButtonIcon: String = "gearshape.fill"
     public static let preferencesAccessibilityText: String = "User preferences"
