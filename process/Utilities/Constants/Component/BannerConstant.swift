@@ -26,7 +26,7 @@ enum BannerType {
             case .Warning:
                 return Color.yellow
             case .Error:
-                return Color.red
+                return Color(red: 180/255, green: 80/255, blue: 80/255)
         }
     }
 }
@@ -35,7 +35,7 @@ enum BannerType {
 /** Centralized static class for banner customization constants. */
 class BannerConstant {
     
-    /* MARK: Banner customization constants */
+    /* MARK: Customization */
     
     public static let animation: Animation = .easeInOut
     public static let textColor: Color = .white

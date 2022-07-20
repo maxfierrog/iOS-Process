@@ -27,74 +27,82 @@ struct LoginView: View {
     
     /* MARK: Struct fields */
     
+    @StateObject var model: LoginViewModel
     @Environment(\.colorScheme) private var colorScheme
-    @StateObject private var model = LoginViewModel()
     @FocusState private var focus: FocusableLoginField?
     
     /* MARK: View declaration */
     
     var body: some View {
-        GroupBox {
-            NavigationLink(destination: RegistrationView(), tag: true, selection: $model.navigateToRegister) { }
-            NavigationLink(destination: HomeView(currentUser: $model.verifiedUser), tag: true, selection: $model.navigateToHome) { }
-            
-            VStack (alignment: .center, spacing: 10, content: {
-                Image("login-image")
-                    .resizable()
-                    .scaledToFit()
+        NavigationView {
+            GroupBox {
+                NavigationLink(destination: RegistrationView(model: RegistrationViewModel(model)),
+                               tag: true,
+                               selection: $model.navigateToRegister) { }
                 
-                EmailField(title: "Email", text: $model.emailField)
-                    .padding(.bottom, 10)
-                    .submitLabel(.next)
-                    .focused($focus, equals: .emailField)
-                    .onSubmit {
-                        focus = .passwordField
-                    }
+                VStack (alignment: .center, spacing: 10, content: {
+                    Image("login-image")
+                        .resizable()
+                        .scaledToFit()
+                    
+                    EmailField(title: "Email", text: $model.emailField)
+                        .padding(.bottom, 10)
+                        .submitLabel(.next)
+                        .focused($focus, equals: .emailField)
+                        .onSubmit {
+                            focus = .passwordField
+                        }
+                    
+                    PasswordField(title: "Password", text: $model.passwordField)
+                        .padding(.bottom, 20)
+                        .focused($focus, equals: .passwordField)
+                        .submitLabel(.go)
+                })
                 
-                PasswordField(title: "Password", text: $model.passwordField)
-                    .padding(.bottom, 20)
-                    .focused($focus, equals: .passwordField)
-                    .submitLabel(.go)
-            })
-            
-            ActionButton(state: $model.loginButtonState, onTap: {
-                model.loginUser()
-            }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
-            
-            Text("or")
-                .bold()
-                .font(.subheadline)
-            
-            ActionButton(state: $model.registerButtonState, onTap: {
-                model.didTapRegister()
-            }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-            
-            Button {
-                model.sendPasswordResetEmail()
+                ActionButton(state: $model.loginButtonState, onTap: {
+                    model.loginUser()
+                }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
+                
+                Text("or")
+                    .bold()
+                    .font(.subheadline)
+                
+                ActionButton(state: $model.registerButtonState, onTap: {
+                    model.didTapRegister()
+                }, backgroundColor: colorScheme == .dark ? .brown : .primary)
+                
+                Button {
+                    model.sendPasswordResetEmail()
+                } label: {
+                    Text(LoginConstant.forgotPasswordButtonText)
+                        .underline()
+                }
+                .font(.footnote)
+                .padding(.top, 5)
             } label: {
-                Text(LoginConstant.forgotPasswordButtonText)
-                    .underline()
+                Label(LoginConstant.welcomeMessage, systemImage: LoginConstant.welcomeIcon)
             }
-            .font(.footnote)
-            .padding(.top, 5)
-        } label: {
-            Label(LoginConstant.welcomeMessage, systemImage: LoginConstant.welcomeIcon)
+            .padding()
+            .navigationTitle(LoginConstant.navigationTitle)
         }
-        .padding()
-        .navigationTitle(LoginConstant.navigationTitle)
-        .accentColor(Color(.label))
+        .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
     }
 }
 
 
+/** Handles UI state tracking and updating, credential validation, initial
+ navigation, and dispatches API calls. */
 class LoginViewModel: ObservableObject {
     
-    /* MARK: Class fields */
+    /* MARK: Model fields */
     
+    // SuperView model
+    @Published var superModel: SuperViewModel
+        
     // Navigation fields
     @Published var navigateToHome: Bool? = false
-    @Published var verifiedUser: User = User(name: "", username: "", email: "")
+    @Published var verifiedUser: User = User()
     
     // Data fields
     @Published var passwordField: String = ""
@@ -124,9 +132,10 @@ class LoginViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    /* MARK: Methods */
+    /* MARK: Model methods */
     
-    init() {
+    init(_ superModel: SuperViewModel) {
+        self.superModel = superModel
         emailIsValidPublisher
             .combineLatest(passwordIsValidPublisher)
             .map { emailValid, passwordValid in
@@ -142,6 +151,9 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /** First authenticates with email and password credentials, then fetches
+     user data model from database, and passes it to SuperModel, who handles
+     navigation to home. */
     func loginUser() {
         loginButtonState = LoginConstant.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
@@ -157,14 +169,14 @@ class LoginViewModel: ObservableObject {
                 }
                 self?.verifiedUser = user!
                 self?.loginButtonState = LoginConstant.successLoginButtonState
-                self?.navigateToHome = true
+                self?.superModel.loginWithUserModel(user!)
             }
         }
     }
     
     func sendPasswordResetEmail() {
         guard VerificationUtils.isValidEmail(emailField) else {
-            showBannerWithErrorMessage("Please enter a valid email address.")
+            showBannerWithErrorMessage(LoginConstant.invalidEmailForResetText)
             return
         }
         Auth.auth().sendPasswordReset(withEmail: emailField) { error in
@@ -172,8 +184,8 @@ class LoginViewModel: ObservableObject {
                 self.showBannerWithErrorMessage(error?.localizedDescription)
                 return
             }
-            self.bannerData.title = "Email sent"
-            self.bannerData.detail = "We have sent a recovery link to the account associated with that email address, if there is one."
+            self.bannerData.title = LoginConstant.recoveryEmailSentBannerTitle
+            self.bannerData.detail = LoginConstant.recoveryEmailSentText
             self.bannerData.type = .Info
             self.showErrorBanner = true
         }
@@ -184,11 +196,15 @@ class LoginViewModel: ObservableObject {
         navigateToRegister = true
     }
     
-    /* MARK: Helper methods */
+    func superLoginUserWithModel(_ model: User) {
+        self.superModel.loginWithUserModel(model)
+    }
+    
+    /* MARK: Model helper methods */
     
     private func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        bannerData.title = "Error"
+        bannerData.title = LoginConstant.genericErrorBannerTitle
         bannerData.detail = message
         bannerData.type = .Error
         showErrorBanner = true
@@ -198,7 +214,6 @@ class LoginViewModel: ObservableObject {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
-            .previewInterfaceOrientation(.portrait)
+        LoginView(model: LoginViewModel(SuperViewModel()))
     }
 }

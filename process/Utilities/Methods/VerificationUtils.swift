@@ -55,4 +55,9 @@ class VerificationUtils {
                     username: username,
                     email: email)
     }
+    
+    /** Returns a placeholder user data model to temporarily satisfy fields. */
+    static func getPlaceholderUser() -> User {
+        return User()
+    }
 }

@@ -12,7 +12,7 @@ import Foundation
 /** Centralized helper class for User model constants. */
 class UserConstant {
     
-    /* MARK: Field error constants */
+    /* MARK: Field errors */
     
     /** This will be stored instead of an Authentication ID when registration
      succeeds in saving user data despite having failed to sign in the user.

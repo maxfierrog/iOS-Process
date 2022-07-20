@@ -29,7 +29,7 @@ struct RegistrationView: View {
     
     /* MARK: Struct fields */
     
-    @StateObject private var model = RegistrationViewModel()
+    @StateObject var model: RegistrationViewModel
     @FocusState private var focus: FocusableRegistrationField?
     @Environment(\.colorScheme) private var colorScheme
     
@@ -38,8 +38,6 @@ struct RegistrationView: View {
     var body: some View {
         VStack {
             GroupBox {
-                NavigationLink(destination: HomeView(currentUser: $model.registeredUser), tag: true, selection: $model.navigateToHome) { }
-
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("register-image")
                         .resizable()
@@ -81,21 +79,25 @@ struct RegistrationView: View {
             }
             .padding()
         }
-        .accentColor(Color(.label))
+        .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
         .navigationTitle(RegistrationConstant.navigationTitle)
     }
 }
 
 
-/** State and functional model for RegistrationView. */
+/** State and functional model for RegistrationView. Handles UI updates, tests
+ credentials' form, and dispatches API calls. */
 class RegistrationViewModel: ObservableObject {
     
-    /* MARK: Class fields */
+    /* MARK: Model fields */
+    
+    // SuperView model
+    @Published var loginModel: LoginViewModel
     
     // Navigation fields
     @Published var navigateToHome: Bool? = false
-    @Published var registeredUser: User = VerificationUtils.getNewUserModel(name: "", username: "", email: "")
+    @Published var registeredUser: User = User()
     
     // Data fields
     @Published var nameField: String = ""
@@ -132,9 +134,10 @@ class RegistrationViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    /* MARK: Class methods */
+    /* MARK: Model methods */
     
-    init() {
+    init(_ loginModel: LoginViewModel) {
+        self.loginModel = loginModel
         emailIsValidPublisher
             .combineLatest(passwordIsValidPublisher, screenNameIsValidPublisher)
             .map { emailValid, passwordValid, screenNameIsValid in
@@ -150,6 +153,14 @@ class RegistrationViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /** This method follows these steps:
+     1. Creates a user authentication entry with the given credentials
+     2. Signs in using those same credentials
+     3. Generates a unique username from the provided screen name
+     4. Iinstantiates a user model
+     5. Uploads the user model to the realtime database
+     If the last steps fail, the user's entry in the authentication table is
+     deleted to maintain data consistency. */
     func register() {
         registerButtonState = RegistrationConstant.loadingRegisterButtonState
         Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] _, error in
@@ -158,26 +169,24 @@ class RegistrationViewModel: ObservableObject {
                 self?.showBannerWithErrorMessage(error!.localizedDescription)
                 return
             }
-            print("Created user")
             Auth.auth().signIn(withEmail: self!.emailField, password: self!.passwordField) { [weak self] _, error in
                 guard error == nil else {
                     self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                     self?.showBannerWithErrorMessage(error!.localizedDescription)
                     return
                 }
-                print("Signed in user")
                 VerificationUtils.availableUsernameFromName(self!.nameField) { generatedUsername, error in
                     guard error == nil else {
                         self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                         self?.showBannerWithErrorMessage(error!.localizedDescription)
+                        APIHandler.attemptToDeleteCurrentUser()
                         return
                     }
-                    let newUser = VerificationUtils.getNewUserModel(
+                    let newUser = User(
                         name: self!.nameField,
                         username: generatedUsername!,
                         email: self!.emailField
                     )
-                    print("Created user model")
                     APIHandler.uploadNewUser(newUser) { error in
                         guard error == nil else {
                             self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
@@ -185,21 +194,20 @@ class RegistrationViewModel: ObservableObject {
                             APIHandler.attemptToDeleteCurrentUser()
                             return
                         }
-                        print("Uploaded user to database")
                         self?.registerButtonState = RegistrationConstant.successRegisterButtonState
                         self?.registeredUser = newUser
-                        self?.navigateToHome = true
+                        self?.loginModel.superLoginUserWithModel(newUser)
                     }
                 }
             }
         }
     }
     
-    /* MARK: Helper methods */
+    /* MARK: Model helper methods */
     
     private func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        bannerData.title = "Error"
+        bannerData.title = RegistrationConstant.genericErrorBannerTitle
         bannerData.detail = message
         bannerData.type = .Error
         showErrorBanner = true
@@ -209,7 +217,6 @@ class RegistrationViewModel: ObservableObject {
 
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
-        RegistrationView()
-            .previewInterfaceOrientation(.portrait)
+        RegistrationView(model: RegistrationViewModel(LoginViewModel(SuperViewModel())))
     }
 }

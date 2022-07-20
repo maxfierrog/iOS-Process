@@ -5,6 +5,7 @@
 //  Created by Maximo Fierro on 7/11/22.
 //
 
+
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
@@ -27,10 +28,7 @@ struct processApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
         WindowGroup {
-            // TODO: Decide if user's login is should be persisted
-            NavigationView {
-                LoginView()
-            }
+            SuperView()
         }
     }
 }

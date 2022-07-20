@@ -37,6 +37,13 @@
 		505D6E1B287EC49B005A28CB /* VerificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E1A287EC49B005A28CB /* VerificationUtils.swift */; };
 		505D6E21287EEDD3005A28CB /* Invite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E20287EEDD3005A28CB /* Invite.swift */; };
 		505D6E26287EF262005A28CB /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E25287EF262005A28CB /* APIHandler.swift */; };
+		505D6E2828880787005A28CB /* ProjectsConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E2728880787005A28CB /* ProjectsConstant.swift */; };
+		505D6E2A288807E2005A28CB /* TasksConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E29288807E2005A28CB /* TasksConstant.swift */; };
+		505D6E2C288807F0005A28CB /* ProfileConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E2B288807F0005A28CB /* ProfileConstant.swift */; };
+		505D6E2E288808D9005A28CB /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E2D288808D9005A28CB /* GlobalConstant.swift */; };
+		505D6E30288809EE005A28CB /* HomeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E2F288809EE005A28CB /* HomeConstants.swift */; };
+		505D6E36288823FA005A28CB /* Super.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E35288823FA005A28CB /* Super.swift */; };
+		505D6E3C2888575D005A28CB /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E3B2888575D005A28CB /* RoundButton.swift */; };
 		982352902887F82C00A565CB /* APIHandlerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9823528F2887F82C00A565CB /* APIHandlerError.swift */; };
 		982352942887F8F600A565CB /* LoginConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982352932887F8F600A565CB /* LoginConstant.swift */; };
 		982352962887F90400A565CB /* RegistrationConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982352952887F90400A565CB /* RegistrationConstant.swift */; };
@@ -85,6 +92,13 @@
 		505D6E1A287EC49B005A28CB /* VerificationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationUtils.swift; sourceTree = "<group>"; };
 		505D6E20287EEDD3005A28CB /* Invite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invite.swift; sourceTree = "<group>"; };
 		505D6E25287EF262005A28CB /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
+		505D6E2728880787005A28CB /* ProjectsConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsConstant.swift; sourceTree = "<group>"; };
+		505D6E29288807E2005A28CB /* TasksConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksConstant.swift; sourceTree = "<group>"; };
+		505D6E2B288807F0005A28CB /* ProfileConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConstant.swift; sourceTree = "<group>"; };
+		505D6E2D288808D9005A28CB /* GlobalConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
+		505D6E2F288809EE005A28CB /* HomeConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConstants.swift; sourceTree = "<group>"; };
+		505D6E35288823FA005A28CB /* Super.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Super.swift; sourceTree = "<group>"; };
+		505D6E3B2888575D005A28CB /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		9823528F2887F82C00A565CB /* APIHandlerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandlerError.swift; sourceTree = "<group>"; };
 		982352932887F8F600A565CB /* LoginConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginConstant.swift; sourceTree = "<group>"; };
 		982352952887F90400A565CB /* RegistrationConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationConstant.swift; sourceTree = "<group>"; };
@@ -210,7 +224,7 @@
 				982352922887F8C700A565CB /* Constants */,
 				982352912887F84200A565CB /* Errors */,
 				505D6DD2287C2054005A28CB /* ParentViews */,
-				505D6E1C287EC4AC005A28CB /* ViewComponents */,
+				505D6E1C287EC4AC005A28CB /* Components */,
 				505D6E19287EC484005A28CB /* Methods */,
 			);
 			path = Utilities;
@@ -236,24 +250,70 @@
 			path = Methods;
 			sourceTree = "<group>";
 		};
-		505D6E1C287EC4AC005A28CB /* ViewComponents */ = {
+		505D6E1C287EC4AC005A28CB /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				505D6E15287EB061005A28CB /* PasswordField.swift */,
 				505D6E17287EB24A005A28CB /* EmailField.swift */,
 				9879C1542880C385009A34D3 /* BannerModifier.swift */,
+				505D6E3B2888575D005A28CB /* RoundButton.swift */,
 			);
-			path = ViewComponents;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		505D6E1D287EEBDD005A28CB /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				505D6E382888240E005A28CB /* Lifecycle */,
 				9863A234287F649E008616B2 /* Preview Content */,
-				505D6DBD287C1F9E005A28CB /* processApp.swift */,
 				505D6DC1287C1F9F005A28CB /* Assets.xcassets */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		505D6E3128880A39005A28CB /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				982352932887F8F600A565CB /* LoginConstant.swift */,
+				982352952887F90400A565CB /* RegistrationConstant.swift */,
+			);
+			path = Verification;
+			sourceTree = "<group>";
+		};
+		505D6E3228880A62005A28CB /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				505D6E2F288809EE005A28CB /* HomeConstants.swift */,
+				505D6E2728880787005A28CB /* ProjectsConstant.swift */,
+				505D6E29288807E2005A28CB /* TasksConstant.swift */,
+				505D6E2B288807F0005A28CB /* ProfileConstant.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		505D6E3328880A93005A28CB /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				982352992887FAC200A565CB /* BannerConstant.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		505D6E3428880AB0005A28CB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				982352972887F91900A565CB /* UserConstant.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		505D6E382888240E005A28CB /* Lifecycle */ = {
+			isa = PBXGroup;
+			children = (
+				505D6DBD287C1F9E005A28CB /* processApp.swift */,
+				505D6E35288823FA005A28CB /* Super.swift */,
+			);
+			path = Lifecycle;
 			sourceTree = "<group>";
 		};
 		982352912887F84200A565CB /* Errors */ = {
@@ -267,10 +327,11 @@
 		982352922887F8C700A565CB /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				982352932887F8F600A565CB /* LoginConstant.swift */,
-				982352952887F90400A565CB /* RegistrationConstant.swift */,
-				982352972887F91900A565CB /* UserConstant.swift */,
-				982352992887FAC200A565CB /* BannerConstant.swift */,
+				505D6E2D288808D9005A28CB /* GlobalConstant.swift */,
+				505D6E3428880AB0005A28CB /* Model */,
+				505D6E3328880A93005A28CB /* Component */,
+				505D6E3228880A62005A28CB /* Home */,
+				505D6E3128880A39005A28CB /* Verification */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -391,6 +452,7 @@
 				505D6DF9287C2289005A28CB /* EditTask.swift in Sources */,
 				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
 				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
+				505D6E36288823FA005A28CB /* Super.swift in Sources */,
 				9879C16F28854896009A34D3 /* Home.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
 				982352942887F8F600A565CB /* LoginConstant.swift in Sources */,
@@ -398,6 +460,7 @@
 				505D6E26287EF262005A28CB /* APIHandler.swift in Sources */,
 				505D6DF7287C227F005A28CB /* NewTask.swift in Sources */,
 				505D6DD8287C2143005A28CB /* SelectSubtasks.swift in Sources */,
+				505D6E2A288807E2005A28CB /* TasksConstant.swift in Sources */,
 				505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */,
 				982352902887F82C00A565CB /* APIHandlerError.swift in Sources */,
 				505D6E01287C22F8005A28CB /* Project.swift in Sources */,
@@ -405,12 +468,14 @@
 				505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */,
 				9879C1552880C385009A34D3 /* BannerModifier.swift in Sources */,
 				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
+				505D6E3C2888575D005A28CB /* RoundButton.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
 				505D6E1B287EC49B005A28CB /* VerificationUtils.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
 				505D6DF2287C2247005A28CB /* EditProject.swift in Sources */,
 				505D6DBE287C1F9E005A28CB /* processApp.swift in Sources */,
+				505D6E2E288808D9005A28CB /* GlobalConstant.swift in Sources */,
 				505D6DE8287C21B7005A28CB /* ExportTasks.swift in Sources */,
 				505D6DDE287C216B005A28CB /* Registration.swift in Sources */,
 				505D6DEF287C2238005A28CB /* NewProject.swift in Sources */,
@@ -418,10 +483,13 @@
 				9823529A2887FAC200A565CB /* BannerConstant.swift in Sources */,
 				505D6DE4287C2199005A28CB /* ProfileHome.swift in Sources */,
 				982352962887F90400A565CB /* RegistrationConstant.swift in Sources */,
+				505D6E30288809EE005A28CB /* HomeConstants.swift in Sources */,
+				505D6E2C288807F0005A28CB /* ProfileConstant.swift in Sources */,
 				505D6DE2287C2190005A28CB /* TasksHome.swift in Sources */,
 				505D6DED287C2218005A28CB /* Notifications.swift in Sources */,
 				982352982887F91900A565CB /* UserConstant.swift in Sources */,
 				505D6DFF287C22E7005A28CB /* User.swift in Sources */,
+				505D6E2828880787005A28CB /* ProjectsConstant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
