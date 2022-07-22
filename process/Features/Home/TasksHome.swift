@@ -28,7 +28,21 @@ struct TasksHomeView: View {
             }
             .pickerStyle(.segmented)
             .padding()
-            
+            ScrollView(.vertical) {
+                LazyVGrid(columns: model.taskListColumn) {
+                        ForEach(0...35, id: \.self) { value in
+                            Text(String(format: "Task %x", value))
+                                .font(.caption)
+                                .bold()
+                                .frame(minWidth: 356, minHeight: 80)
+                                .background(Color(red: 220/256, green: 220/256, blue: 220/256))
+                                .cornerRadius(20)
+                                .padding(.bottom, 8)
+                                .padding(.leading, 16)
+                                .padding(.trailing, 16)
+                        }
+                    }
+                }
             Spacer()
         }
         .roundButton(
@@ -79,6 +93,9 @@ class TasksHomeViewModel: ObservableObject {
     @Published var navigateToNewTask: Bool = false
     @Published var navigateToExport: Bool? = false
     @Published var navigateToTaskDetails: Bool? = false
+    
+    // Task list
+    @Published var taskListColumn: [GridItem] = [GridItem(.fixed(30))]
     
     // Segmented control
     @Published var taskCategories: [String] = TasksConstant.taskCategories

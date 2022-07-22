@@ -33,7 +33,8 @@ struct ProjectsHomeView: View {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 0) {
                     ForEach((0...20), id: \.self) { num in
                         Text("Project \(num)")
-                            .font(.system(size: 20))
+                            .font(.caption)
+                            .bold()
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 180)
                             .background(Color(red: 220/256, green: 220/256, blue: 220/256))
                             .cornerRadius(20)
