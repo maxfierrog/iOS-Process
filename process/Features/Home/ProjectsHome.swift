@@ -12,13 +12,11 @@ import SwiftUI
 /** Allows user to view ongoing and finished projects they created or are
  collaborators in, with the option to navigate to their Details views. */
 struct ProjectsHomeView: View {
-    
-    /* MARK: Struct fields */
-    
+        
     @StateObject var model: ProjectsHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
     
-    /* MARK: View declaration */
+    /* MARK: Projects home view */
 
     var body: some View {
         VStack {
@@ -30,6 +28,8 @@ struct ProjectsHomeView: View {
             .pickerStyle(.segmented)
             .padding()
             
+            Text(model.user.name)
+            
             Spacer()
         }
         .roundButton(
@@ -38,7 +38,6 @@ struct ProjectsHomeView: View {
             model.tappedNewProject()
         }
         .accentColor(GlobalConstant.accentColor)
-        .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button {
@@ -68,16 +67,12 @@ class ProjectsHomeViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // HomeView parent model
-    var homeViewModel: HomeViewModel
+    private var homeViewModel: HomeViewModel
     @Published var user: User
     
     // Segmented control
     @Published var projectCategories: [String] = ProjectsConstant.projectCategories
     @Published var selectedProjectCategory: Int = ProjectsConstant.startingProjectCategory
-    
-    // UI state fields
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
-    @Published var showBanner: Bool = false
     
     // Search bar
     @Published var searchText: String = ""
@@ -86,7 +81,7 @@ class ProjectsHomeViewModel: ObservableObject {
     
     init(_ homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
-        self.user = homeViewModel.getCurrentUser()
+        self.user = homeViewModel.getUser()
     }
     
     func tappedLogOut() {
@@ -107,10 +102,7 @@ class ProjectsHomeViewModel: ObservableObject {
     
     private func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        bannerData.title = ProjectsConstant.genericErrorBannerTitle
-        bannerData.detail = message
-        bannerData.type = .Error
-        showBanner = true
+        self.homeViewModel.showBannerWithErrorMessage(message)
     }
     
 }

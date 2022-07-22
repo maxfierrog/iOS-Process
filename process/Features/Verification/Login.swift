@@ -25,13 +25,11 @@ enum FocusableLoginField: Hashable {
  through banners. */
 struct LoginView: View {
     
-    /* MARK: Struct fields */
-    
     @StateObject var model: LoginViewModel
     @Environment(\.colorScheme) private var colorScheme
     @FocusState private var focus: FocusableLoginField?
     
-    /* MARK: View declaration */
+    /* MARK: Login view */
     
     var body: some View {
         NavigationView {

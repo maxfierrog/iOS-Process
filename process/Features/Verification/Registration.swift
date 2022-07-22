@@ -27,13 +27,11 @@ enum FocusableRegistrationField: Hashable {
  comprehensive error messages through banners. */
 struct RegistrationView: View {
     
-    /* MARK: Struct fields */
-    
     @StateObject var model: RegistrationViewModel
     @FocusState private var focus: FocusableRegistrationField?
     @Environment(\.colorScheme) private var colorScheme
     
-    /* MARK: View declaration */
+    /* MARK: Registration view */
     
     var body: some View {
         VStack {
@@ -187,7 +185,7 @@ class RegistrationViewModel: ObservableObject {
                         username: generatedUsername!,
                         email: self!.emailField
                     )
-                    APIHandler.uploadNewUser(newUser) { error in
+                    APIHandler.uploadUser(newUser) { error in
                         guard error == nil else {
                             self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                             self?.showBannerWithErrorMessage(error!.localizedDescription)

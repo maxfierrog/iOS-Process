@@ -12,12 +12,10 @@ import SwiftUI
 /** Facilitates a summary of tasks for the user's convencience. */
 struct TasksHomeView: View {
     
-    /* MARK: Struct fields */
-    
     @StateObject var model: TasksHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
     
-    /* MARK: View declaration */
+    /* MARK: Tasks home view */
 
     var body: some View {
         VStack {
@@ -86,7 +84,7 @@ class TasksHomeViewModel: ObservableObject {
     
     init(_ parentModel: HomeViewModel) {
         self.homeViewModel = parentModel
-        self.user = parentModel.currentUser
+        self.user = parentModel.getUser()
     }
     
     func tappedLogOut() {
@@ -107,10 +105,7 @@ class TasksHomeViewModel: ObservableObject {
     
     private func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        bannerData.title = TasksConstant.genericErrorBannerTitle
-        bannerData.detail = message
-        bannerData.type = .Error
-        showBanner = true
+        self.homeViewModel.showBannerWithErrorMessage(message)
     }
     
 }

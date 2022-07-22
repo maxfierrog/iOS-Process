@@ -11,12 +11,10 @@ import SwiftUI
 
 /** Root tab bar controlling access to Projects, Tasks, and Profile views. */
 struct HomeView: View {
-    
-    /* MARK: Struct fields */
-    
+        
     @ObservedObject var model: HomeViewModel
     
-    /* MARK: View declaration */
+    /* MARK: Home view declaration */
     
     var body: some View {
         TabView {
@@ -45,6 +43,7 @@ struct HomeView: View {
             }
         }
         .accentColor(GlobalConstant.accentColor)
+        .banner(data: $model.bannerData, show: $model.showBanner)
     }
 }
 
@@ -58,21 +57,38 @@ class HomeViewModel: ObservableObject {
     
     // SuperView model
     var superModel: SuperViewModel
-    @Published var currentUser: User
+    @Published private var user: User
+    
+    // Banner state fields
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    @Published var showBanner: Bool = false
     
     /* MARK: Model methods */
     
     init(_ superModel: SuperViewModel) {
         self.superModel = superModel
-        self.currentUser = superModel.getSignedInUser()
+        self.user = superModel.getUser()
+    }
+    
+    func updateUserModel(_ newModel: User) {
+        self.superModel.updateUserModel(newModel)
+        self.user = newModel
     }
     
     func logOut() -> Bool {
         return superModel.logOut()
     }
     
-    func getCurrentUser() -> User {
-        return self.currentUser
+    func getUser() -> User {
+        return superModel.getUser()
+    }
+    
+    func showBannerWithErrorMessage(_ message: String?) {
+        guard let message = message else { return }
+        bannerData.title = ProjectsConstant.genericErrorBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Error
+        showBanner = true
     }
 }
 

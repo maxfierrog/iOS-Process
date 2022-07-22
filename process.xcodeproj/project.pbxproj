@@ -310,8 +310,8 @@
 		505D6E382888240E005A28CB /* Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				505D6DBD287C1F9E005A28CB /* processApp.swift */,
 				505D6E35288823FA005A28CB /* Super.swift */,
+				505D6DBD287C1F9E005A28CB /* processApp.swift */,
 			);
 			path = Lifecycle;
 			sourceTree = "<group>";

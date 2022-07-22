@@ -16,6 +16,7 @@ public struct User: Codable {
     /* MARK: User data fields */
     
     // Identifying user data
+    var id: String
     var authID: String
     var username: String
     var name: String
@@ -29,6 +30,7 @@ public struct User: Codable {
     var receivedInvites: Array<Invite>
     
     enum CodingKeys: String, CodingKey {
+        case id
         case authID
         case username
         case name
@@ -45,6 +47,7 @@ public struct User: Codable {
     /** Initializes a user data model from a screen NAME, a unique USERNAME,
      and a unique EMAIL. Used to save new user data during registration. */
     init(name: String, username: String, email: String) {
+        self.id = UUID().uuidString
         self.name = name
         self.email = email
         self.username = username
@@ -61,12 +64,27 @@ public struct User: Codable {
         }
     }
     
-    /** Initialize a placeholder user model. */
+    /** Initializes a COPYOF a user data model, with updates to their screen
+     NAME and USERNAME. */
+    init(copyOf: User, name: String, username: String) {
+        self.name = name
+        self.username = username
+        self.id = copyOf.id
+        self.email = copyOf.email
+        self.authID = copyOf.authID
+        self.assignedTasks = copyOf.assignedTasks
+        self.ownedProjects = copyOf.ownedProjects
+        self.invitedProjects = copyOf.invitedProjects
+        self.receivedInvites = copyOf.receivedInvites
+    }
+    
+    /** Initialize a placeholder user data model. */
     init() {
         self.name = ""
         self.email = ""
         self.username = ""
         self.authID = ""
+        self.id = ""
         self.assignedTasks = []
         self.ownedProjects = []
         self.invitedProjects = []

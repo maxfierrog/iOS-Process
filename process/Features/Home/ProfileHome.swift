@@ -13,83 +13,25 @@ import SwiftUI
  and to interface with account and privacy preferences. */
 struct ProfileHomeView: View {
     
-    /* MARK: Struct fields */
-    
     @StateObject var model: ProfileHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
-    
-    /* MARK: View declaration */
+
+    /* MARK: Profile home view */
     
     var body: some View {
         VStack {
-            GroupBox {
-                HStack {
-                    HStack {
-                        Spacer()
-                        Image(model.getProfilePicture())
-                            .resizable()
-                            .frame(width: 125, height: 125)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.gray, lineWidth: 4)
-                            }
-                            .shadow(radius: 7)
-                            .padding(.init(top: 8, leading: 0, bottom: 8, trailing: 10))
-                    }
-                    VStack {
-                        HStack {
-                            Text(model.user.name)
-                                .font(.title2)
-                                .bold()
-                            Spacer()
-                        }
-                        HStack {
-                            Text(model.user.username)
-                                .font(.title3)
-                                .padding(.bottom, 3)
-                            Spacer()
-                        }
-                        HStack {
-                            Button(action: {
-                                model.editing.toggle()
-                            }, label: {
-                                Text("Edit")
-                                    .font(.subheadline)
-                            })
-                            .buttonStyle(.bordered)
-                            Spacer()
-                        }
-                    }
-                    Spacer()
-                }
+            if (model.editing) {
+                EditProfileCardView(model: model)
             }
-            .padding()
-            
-            HStack {
-                Text("User Analytics")
-                    .font(.title2)
-                    .bold()
-                    .padding(.leading, 24)
-                
-                Spacer()
-            }
-            
-            ScrollView(.horizontal) {
-                HStack(spacing: 20) {
-                    ForEach(0..<10) { _ in
-                        GroupBox {
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .frame(width: 200, height: 200)
+            ProfileCardView(model: model)
+                .onLongPressGesture {
+                    withAnimation {
+                        model.tappedEditProfile()
                     }
                 }
+            if (!model.editing) {
+                AnalyticsScrollView(model: model)
             }
-            
             Spacer()
         }
         .accentColor(GlobalConstant.accentColor)
@@ -116,6 +58,130 @@ struct ProfileHomeView: View {
 }
 
 
+/** A display card containing user identifying data. */
+struct ProfileCardView: View {
+    
+    @StateObject var model: ProfileHomeViewModel
+    
+    /* MARK: Profile card view */
+    
+    var body: some View {
+        GroupBox {
+            HStack {
+                Spacer()
+                Image(model.getProfilePicture())
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .overlay {
+                        Circle().stroke(.gray, lineWidth: 4)
+                    }
+                    .shadow(radius: 7)
+                    .padding(.init(top: 8, leading: 8, bottom: 8, trailing: 10))
+                VStack {
+                    HStack {
+                        Text(model.localName)
+                            .font(.title2)
+                            .bold()
+                    }
+                    HStack {
+                        Text(model.localUsername)
+                            .font(.title3)
+                            .padding(.bottom, 3)
+                    }
+                }
+                Spacer()
+            }
+        }
+        .padding()
+    }
+}
+
+
+/** A display card containing user identifying data. */
+struct EditProfileCardView: View {
+    
+    @StateObject var model: ProfileHomeViewModel
+    
+    /* MARK: Edit profile view */
+    
+    var body: some View {
+        GroupBox {
+            VStack {
+                TextField(text: $model.localName, prompt: Text("Name")) {
+                    Text("Screen name")
+                }
+                .padding(.bottom, 10)
+                .padding(.top, 10)
+                .textFieldStyle(.roundedBorder)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                TextField(text: $model.localUsername, prompt: Text("Username")) {
+                    Text("Screen name")
+                }
+                .padding(.bottom, 10)
+                .textFieldStyle(.roundedBorder)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                HStack {
+                    Button {
+                        model.chooseProfilePicture()
+                    } label: {
+                        Text("Choose Profile Picture")
+                    }
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Button {
+                        model.saveUserData()
+                    } label: {
+                        Text("Save")
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+        } label: {
+            Label("Edit user profile", systemImage: "square.and.pencil")
+        }
+        .padding()
+    }
+}
+
+
+struct AnalyticsScrollView: View {
+    
+    @ObservedObject var model: ProfileHomeViewModel
+    
+    /* MARK: Analytics view */
+    
+    var body: some View {
+        ScrollView(.vertical) {
+            HStack {
+                Text("User Analytics")
+                    .font(.title2)
+                    .bold()
+                    .padding(.leading, 24)
+                
+                Spacer()
+            }
+            ScrollView(.horizontal) {
+                HStack(spacing: 20) {
+                    ForEach(0..<10) { _ in
+                        GroupBox {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .frame(width: 200, height: 200)
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /** Data model for the Profile view. Communicates with Home view's model to
  obtain data and to communicate instructions, such as logging out. */
@@ -131,26 +197,63 @@ class ProfileHomeViewModel: ObservableObject {
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
     
-    // Editing
+    // Profile editing
     @Published var editing: Bool = false
+    @Published var editorNameField: String = ""
+    @Published var editorUsernameField: String = ""
+    
+    // Bridges
+    @Published var localUsername: String
+    @Published var localName: String
     
     /* MARK: Model methods */
     
     init(_ model: HomeViewModel) {
         self.homeViewModel = model
-        self.user = model.currentUser
+        self.user = model.getUser()
+        self.localName = model.getUser().name
+        self.localUsername = model.getUser().username
     }
     
-    func getProfilePicture() -> String {
-        return ProfileConstant.defaultProfilePicture
+    func chooseProfilePicture() {
+        
     }
     
     func tappedPreferences() {
         // FIXME: Show preferences view
     }
     
+    func getProfilePicture() -> String {
+        return ProfileConstant.defaultProfilePicture
+    }
+    
     func tappedEditProfile() {
-        // FIXME: Show profile edit view
+        if self.editing {
+            self.localName = self.user.name
+            self.localUsername = self.user.username
+        }
+        self.editing.toggle()
+    }
+    
+    func saveUserData() {
+        let updatedDataModel = User(
+            copyOf: self.user,
+            name: self.localName,
+            username: self.localUsername
+        )
+        updateUserModel(updatedDataModel)
+        self.editing = false
+    }
+    
+    func updateUserModel(_ newModel: User) {
+        APIHandler.uploadUser(newModel) { error in
+            guard error == nil else {
+                self.showBannerWithErrorMessage(error?.localizedDescription)
+                return
+            }
+            self.homeViewModel.updateUserModel(newModel)
+            self.user = newModel
+        }
     }
     
     func tappedLogOut() {
@@ -163,10 +266,7 @@ class ProfileHomeViewModel: ObservableObject {
     
     private func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        bannerData.title = ProfileConstant.genericErrorBannerTitle
-        bannerData.detail = message
-        bannerData.type = .Error
-        showBanner = true
+        self.homeViewModel.showBannerWithErrorMessage(message)
     }
 }
 

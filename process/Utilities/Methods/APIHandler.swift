@@ -33,10 +33,11 @@ class APIHandler {
 
     /** Uploads a new User struct model USER to Firestore. Allows for a
      COMPLETION block with an ERROR parameter, which will be nil if the upload
-     was successful. */
-    static func uploadNewUser(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
+     was successful. If a user with the same ID exists in the database, the
+     entry will be replaced. */
+    static func uploadUser(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
         do {
-            try db.collection("users").document(UUID().uuidString).setData(from: user)
+            try db.collection("users").document(user.id).setData(from: user)
             completion(nil)
         } catch let error {
             completion(error)
@@ -154,4 +155,5 @@ class APIHandler {
             return false
         }
     }
+    
 }
