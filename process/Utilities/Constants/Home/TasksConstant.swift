@@ -9,7 +9,7 @@ import Foundation
 
 
 /** Centralized helper class for Task related views and models. */
-class TasksConstant {
+class TasksConstant: GlobalConstant {
     
     /* MARK: TasksView */
     
@@ -26,6 +26,4 @@ class TasksConstant {
     public static let exportAccessibilityText: String = "Export tasks"
     public static let navigationTitle: String = "Tasks"
     
-    // Banner messages
-    public static let genericErrorBannerTitle: String = "Error"
 }

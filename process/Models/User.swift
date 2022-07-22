@@ -21,7 +21,6 @@ public struct User: Codable {
     var username: String
     var name: String
     var email: String
-    var profilePictureID: String?
     
     // Functional user data
     var assignedTasks: Array<String>
@@ -36,7 +35,6 @@ public struct User: Codable {
         case name
         case email
         case assignedTasks
-        case profilePictureID
         case ownedProjects
         case invitedProjects
         case receivedInvites

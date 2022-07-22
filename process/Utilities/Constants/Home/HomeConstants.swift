@@ -10,7 +10,7 @@ import Foundation
 
 
 /** Centralized helper class for Home view details. */
-class HomeConstants {
+class HomeConstants: GlobalConstant {
     
     /* MARK: Details */
     

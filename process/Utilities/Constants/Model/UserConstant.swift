@@ -10,7 +10,7 @@ import Foundation
 
 
 /** Centralized helper class for User model constants. */
-class UserConstant {
+class UserConstant: GlobalConstant {
     
     /* MARK: Field errors */
     
@@ -25,4 +25,7 @@ class UserConstant {
      backend fixes. */
     static public let noAuthIDMessage: String = "ERROR"
     
+    /** The path for the default profile picture image, which is presented
+     for users which have not manually selected one. */
+    static public let defaultProfilePicturePath = "default.jpg"
 }

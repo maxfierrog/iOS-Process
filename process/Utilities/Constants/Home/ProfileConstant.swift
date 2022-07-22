@@ -9,7 +9,7 @@ import Foundation
 
 
 /** Centralized helper class for Profile related views and models. */
-class ProfileConstant {
+class ProfileConstant: GlobalConstant {
     
     /* MARK: ProfileView */
     
@@ -21,6 +21,4 @@ class ProfileConstant {
     public static let preferencesAccessibilityText: String = "User preferences"
     public static let navigationTitle: String = "Profile"
     
-    // Banner messages
-    public static let genericErrorBannerTitle: String = "Error"
 }

@@ -20,6 +20,7 @@ struct ProfileHomeView: View {
     
     var body: some View {
         VStack {
+            NavigationLink(destination: UserPreferencesView(), tag: true, selection: $model.navigateToPreferences) { }
             if (model.editing) {
                 EditProfileCardView(model: model)
             }
@@ -54,6 +55,9 @@ struct ProfileHomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $model.navigateToChoosePhoto) {
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $model.profilePictureImage)
+        }
     }
 }
 
@@ -69,7 +73,7 @@ struct ProfileCardView: View {
         GroupBox {
             HStack {
                 Spacer()
-                Image(model.getProfilePicture())
+                Image(uiImage: model.profilePictureImage)
                     .resizable()
                     .frame(width: 100, height: 100)
                     .clipShape(Circle())
@@ -125,14 +129,18 @@ struct EditProfileCardView: View {
                 .disableAutocorrection(true)
                 HStack {
                     Button {
-                        model.chooseProfilePicture()
+                        withAnimation {
+                            model.chooseProfilePicture()
+                        }
                     } label: {
                         Text("Choose Profile Picture")
                     }
                     .buttonStyle(.bordered)
                     Spacer()
                     Button {
-                        model.saveUserData()
+                        withAnimation {
+                            model.saveUserData()
+                        }
                     } label: {
                         Text("Save")
                     }
@@ -193,7 +201,14 @@ class ProfileHomeViewModel: ObservableObject {
     private var homeViewModel: HomeViewModel
     @Published var user: User
     
-    // UI state fields
+    // Navigation
+    @Published var navigateToPreferences: Bool? = false
+    
+    // Profile picture
+    @Published var profilePictureImage: UIImage
+    @Published var navigateToChoosePhoto: Bool = false
+    
+    // Banner state fields
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
     
@@ -213,36 +228,62 @@ class ProfileHomeViewModel: ObservableObject {
         self.user = model.getUser()
         self.localName = model.getUser().name
         self.localUsername = model.getUser().username
+        self.profilePictureImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+        APIHandler.fetchImageFromStorage(user: model.getUser()) { error, image in
+            guard error == nil else { return }
+            self.profilePictureImage = image!
+        }
     }
     
     func chooseProfilePicture() {
-        
+        self.navigateToChoosePhoto = true
     }
     
     func tappedPreferences() {
         // FIXME: Show preferences view
     }
     
-    func getProfilePicture() -> String {
-        return ProfileConstant.defaultProfilePicture
+    func getProfilePicture() -> UIImage {
+        return self.profilePictureImage
     }
     
     func tappedEditProfile() {
         if self.editing {
             self.localName = self.user.name
             self.localUsername = self.user.username
+            self.profilePictureImage = UIImage(named: ProfileConstant.defaultProfilePicture)! // FIXME: Only works if the user's image is the default one
         }
         self.editing.toggle()
     }
     
     func saveUserData() {
-        let updatedDataModel = User(
-            copyOf: self.user,
-            name: self.localName,
-            username: self.localUsername
-        )
-        updateUserModel(updatedDataModel)
-        self.editing = false
+        if (self.user.username != self.localUsername) {
+            APIHandler.matchUsernameQuery(user.username) { result, error in
+                guard error == nil else {
+                    self.showBannerWithErrorMessage(error?.localizedDescription)
+                    return
+                }
+                guard result!.documents.isEmpty else {
+                    self.showBannerWithErrorMessage("Sorry, that username already exists. Please choose another one.")
+                    return
+                }
+                let updatedDataModel = User(
+                    copyOf: self.user,
+                    name: self.localName,
+                    username: self.localUsername
+                )
+                self.updateUserModel(updatedDataModel)
+                self.editing = false
+            }
+        } else {
+            let updatedDataModel = User(
+                copyOf: self.user,
+                name: self.localName,
+                username: self.localUsername
+            )
+            self.updateUserModel(updatedDataModel)
+            self.editing = false
+        }
     }
     
     func updateUserModel(_ newModel: User) {
@@ -253,6 +294,14 @@ class ProfileHomeViewModel: ObservableObject {
             }
             self.homeViewModel.updateUserModel(newModel)
             self.user = newModel
+            let uploadTask = APIHandler.uploadImageToStorage(image: self.profilePictureImage, user: self.user) { error, _ in
+                guard error == nil else {
+                    self.showBannerWithErrorMessage(error?.localizedDescription)
+                    return
+                }
+            }
+            uploadTask.resume()
+            self.showBannerWithSuccessMessage("Successfully changed your user data.")
         }
     }
     
@@ -262,12 +311,24 @@ class ProfileHomeViewModel: ObservableObject {
         }
     }
     
-    /* MARK: Model helper methods */
+    /* MARK: Helper methods */
     
-    private func showBannerWithErrorMessage(_ message: String?) {
+    func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        self.homeViewModel.showBannerWithErrorMessage(message)
+        bannerData.title = GlobalConstant.genericErrorBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Error
+        showBanner = true
     }
+    
+    func showBannerWithSuccessMessage(_ message: String?) {
+        guard let message = message else { return }
+        bannerData.title = GlobalConstant.genericSuccessBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Success
+        showBanner = true
+    }
+    
 }
 
 struct ProfileHomeView_Previews: PreviewProvider {

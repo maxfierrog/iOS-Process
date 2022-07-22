@@ -42,7 +42,6 @@ struct RegistrationView: View {
                         .scaledToFit()
                         .padding(.bottom, 10)
                         .padding(.top, 15)
-                    
                     TextField(text: $model.nameField, prompt: Text("Name")) {
                         Text("Screen name")
                     }
@@ -54,7 +53,6 @@ struct RegistrationView: View {
                     .onSubmit {
                         focus = .emailField
                     }
-                    
                     EmailField(title: "Email", text: $model.emailField)
                         .padding(.bottom, 10)
                         .submitLabel(.next)
@@ -62,13 +60,11 @@ struct RegistrationView: View {
                         .onSubmit {
                             focus = .passwordField
                         }
-                    
                     PasswordField(title: "Password", text: $model.passwordField)
                         .padding(.bottom, 20)
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
                 })
-                
                 ActionButton(state: $model.registerButtonState, onTap: {
                     model.register()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
@@ -76,8 +72,8 @@ struct RegistrationView: View {
                 Label(RegistrationConstant.welcomeMessage, systemImage: RegistrationConstant.welcomeIcon)
             }
             .padding()
+            .accentColor(GlobalConstant.accentColor)
         }
-        .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showErrorBanner)
         .navigationTitle(RegistrationConstant.navigationTitle)
     }
@@ -102,7 +98,7 @@ class RegistrationViewModel: ObservableObject {
     @Published var passwordField: String = ""
     @Published var emailField: String = ""
     
-    // UI state fields
+    // Banner and button state fields
     @Published var registerButtonState: ActionButtonState = RegistrationConstant.invalidRegisterButtonState
     @Published var registrationHasError: Bool = false
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)

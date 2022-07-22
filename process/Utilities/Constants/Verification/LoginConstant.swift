@@ -11,7 +11,7 @@ import ActionButton
 
 
 /** Centralized helper class for Login view and model constants. */
-class LoginConstant {
+class LoginConstant: GlobalConstant {
     
     /* MARK: LoginView */
     
@@ -39,5 +39,5 @@ class LoginConstant {
     public static let invalidEmailForResetText: String = "Please enter a valid email address."
     public static let recoveryEmailSentText: String = "We have sent a recovery link to the account associated with that email address, if there is one."
     public static let recoveryEmailSentBannerTitle: String = "Email sent"
-    public static let genericErrorBannerTitle: String = "Error"
+
 }

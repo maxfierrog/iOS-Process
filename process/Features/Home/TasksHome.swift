@@ -19,6 +19,8 @@ struct TasksHomeView: View {
 
     var body: some View {
         VStack {
+            NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
+            NavigationLink(destination: TaskDetailsView(), tag: true, selection: $model.navigateToTaskDetails) { }
             Picker(TasksConstant.pickerAccessibilityText, selection: $model.selectedTaskCategory) {
                 ForEach(model.taskCategories, id: \.self) { category in
                     Text(category)
@@ -44,7 +46,6 @@ struct TasksHomeView: View {
                     Label(TasksConstant.exportAccessibilityText, systemImage: TasksConstant.exportButtonIcon)
                 }
             }
-                
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
                     withAnimation {
@@ -53,6 +54,11 @@ struct TasksHomeView: View {
                 } label: {
                     Text(GlobalConstant.logoutButtonText)
                 }
+            }
+        }
+        .sheet(isPresented: $model.navigateToNewTask) {
+            NavigationView {
+                NewTaskView()
             }
         }
     }
@@ -69,11 +75,16 @@ class TasksHomeViewModel: ObservableObject {
     private var homeViewModel: HomeViewModel
     @Published var user: User
     
+    // Navigation
+    @Published var navigateToNewTask: Bool = false
+    @Published var navigateToExport: Bool? = false
+    @Published var navigateToTaskDetails: Bool? = false
+    
     // Segmented control
     @Published var taskCategories: [String] = TasksConstant.taskCategories
     @Published var selectedTaskCategory: Int = TasksConstant.startingTaskCategory
     
-    // UI state fields
+    // Banner state fields
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
     
@@ -94,20 +105,30 @@ class TasksHomeViewModel: ObservableObject {
     }
     
     func tappedExport() {
-        // FIXME: Show export view
+        self.navigateToExport = true
     }
     
     func tappedNewTask() {
-        // FIXME: Generate new tasks
+        self.navigateToNewTask = true
     }
     
-    /* MARK: Model helper methods */
+    /* MARK: Helper methods */
     
-    private func showBannerWithErrorMessage(_ message: String?) {
+    func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        self.homeViewModel.showBannerWithErrorMessage(message)
+        bannerData.title = GlobalConstant.genericErrorBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Error
+        showBanner = true
     }
     
+    func showBannerWithSuccessMessage(_ message: String?) {
+        guard let message = message else { return }
+        bannerData.title = GlobalConstant.genericSuccessBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Success
+        showBanner = true
+    }
 }
 
 struct TasksHomeView_Previews: PreviewProvider {

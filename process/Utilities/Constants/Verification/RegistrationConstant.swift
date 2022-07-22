@@ -11,7 +11,7 @@ import ActionButton
 
 
 /** Centralized helper class for Register view and model constants. */
-class RegistrationConstant {
+class RegistrationConstant: GlobalConstant {
     
     /* MARK: RegistrationView */
     
@@ -31,8 +31,5 @@ class RegistrationConstant {
         .disabled(title: "Could not register user", systemImage: "person.fill.xmark")
     static public let successRegisterButtonState: ActionButtonState =
         .disabled(title: "Success!", systemImage: "person.fill.checkmark")
-
-    // Banner messages
-    public static let genericErrorBannerTitle: String = "Error"
 
 }

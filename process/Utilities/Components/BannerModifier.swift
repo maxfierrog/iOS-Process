@@ -28,6 +28,7 @@ struct BannerModifier: ViewModifier {
             content
             if show {
                 VStack {
+                    Spacer()
                     HStack {
                         VStack(alignment: .leading, spacing: BannerConstant.titleAndDetailsSpacing) {
                             Text(data.title)
@@ -40,11 +41,10 @@ struct BannerModifier: ViewModifier {
                     .padding(12)
                     .background(data.type.tintColor)
                     .cornerRadius(BannerConstant.bannerCornerRadius)
-                    Spacer()
                 }
                 .padding()
                 .animation(BannerConstant.animation) // FIXME: Find non-deprecated replacement that works
-                .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
+                .transition(AnyTransition.move(edge: .bottom))
                 .onTapGesture {
                     withAnimation {
                         self.show = false

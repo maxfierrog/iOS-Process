@@ -37,12 +37,10 @@ struct LoginView: View {
                 NavigationLink(destination: RegistrationView(model: RegistrationViewModel(model)),
                                tag: true,
                                selection: $model.navigateToRegister) { }
-                
                 VStack (alignment: .center, spacing: 10, content: {
                     Image("login-image")
                         .resizable()
                         .scaledToFit()
-                    
                     EmailField(title: "Email", text: $model.emailField)
                         .padding(.bottom, 10)
                         .submitLabel(.next)
@@ -50,25 +48,20 @@ struct LoginView: View {
                         .onSubmit {
                             focus = .passwordField
                         }
-                    
                     PasswordField(title: "Password", text: $model.passwordField)
                         .padding(.bottom, 20)
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
                 })
-                
                 ActionButton(state: $model.loginButtonState, onTap: {
                     model.loginUser()
                 }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
-                
                 Text("or")
                     .bold()
                     .font(.subheadline)
-                
                 ActionButton(state: $model.registerButtonState, onTap: {
                     model.didTapRegister()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
-                
                 Button {
                     model.sendPasswordResetEmail()
                 } label: {
@@ -82,9 +75,9 @@ struct LoginView: View {
             }
             .padding()
             .navigationTitle(LoginConstant.navigationTitle)
+            .banner(data: $model.bannerData, show: $model.showErrorBanner)
         }
         .accentColor(GlobalConstant.accentColor)
-        .banner(data: $model.bannerData, show: $model.showErrorBanner)
     }
 }
 
@@ -107,7 +100,7 @@ class LoginViewModel: ObservableObject {
     @Published var emailField: String = ""
     @Published var navigateToRegister: Bool? = nil
     
-    // UI state fields
+    // Banner and button state fields
     @Published var loginButtonState: ActionButtonState = LoginConstant.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: LoginConstant.registerButtonTitle, systemImage: LoginConstant.registerButtonIcon)
     @Published var showErrorBanner: Bool = false

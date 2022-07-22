@@ -9,7 +9,7 @@ import Foundation
 
 
 /** Centralized helper class for Project related views and models. */
-class ProjectsConstant {
+class ProjectsConstant: GlobalConstant {
     
     /* MARK: ProjectsView */
     
@@ -26,6 +26,4 @@ class ProjectsConstant {
     public static let notificationsAccessibilityText: String = "Notifications"
     public static let navigationTitle: String = "Projects"
     
-    // Banner messages
-    public static let genericErrorBannerTitle: String = "Error"
 }

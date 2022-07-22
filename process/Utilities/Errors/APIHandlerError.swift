@@ -23,4 +23,7 @@ enum APIHandlerError: Error {
     
     /** No items were found for request designed to be non-empty. */
     case emptyRequest(String)
+    
+    /** Failed to upload data to storage. */
+    case dataUploadFailed(String)
 }

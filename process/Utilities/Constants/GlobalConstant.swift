@@ -20,4 +20,10 @@ class GlobalConstant {
     
     /** Message displayed on banner when log out fails. */
     public static let logOutFailedBannerMessage: String = "Failed to log out. Please try again shortly."
+    
+    /** Error banner title. */
+    public static let genericErrorBannerTitle: String = "Error"
+    
+    /** Success banner title. */
+    public static let genericSuccessBannerTitle: String = "Success!"
 }

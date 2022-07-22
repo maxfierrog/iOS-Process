@@ -20,9 +20,9 @@ enum BannerType {
     var tintColor: Color {
             switch self {
             case .Info:
-                return Color(red: 67/255, green: 154/255, blue: 215/255)
+                return Color(red: 130/255, green: 130/255, blue: 130/255)
             case .Success:
-                return Color.green
+                return Color(red: 60/255, green: 130/255, blue: 60/255)
             case .Warning:
                 return Color.yellow
             case .Error:
@@ -33,7 +33,7 @@ enum BannerType {
 
 
 /** Centralized static class for banner customization constants. */
-class BannerConstant {
+class BannerConstant: GlobalConstant {
     
     /* MARK: Customization */
     

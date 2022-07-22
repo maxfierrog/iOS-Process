@@ -25,7 +25,7 @@ struct HomeView: View {
             .tabItem {
                 Label(HomeConstants.projectsTabButtonText, systemImage: HomeConstants.projectsTabButtonIcon)
             }
-            
+
             NavigationView {
                 TasksHomeView(model: TasksHomeViewModel(model))
                     .navigationTitle(TasksConstant.navigationTitle)
@@ -33,7 +33,7 @@ struct HomeView: View {
             .tabItem {
                 Label(HomeConstants.tasksTabButtonText, systemImage: HomeConstants.tasksTabButtonIcon)
             }
-            
+
             NavigationView {
                 ProfileHomeView(model: ProfileHomeViewModel(model))
                     .navigationTitle(ProfileConstant.navigationTitle)
@@ -43,7 +43,6 @@ struct HomeView: View {
             }
         }
         .accentColor(GlobalConstant.accentColor)
-        .banner(data: $model.bannerData, show: $model.showBanner)
     }
 }
 
@@ -58,10 +57,6 @@ class HomeViewModel: ObservableObject {
     // SuperView model
     var superModel: SuperViewModel
     @Published private var user: User
-    
-    // Banner state fields
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
-    @Published var showBanner: Bool = false
     
     /* MARK: Model methods */
     
@@ -83,13 +78,6 @@ class HomeViewModel: ObservableObject {
         return superModel.getUser()
     }
     
-    func showBannerWithErrorMessage(_ message: String?) {
-        guard let message = message else { return }
-        bannerData.title = ProjectsConstant.genericErrorBannerTitle
-        bannerData.detail = message
-        bannerData.type = .Error
-        showBanner = true
-    }
 }
 
 struct HomeView_Previews: PreviewProvider {

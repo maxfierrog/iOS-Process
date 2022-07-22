@@ -20,6 +20,8 @@ struct ProjectsHomeView: View {
 
     var body: some View {
         VStack {
+            NavigationLink(destination: NotificationsView(), tag: true, selection: $model.navigateToNotifications) { }
+            NavigationLink(destination: ProjectDetailsView(), tag: true, selection: $model.navigateToProjectDetails) { }
             Picker(ProjectsConstant.pickerAccessibilityText, selection: $model.selectedProjectCategory) {
                 ForEach(model.projectCategories, id: \.self) { category in
                     Text(category)
@@ -27,9 +29,18 @@ struct ProjectsHomeView: View {
             }
             .pickerStyle(.segmented)
             .padding()
-            
-            Text(model.user.name)
-            
+            ScrollView {
+                LazyVGrid(columns: model.twoColumnGrid, spacing: 0) {
+                    ForEach((0...20), id: \.self) { num in
+                        Text("Project \(num)")
+                            .font(.system(size: 20))
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 180)
+                            .background(Color(red: 220/256, green: 220/256, blue: 220/256))
+                            .cornerRadius(20)
+                            .padding(8)
+                    }
+                }
+            }
             Spacer()
         }
         .roundButton(
@@ -37,6 +48,7 @@ struct ProjectsHomeView: View {
             image: Image(systemName: "plus").foregroundColor(colorScheme == .dark ? .black : .white)) {
             model.tappedNewProject()
         }
+        .banner(data: $model.bannerData, show: $model.showBanner)
         .accentColor(GlobalConstant.accentColor)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -56,6 +68,11 @@ struct ProjectsHomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $model.navigateToNewProject) {
+            NavigationView {
+                NewProjectView()
+            }
+        }
     }
 }
 
@@ -70,9 +87,21 @@ class ProjectsHomeViewModel: ObservableObject {
     private var homeViewModel: HomeViewModel
     @Published var user: User
     
+    // Navigation
+    @Published var navigateToNewProject: Bool = false
+    @Published var navigateToProjectDetails: Bool? = false
+    @Published var navigateToNotifications: Bool? = false
+    
+    // Projects grid
+    @Published var twoColumnGrid: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
+    
     // Segmented control
     @Published var projectCategories: [String] = ProjectsConstant.projectCategories
     @Published var selectedProjectCategory: Int = ProjectsConstant.startingProjectCategory
+    
+    // Banner state fields
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    @Published var showBanner: Bool = false
     
     // Search bar
     @Published var searchText: String = ""
@@ -91,18 +120,29 @@ class ProjectsHomeViewModel: ObservableObject {
     }
     
     func tappedNotifications() {
-        // FIXME: Show notifications view
+        self.navigateToNotifications = true
     }
     
     func tappedNewProject() {
-        // FIXME: Generate new projects
+        self.navigateToNewProject = true
     }
     
-    /* MARK: Model helper methods */
+    /* MARK: Helper methods */
     
-    private func showBannerWithErrorMessage(_ message: String?) {
+    func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }
-        self.homeViewModel.showBannerWithErrorMessage(message)
+        bannerData.title = GlobalConstant.genericErrorBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Error
+        showBanner = true
+    }
+    
+    func showBannerWithSuccessMessage(_ message: String?) {
+        guard let message = message else { return }
+        bannerData.title = GlobalConstant.genericSuccessBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Success
+        showBanner = true
     }
     
 }

@@ -59,6 +59,7 @@
 		9879C16928813B5D009A34D3 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9879C16828813B5D009A34D3 /* FirebaseFirestoreSwift */; };
 		9879C16B28813B5D009A34D3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9879C16A28813B5D009A34D3 /* FirebaseStorage */; };
 		9879C16F28854896009A34D3 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9879C16E28854896009A34D3 /* Home.swift */; };
+		988FD3DF288A911E0057D49D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3DE288A911E0057D49D /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +108,7 @@
 		9863A235287F64BE008616B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9879C1542880C385009A34D3 /* BannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerModifier.swift; sourceTree = "<group>"; };
 		9879C16E28854896009A34D3 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		988FD3DE288A911E0057D49D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +259,7 @@
 				505D6E17287EB24A005A28CB /* EmailField.swift */,
 				9879C1542880C385009A34D3 /* BannerModifier.swift */,
 				505D6E3B2888575D005A28CB /* RoundButton.swift */,
+				988FD3DE288A911E0057D49D /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				505D6DF9287C2289005A28CB /* EditTask.swift in Sources */,
 				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
 				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
+				988FD3DF288A911E0057D49D /* ImagePicker.swift in Sources */,
 				505D6E36288823FA005A28CB /* Super.swift in Sources */,
 				9879C16F28854896009A34D3 /* Home.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
