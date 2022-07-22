@@ -39,6 +39,9 @@ struct ProjectsHomeView: View {
                             .background(Color(red: 220/256, green: 220/256, blue: 220/256))
                             .cornerRadius(20)
                             .padding(8)
+                            .onTapGesture {
+                                model.tappedProject()
+                            }
                     }
                 }
             }
@@ -126,6 +129,10 @@ class ProjectsHomeViewModel: ObservableObject {
     
     func tappedNewProject() {
         self.navigateToNewProject = true
+    }
+    
+    func tappedProject() {
+        self.navigateToProjectDetails = true
     }
     
     /* MARK: Helper methods */

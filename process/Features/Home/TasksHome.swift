@@ -40,6 +40,9 @@ struct TasksHomeView: View {
                                 .padding(.bottom, 8)
                                 .padding(.leading, 16)
                                 .padding(.trailing, 16)
+                                .onTapGesture {
+                                    model.tappedTask()
+                                }
                         }
                     }
                 }
@@ -119,6 +122,10 @@ class TasksHomeViewModel: ObservableObject {
         if (!self.homeViewModel.logOut()) {
             self.showBannerWithErrorMessage(GlobalConstant.logOutFailedBannerMessage)
         }
+    }
+    
+    func tappedTask() {
+        self.navigateToTaskDetails = true
     }
     
     func tappedExport() {
