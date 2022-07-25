@@ -10,9 +10,9 @@ import SwiftUI
 
 
 /** Root view managing access between verification and home views. */
-struct SuperView: View {
+struct RootView: View {
         
-    @ObservedObject var model = SuperViewModel()
+    @ObservedObject var model = RootViewModel()
     
     /* MARK: Superview fork */
     
@@ -31,7 +31,7 @@ struct SuperView: View {
 
 /** Model for determining the authentication state of the application, and
  switching between login/registration and home views accordingly. */
-class SuperViewModel: ObservableObject {
+class RootViewModel: ObservableObject {
     
     /* MARK: Model fields */
     
@@ -43,16 +43,17 @@ class SuperViewModel: ObservableObject {
     /** Check for existing Authentication session, and extract current user's
      model if there is one. */
     init() {
-        self.user = User(
-            name: "Preview User",
-            username: "username",
-            email: "name@email.com"
-        )
+        self.user = User(name: "Preview User",
+                         username: "username",
+                         email: "name@email.com")
         self.userSignedIn = false
         APIHandler.getCurrentUserModel { user, error in
             guard error == nil && user != nil else { return }
             self.user = user!
-            self.userSignedIn = true
+            self.user.getProfilePicture() { error, _ in
+                guard error == nil else { return }
+                self.userSignedIn = true
+            }
         }
     }
     
@@ -66,13 +67,16 @@ class SuperViewModel: ObservableObject {
         return true
     }
     
-    func loginWithUserModel(_ model: User) {
-        self.user = model
-        self.userSignedIn = true
+    func loginWithUserModel(_ user: User) {
+        self.user = user
+        self.user.getProfilePicture() { error, _ in
+            guard error == nil else { return }
+            self.userSignedIn = true
+        }
     }
     
-    func updateUserModel(_ newModel: User) {
-        self.user = newModel
+    func updateUserModel(_ user: User) {
+        self.user = user
     }
     
     func getUser() -> User {
@@ -82,6 +86,6 @@ class SuperViewModel: ObservableObject {
 
 struct Content_Previews: PreviewProvider {
     static var previews: some View {
-        SuperView()
+        RootView()
     }
 }

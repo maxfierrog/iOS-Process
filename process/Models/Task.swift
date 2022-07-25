@@ -22,7 +22,7 @@ public struct Task: Codable {
     var dateDue: String?
     var dateCompleted: String?
     var assignee: String?
-    var creator: User
+    var creator: UserData
     var project: Project?
     var subtasks: Array<Task>
     

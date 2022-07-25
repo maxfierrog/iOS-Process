@@ -45,7 +45,7 @@ class APIHandler {
      entry will be replaced. */
     static func uploadUser(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
         do {
-            try realtimeDB.collection("users").document(user.id).setData(from: user)
+            try realtimeDB.collection("users").document(user.data.id).setData(from: user.data)
             completion(nil)
         } catch let error {
             completion(error)
@@ -122,10 +122,10 @@ class APIHandler {
             }
             let userDocumentID = querySnapshot!.documents[0].documentID
             let docRef = realtimeDB.collection("users").document(userDocumentID)
-            docRef.getDocument(as: User.self) { result in
+            docRef.getDocument(as: UserData.self) { result in
                 switch result {
-                case .success(let user):
-                    completion(user, nil)
+                case .success(let userData):
+                    completion(User(userData), nil)
                 case .failure(let error):
                     completion(nil, error)
                 }
@@ -146,7 +146,11 @@ class APIHandler {
     static func getCurrentUserModel(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
         if let email = Auth.auth().currentUser?.email {
             APIHandler.getUserFromEmail(email) { user, error in
-                completion(user, error)
+                guard error == nil else {
+                    completion(nil, error)
+                    return
+                }
+                completion(user, nil)
             }
         } else {
             completion(nil, APIHandlerError.noAuthenticatedUser("No user is currently authenticated."))
@@ -167,7 +171,7 @@ class APIHandler {
     /** Uploads an image reference with DATA to the images folder in the
      storage database, with NAME for its path termination. Allows for a
      completion block for errors and metadata. */
-    static func uploadImageToStorage(image: UIImage, user: User, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
+    static func uploadImageToStorage(image: UIImage, user: UserData, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
         let pictureCopy = image
         let pictureData = pictureCopy.resized(to: CGSize(width: 512, height: 512)).jpegData(compressionQuality: 0.9)! //FIXME: Image resizing doesn't work
         let pictureRef = APIHandler.imagesRef.child(user.id)
@@ -196,14 +200,13 @@ class APIHandler {
     
     /** Fetches a user's profile picture from storage. User's profile picctures
      are stored in the images directory, and are named with their IDs. */
-    static func fetchImageFromStorage(user: User, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
+    static func fetchImageFromStorage(user: UserData, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
         let pictureRef = APIHandler.imagesRef.child(user.id)
         pictureRef.getData(maxSize: 1 * 2048 * 2048) { data, error in // FIXME: MaxSize too generous, temp fix for disfunctional resizing
             guard error == nil else {
                 completion(error, nil)
                 return
             }
-            print("Fetched")
             completion(nil, UIImage(data: data!))
         }
     }

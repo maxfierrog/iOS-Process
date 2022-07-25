@@ -50,14 +50,14 @@ class VerificationUtils {
     
     /** Returns a new user data model with a unique EMAIL, unique USERNAME,
      and non-unique screen NAME. */
-    static func getNewUserModel(name: String, username: String, email: String) -> User {
-        return User(name: name,
+    static func getNewUserModel(name: String, username: String, email: String) -> UserData {
+        return UserData(name: name,
                     username: username,
                     email: email)
     }
     
     /** Returns a placeholder user data model to temporarily satisfy fields. */
-    static func getPlaceholderUser() -> User {
-        return User()
+    static func getPlaceholderUser() -> UserData {
+        return UserData()
     }
 }

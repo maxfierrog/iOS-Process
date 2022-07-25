@@ -35,7 +35,7 @@ struct TasksHomeView: View {
                                 .font(.caption)
                                 .bold()
                                 .frame(minWidth: 356, minHeight: 80)
-                                .background(Color(red: 220/256, green: 220/256, blue: 220/256))
+                                .background(Color(red: 36/256, green: 36/256, blue: 36/256))
                                 .cornerRadius(20)
                                 .padding(.bottom, 8)
                                 .padding(.leading, 16)
@@ -115,7 +115,7 @@ class TasksHomeViewModel: ObservableObject {
     
     init(_ parentModel: HomeViewModel) {
         self.homeViewModel = parentModel
-        self.user = parentModel.getUser()
+        self.user = parentModel.user
     }
     
     func tappedLogOut() {
@@ -157,6 +157,6 @@ class TasksHomeViewModel: ObservableObject {
 
 struct TasksHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(model: HomeViewModel(SuperViewModel()))
+        HomeView(model: HomeViewModel(RootViewModel()))
     }
 }

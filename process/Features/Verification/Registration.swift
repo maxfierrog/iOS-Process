@@ -176,11 +176,9 @@ class RegistrationViewModel: ObservableObject {
                         APIHandler.attemptToDeleteCurrentUser()
                         return
                     }
-                    let newUser = User(
-                        name: self!.nameField,
-                        username: generatedUsername!,
-                        email: self!.emailField
-                    )
+                    let newUser = User(name: self!.nameField,
+                                       username: generatedUsername!,
+                                       email: self!.emailField)
                     APIHandler.uploadUser(newUser) { error in
                         guard error == nil else {
                             self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
@@ -211,6 +209,6 @@ class RegistrationViewModel: ObservableObject {
 
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
-        RegistrationView(model: RegistrationViewModel(LoginViewModel(SuperViewModel())))
+        RegistrationView(model: RegistrationViewModel(LoginViewModel(RootViewModel())))
     }
 }

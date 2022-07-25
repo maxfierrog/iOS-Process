@@ -9,8 +9,8 @@ import Foundation
 
 public struct Invite: Codable {
     
-    var sender: User
-    var receiver: User
+    var sender: UserData
+    var receiver: UserData
     var project: Project
     var timeSent: String
     

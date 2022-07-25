@@ -89,8 +89,8 @@ class LoginViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // SuperView model
-    @Published var superModel: SuperViewModel
-        
+    @Published var superModel: RootViewModel
+    
     // Navigation fields
     @Published var navigateToHome: Bool? = false
     @Published var verifiedUser: User = User()
@@ -123,9 +123,9 @@ class LoginViewModel: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    /* MARK: Model methods */
+    /* MARK: Initializers */
     
-    init(_ superModel: SuperViewModel) {
+    init(_ superModel: RootViewModel) {
         self.superModel = superModel
         emailIsValidPublisher
             .combineLatest(passwordIsValidPublisher)
@@ -141,6 +141,8 @@ class LoginViewModel: ObservableObject {
             .assign(to: \.loginButtonState, on: self)
             .store(in: &cancellables)
     }
+    
+    /* MARK: Action methods */
     
     /** First authenticates with email and password credentials, then fetches
      user data model from database, and passes it to SuperModel, who handles
@@ -160,7 +162,7 @@ class LoginViewModel: ObservableObject {
                 }
                 self?.verifiedUser = user!
                 self?.loginButtonState = LoginConstant.successLoginButtonState
-                self?.superModel.loginWithUserModel(user!)
+                self?.superLoginUserWithModel(user!)
             }
         }
     }
@@ -187,8 +189,8 @@ class LoginViewModel: ObservableObject {
         navigateToRegister = true
     }
     
-    func superLoginUserWithModel(_ model: User) {
-        self.superModel.loginWithUserModel(model)
+    func superLoginUserWithModel(_ user: User) {
+        self.superModel.loginWithUserModel(user)
     }
     
     /* MARK: Model helper methods */
@@ -200,11 +202,13 @@ class LoginViewModel: ObservableObject {
         bannerData.type = .Error
         showErrorBanner = true
     }
+    
+    
 }
 
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(model: LoginViewModel(SuperViewModel()))
+        LoginView(model: LoginViewModel(RootViewModel()))
     }
 }

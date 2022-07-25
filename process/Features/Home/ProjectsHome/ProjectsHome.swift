@@ -36,7 +36,7 @@ struct ProjectsHomeView: View {
                             .font(.caption)
                             .bold()
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 180)
-                            .background(Color(red: 220/256, green: 220/256, blue: 220/256))
+                            .background(Color(red: 36/256, green: 36/256, blue: 36/256))
                             .cornerRadius(20)
                             .padding(8)
                             .onTapGesture {
@@ -114,7 +114,7 @@ class ProjectsHomeViewModel: ObservableObject {
     
     init(_ homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
-        self.user = homeViewModel.getUser()
+        self.user = homeViewModel.user
     }
     
     func tappedLogOut() {
@@ -158,7 +158,6 @@ class ProjectsHomeViewModel: ObservableObject {
 
 struct ProjectsHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(model: HomeViewModel(SuperViewModel()))
-            .preferredColorScheme(.light)
+        HomeView(model: HomeViewModel(RootViewModel()))
     }
 }

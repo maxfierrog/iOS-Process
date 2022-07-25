@@ -55,33 +55,30 @@ class HomeViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // SuperView model
-    var superModel: SuperViewModel
-    @Published private var user: User
+    var superModel: RootViewModel
+    @Published var user: User
     
     /* MARK: Model methods */
     
-    init(_ superModel: SuperViewModel) {
+    init(_ superModel: RootViewModel) {
         self.superModel = superModel
         self.user = superModel.getUser()
     }
     
-    func updateUserModel(_ newModel: User) {
-        self.superModel.updateUserModel(newModel)
-        self.user = newModel
+    func updateUserModel(_ user: User) {
+        self.superModel.updateUserModel(user)
+        self.user = user
     }
     
     func logOut() -> Bool {
         return superModel.logOut()
     }
     
-    func getUser() -> User {
-        return superModel.getUser()
-    }
     
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(model: HomeViewModel(SuperViewModel()))
+        HomeView(model: HomeViewModel(RootViewModel()))
     }
 }

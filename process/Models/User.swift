@@ -7,11 +7,81 @@
 
 
 import Foundation
+import SwiftUI
+
+
+/** User class used as functional intermediary between the User struct, which
+ stores data, and internal models. */
+class User: ObservableObject {
+    
+    /* MARK: User class fields */
+    
+    @Published var data: UserData
+    @Published var image: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+    
+    /* MARK: User initializers */
+    
+    init() {
+        self.data = UserData()
+    }
+    
+    init(name: String, username: String, email: String) {
+        self.data = UserData(name: name, username: username, email: email)
+    }
+    
+    init(_ data: UserData) {
+        self.data = data
+    }
+    
+    /* MARK: User methods */
+    
+    func updateData(name: String, username: String, picture: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
+        self.data = UserData(copyOf: self.data, name: name, username: username)
+        self.image = picture
+        APIHandler.uploadUser(self) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            self.updateProfilePicture(picture) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                completion(nil)
+            }
+        }
+    }
+    
+    func getProfilePicture(_ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
+        APIHandler.fetchImageFromStorage(user: self.data) { error, image in
+            guard error == nil else {
+                completion(error, nil)
+                return
+            }
+            self.image = image!
+            completion(nil, image)
+        }
+    }
+        
+    func updateProfilePicture(_ image: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
+        let uploadTask = APIHandler.uploadImageToStorage(image: image, user: self.data) { error, _ in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+        }
+        uploadTask.resume()
+        completion(nil)
+    }
+    
+    
+}
 
 
 /** User data model deconstructible and reconstructible by Firestore SDK
  methods. Stores non-critical private user invormation. */
-public struct User: Codable {
+public struct UserData: Codable {
     
     /* MARK: User data fields */
     
@@ -40,7 +110,7 @@ public struct User: Codable {
         case receivedInvites
     }
     
-    /* MARK: Methods */
+    /* MARK: User data initializers */
     
     /** Initializes a user data model from a screen NAME, a unique USERNAME,
      and a unique EMAIL. Used to save new user data during registration. */
@@ -64,7 +134,7 @@ public struct User: Codable {
     
     /** Initializes a COPYOF a user data model, with updates to their screen
      NAME and USERNAME. */
-    init(copyOf: User, name: String, username: String) {
+    init(copyOf: UserData, name: String, username: String) {
         self.name = name
         self.username = username
         self.id = copyOf.id
