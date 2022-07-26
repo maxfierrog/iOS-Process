@@ -7,26 +7,45 @@
 
 import Foundation
 
-enum TaskSize: String {
-    case small = "small"
-    case medium = "medium"
-    case big = "big"
+enum TaskSize: Int {
+    case small = 1
+    case medium = 2
+    case big = 3
 }
 
-public struct Task: Codable {
+class Task: Hashable {
     
+    var data: TaskData
+    
+    init(data: TaskData) {
+        self.data = data
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+    
+    public static func ==(lhs: Task, rhs: Task) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+}
+
+public struct TaskData: Codable {
+    
+    var id: String
     var name: String
-    var size: String?
+    var size: Int
     var description: String?
     var dateCreated: String
-    var dateDue: String?
+    var dateDue: String
     var dateCompleted: String?
     var assignee: String?
-    var creator: UserData
-    var project: Project?
-    var subtasks: Array<Task>
+    var creator: String
+    var project: String
+    var subtasks: Array<String>
     
     enum CodingKeys: String, CodingKey {
+        case id
         case name
         case size
         case description
@@ -38,4 +57,5 @@ public struct Task: Codable {
         case project
         case subtasks
     }
+
 }

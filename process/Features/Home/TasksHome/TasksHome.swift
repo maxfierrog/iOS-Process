@@ -30,22 +30,30 @@ struct TasksHomeView: View {
             .padding()
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn) {
-                        ForEach(0...35, id: \.self) { value in
-                            Text(String(format: "Task %x", value))
-                                .font(.caption)
-                                .bold()
-                                .frame(minWidth: 356, minHeight: 80)
-                                .background(Color(red: 36/256, green: 36/256, blue: 36/256))
-                                .cornerRadius(20)
-                                .padding(.bottom, 8)
-                                .padding(.leading, 16)
-                                .padding(.trailing, 16)
-                                .onTapGesture {
-                                    model.tappedTask()
-                                }
+                    ForEach((0...20), id: \.self) { _ in
+                        GroupBox {
+                            HStack {
+                                Text("Some details")
+                                    .font(.footnote)
+                            }
+                            .padding(.top, 1)
+                            
+                            HStack {
+                                ProgressView("Due Jul 27, 2022", value: 50, total: 100)
+                                    .progressViewStyle(.linear)
+                                    .font(.caption2)
+                            }
+                            .padding(.top, 8)
+                        } label: {
+                            Text("Task Title")
+                        }
+                        .onTapGesture {
+
                         }
                     }
                 }
+            }
+            .padding(.horizontal)
             Spacer()
         }
         .roundButton(
@@ -98,7 +106,7 @@ class TasksHomeViewModel: ObservableObject {
     @Published var navigateToTaskDetails: Bool? = false
     
     // Task list
-    @Published var taskListColumn: [GridItem] = [GridItem(.fixed(30))]
+    @Published var taskListColumn: [GridItem] = [GridItem()]
     
     // Segmented control
     @Published var taskCategories: [String] = TasksConstant.taskCategories

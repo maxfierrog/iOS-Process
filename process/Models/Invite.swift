@@ -9,12 +9,14 @@ import Foundation
 
 public struct Invite: Codable {
     
-    var sender: UserData
-    var receiver: UserData
-    var project: Project
+    var id: String
+    var sender: String
+    var receiver: String
+    var project: String
     var timeSent: String
     
     enum CodingKeys: String, CodingKey {
+        case id
         case sender
         case receiver
         case project

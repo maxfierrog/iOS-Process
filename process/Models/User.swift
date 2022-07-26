@@ -16,13 +16,15 @@ class User: ObservableObject {
     
     /* MARK: User class fields */
     
-    @Published var data: UserData
-    @Published var image: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+    var data: UserData
+    var image: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+    var tasks: TaskCollection = TaskCollection()
+    var projects: [Project] = []
     
     /* MARK: User initializers */
     
     init() {
-        self.data = UserData()
+        data = UserData()
     }
     
     init(name: String, username: String, email: String) {
@@ -94,9 +96,9 @@ public struct UserData: Codable {
     
     // Functional user data
     var assignedTasks: Array<String>
-    var ownedProjects: Array<Project>
-    var invitedProjects: Array<Project>
-    var receivedInvites: Array<Invite>
+    var ownedProjects: Array<String>
+    var invitedProjects: Array<String>
+    var receivedInvites: Array<String>
     
     enum CodingKeys: String, CodingKey {
         case id

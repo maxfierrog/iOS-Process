@@ -21,7 +21,6 @@
 		505D6DE8287C21B7005A28CB /* ExportTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE7287C21B7005A28CB /* ExportTasks.swift */; };
 		505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DE9287C21CC005A28CB /* UserPreferences.swift */; };
 		505D6DED287C2218005A28CB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEC287C2218005A28CB /* Notifications.swift */; };
-		505D6DEF287C2238005A28CB /* NewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DEE287C2238005A28CB /* NewProject.swift */; };
 		505D6DF2287C2247005A28CB /* EditProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF1287C2247005A28CB /* EditProject.swift */; };
 		505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF3287C2250005A28CB /* ProjectDetails.swift */; };
 		505D6DF7287C227F005A28CB /* NewTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6DF6287C227F005A28CB /* NewTask.swift */; };
@@ -63,6 +62,8 @@
 		988FD3EA288ED1F60057D49D /* UserAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3E9288ED1F60057D49D /* UserAnalyticsView.swift */; };
 		988FD3EC288ED23F0057D49D /* EditProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3EB288ED23F0057D49D /* EditProfileCardView.swift */; };
 		988FD3EE288ED24C0057D49D /* ProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3ED288ED24B0057D49D /* ProfileCardView.swift */; };
+		988FD3F2288EFFF60057D49D /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F1288EFFF60057D49D /* TaskList.swift */; };
+		988FD3F6288FA8CA0057D49D /* NewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F5288FA8CA0057D49D /* NewProject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,7 +82,6 @@
 		505D6DE7287C21B7005A28CB /* ExportTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTasks.swift; sourceTree = "<group>"; };
 		505D6DE9287C21CC005A28CB /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		505D6DEC287C2218005A28CB /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
-		505D6DEE287C2238005A28CB /* NewProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProject.swift; sourceTree = "<group>"; };
 		505D6DF1287C2247005A28CB /* EditProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProject.swift; sourceTree = "<group>"; };
 		505D6DF3287C2250005A28CB /* ProjectDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetails.swift; sourceTree = "<group>"; };
 		505D6DF6287C227F005A28CB /* NewTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTask.swift; sourceTree = "<group>"; };
@@ -115,6 +115,8 @@
 		988FD3E9288ED1F60057D49D /* UserAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnalyticsView.swift; sourceTree = "<group>"; };
 		988FD3EB288ED23F0057D49D /* EditProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCardView.swift; sourceTree = "<group>"; };
 		988FD3ED288ED24B0057D49D /* ProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardView.swift; sourceTree = "<group>"; };
+		988FD3F1288EFFF60057D49D /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
+		988FD3F5288FA8CA0057D49D /* NewProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 				505D6E00287C22F8005A28CB /* Project.swift */,
 				505D6E02287C22FF005A28CB /* Task.swift */,
 				505D6E20287EEDD3005A28CB /* Invite.swift */,
+				988FD3F1288EFFF60057D49D /* TaskList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -355,8 +358,8 @@
 			isa = PBXGroup;
 			children = (
 				505D6DF3287C2250005A28CB /* ProjectDetails.swift */,
+				988FD3F5288FA8CA0057D49D /* NewProject.swift */,
 				505D6DF1287C2247005A28CB /* EditProject.swift */,
-				505D6DEE287C2238005A28CB /* NewProject.swift */,
 				505D6DD9287C2154005A28CB /* SelectCollaborators.swift */,
 			);
 			path = Projects;
@@ -503,12 +506,14 @@
 				982352942887F8F600A565CB /* LoginConstant.swift in Sources */,
 				505D6E21287EEDD3005A28CB /* Invite.swift in Sources */,
 				505D6E26287EF262005A28CB /* APIHandler.swift in Sources */,
+				988FD3F6288FA8CA0057D49D /* NewProject.swift in Sources */,
 				505D6DF7287C227F005A28CB /* NewTask.swift in Sources */,
 				505D6DD8287C2143005A28CB /* SelectSubtasks.swift in Sources */,
 				505D6E2A288807E2005A28CB /* TasksConstant.swift in Sources */,
 				505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */,
 				982352902887F82C00A565CB /* APIHandlerError.swift in Sources */,
 				505D6E01287C22F8005A28CB /* Project.swift in Sources */,
+				988FD3F2288EFFF60057D49D /* TaskList.swift in Sources */,
 				505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */,
 				505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */,
 				9879C1552880C385009A34D3 /* BannerModifier.swift in Sources */,
@@ -524,7 +529,6 @@
 				505D6E2E288808D9005A28CB /* GlobalConstant.swift in Sources */,
 				505D6DE8287C21B7005A28CB /* ExportTasks.swift in Sources */,
 				505D6DDE287C216B005A28CB /* Registration.swift in Sources */,
-				505D6DEF287C2238005A28CB /* NewProject.swift in Sources */,
 				505D6E18287EB24A005A28CB /* EmailField.swift in Sources */,
 				9823529A2887FAC200A565CB /* BannerConstant.swift in Sources */,
 				505D6DE4287C2199005A28CB /* ProfileHome.swift in Sources */,

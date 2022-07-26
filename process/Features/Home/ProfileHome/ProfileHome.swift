@@ -124,7 +124,7 @@ class ProfileHomeViewModel: ObservableObject {
                 return
             }
             guard result!.documents.isEmpty else {
-                self.showBannerWithErrorMessage("Sorry, that username already exists. Please choose another one.")
+                self.showBannerWithErrorMessage(ProfileConstant.usernameColisionError)
                 return
             }
             self.updateUserModel(updatedUser)
@@ -190,7 +190,7 @@ class ProfileHomeViewModel: ObservableObject {
                 self.showBannerWithErrorMessage(error?.localizedDescription)
                 return
             }
-            self.showBannerWithSuccessMessage("Successfully changed your user data.")
+            self.showBannerWithSuccessMessage(ProfileConstant.successUpdatingData)
         }
     }
 }

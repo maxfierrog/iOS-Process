@@ -15,36 +15,88 @@ struct ProjectsHomeView: View {
         
     @StateObject var model: ProjectsHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
-    
+
     /* MARK: Projects home view */
 
     var body: some View {
         VStack {
             NavigationLink(destination: NotificationsView(), tag: true, selection: $model.navigateToNotifications) { }
             NavigationLink(destination: ProjectDetailsView(), tag: true, selection: $model.navigateToProjectDetails) { }
+            HStack {
+                TextField("Search for a project...", text: $model.searchText)
+                        .padding(8)
+                        .padding(.horizontal, 25)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .overlay(
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading, 8)
+                         
+                                if model.isEditingSearch {
+                                    Button(action: {
+                                        model.searchText = ""
+                                    }) {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.gray)
+                                            .padding(.trailing, 8)
+                                    }
+                                }
+                            }
+                        )
+                        .onTapGesture {
+                            model.isEditingSearch = true
+                        }
+                if model.isEditingSearch {
+                    Button(action: {
+                        model.isEditingSearch = false
+                        model.searchText = ""
+                    }) {
+                        Text("Cancel")
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
             Picker(ProjectsConstant.pickerAccessibilityText, selection: $model.selectedProjectCategory) {
                 ForEach(model.projectCategories, id: \.self) { category in
                     Text(category)
                 }
             }
             .pickerStyle(.segmented)
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom)
             ScrollView {
-                LazyVGrid(columns: model.twoColumnGrid, spacing: 0) {
-                    ForEach((0...20), id: \.self) { num in
-                        Text("Project \(num)")
-                            .font(.caption)
-                            .bold()
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 180)
-                            .background(Color(red: 36/256, green: 36/256, blue: 36/256))
-                            .cornerRadius(20)
-                            .padding(8)
-                            .onTapGesture {
-                                model.tappedProject()
+                LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
+                    ForEach((0...20), id: \.self) { _ in
+                        GroupBox {
+                            HStack {
+                                Text("Some details")
+                                    .font(.footnote)
+                                Spacer()
                             }
+                            .padding(.top, 1)
+                            
+                            HStack {
+                                ProgressView("Due Jul 27, 2022", value: 50, total: 100)
+                                    .progressViewStyle(.linear)
+                                    .font(.caption2)
+                                Spacer()
+                            }
+                            .padding(.top, 8)
+                        } label: {
+                            Text("Project Title")
+                        }
+                        .onTapGesture {
+                            model.tappedProject()
+                        }
                     }
                 }
             }
+            .padding(.leading)
+            .padding(.trailing)
             Spacer()
         }
         .roundButton(
@@ -91,6 +143,10 @@ class ProjectsHomeViewModel: ObservableObject {
     private var homeViewModel: HomeViewModel
     @Published var user: User
     
+    // Search bar
+    @Published var searchText: String = ""
+    @Published var isEditingSearch = false
+    
     // Navigation
     @Published var navigateToNewProject: Bool = false
     @Published var navigateToProjectDetails: Bool? = false
@@ -106,10 +162,7 @@ class ProjectsHomeViewModel: ObservableObject {
     // Banner state fields
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
-    
-    // Search bar
-    @Published var searchText: String = ""
-    
+
     /* MARK: Model methods */
     
     init(_ homeViewModel: HomeViewModel) {
