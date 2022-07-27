@@ -179,7 +179,7 @@ class RegistrationViewModel: ObservableObject {
                     let newUser = User(name: self!.nameField,
                                        username: generatedUsername!,
                                        email: self!.emailField)
-                    APIHandler.uploadUser(newUser) { error in
+                    APIHandler.pushUserData(newUser) { error in
                         guard error == nil else {
                             self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                             self?.showBannerWithErrorMessage(error!.localizedDescription)

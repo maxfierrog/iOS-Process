@@ -70,24 +70,24 @@ struct ProjectsHomeView: View {
             .padding(.bottom)
             ScrollView {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
-                    ForEach((0...20), id: \.self) { _ in
+                    ForEach($model.userProjects.indices, id: \.self) { index in
                         GroupBox {
                             HStack {
-                                Text("Some details")
+                                Text(model.userProjects[index].data.description ?? "")
                                     .font(.footnote)
                                 Spacer()
                             }
                             .padding(.top, 1)
                             
                             HStack {
-                                ProgressView("Due Jul 27, 2022", value: 50, total: 100)
+                                ProgressView(DateFormatter().string(from: model.userProjects[index].data.dateCreated), value: 50, total: 100)
                                     .progressViewStyle(.linear)
                                     .font(.caption2)
                                 Spacer()
                             }
                             .padding(.top, 8)
                         } label: {
-                            Text("Project Title")
+                            Text(model.userProjects[index].data.name)
                         }
                         .onTapGesture {
                             model.tappedProject()
@@ -95,8 +95,7 @@ struct ProjectsHomeView: View {
                     }
                 }
             }
-            .padding(.leading)
-            .padding(.trailing)
+            .padding(.horizontal)
             Spacer()
         }
         .roundButton(
@@ -125,8 +124,8 @@ struct ProjectsHomeView: View {
             }
         }
         .sheet(isPresented: $model.navigateToNewProject) {
-            NavigationView {
-                NewProjectView()
+            NavigationView<NewProjectView> {
+                NewProjectView(model: NewProjectViewModel(self.model))
             }
         }
     }
@@ -154,6 +153,7 @@ class ProjectsHomeViewModel: ObservableObject {
     
     // Projects grid
     @Published var twoColumnGrid: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
+    @Published var userProjects: [Project] = []
     
     // Segmented control
     @Published var projectCategories: [String] = ProjectsConstant.projectCategories
@@ -168,6 +168,8 @@ class ProjectsHomeViewModel: ObservableObject {
     init(_ homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
         self.user = homeViewModel.user
+        self.userProjects = APIHandler.pullOwnedProjects(homeViewModel.user)
+        print(self.userProjects)
     }
     
     func tappedLogOut() {

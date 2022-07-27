@@ -47,10 +47,10 @@ class RootViewModel: ObservableObject {
                          username: "username",
                          email: "name@email.com")
         self.userSignedIn = false
-        APIHandler.getCurrentUserModel { user, error in
+        APIHandler.pullUserData { user, error in
             guard error == nil && user != nil else { return }
             self.user = user!
-            self.user.getProfilePicture() { error, _ in
+            self.user.pullProfilePicture() { error, _ in
                 guard error == nil else { return }
                 self.userSignedIn = true
             }
@@ -69,7 +69,7 @@ class RootViewModel: ObservableObject {
     
     func loginWithUserModel(_ user: User) {
         self.user = user
-        self.user.getProfilePicture() { error, _ in
+        self.user.pullProfilePicture() { error, _ in
             guard error == nil else { return }
             self.userSignedIn = true
         }

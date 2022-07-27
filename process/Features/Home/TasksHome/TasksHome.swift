@@ -21,13 +21,52 @@ struct TasksHomeView: View {
         VStack {
             NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
             NavigationLink(destination: TaskDetailsView(), tag: true, selection: $model.navigateToTaskDetails) { }
+            HStack {
+                TextField("Search for a task...", text: $model.searchText)
+                        .padding(8)
+                        .padding(.horizontal, 25)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .overlay(
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading, 8)
+                         
+                                if model.isEditingSearch {
+                                    Button(action: {
+                                        model.searchText = ""
+                                    }) {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.gray)
+                                            .padding(.trailing, 8)
+                                    }
+                                }
+                            }
+                        )
+                        .onTapGesture {
+                            model.isEditingSearch = true
+                        }
+                if model.isEditingSearch {
+                    Button(action: {
+                        model.isEditingSearch = false
+                        model.searchText = ""
+                    }) {
+                        Text("Cancel")
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
             Picker(TasksConstant.pickerAccessibilityText, selection: $model.selectedTaskCategory) {
                 ForEach(model.taskCategories, id: \.self) { category in
                     Text(category)
                 }
             }
             .pickerStyle(.segmented)
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom)
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn) {
                     ForEach((0...20), id: \.self) { _ in
@@ -118,6 +157,7 @@ class TasksHomeViewModel: ObservableObject {
     
     // Search bar
     @Published var searchText: String = ""
+    @Published var isEditingSearch = false
     
     /* MARK: Model methods */
     

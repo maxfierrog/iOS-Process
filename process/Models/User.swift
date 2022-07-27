@@ -10,18 +10,22 @@ import Foundation
 import SwiftUI
 
 
-/** User class used as functional intermediary between the User struct, which
- stores data, and internal models. */
+/** Singleton class used as a functional intermediary between the UserData
+ struct, which stores user data and models. */
 class User: ObservableObject {
     
     /* MARK: User class fields */
     
     var data: UserData
-    var image: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
-    var tasks: TaskCollection = TaskCollection()
-    var projects: [Project] = []
+    var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+    var assignedTasks: [Task] = []
+    var ownedProjects: [Project] = []
+    var invitedProjects: [Project] = []
+    var receivedInvites: [Invite] = []
     
-    /* MARK: User initializers */
+    /* MARK: User class methods */
+    
+    /* Initializers */
     
     init() {
         data = UserData()
@@ -35,39 +39,78 @@ class User: ObservableObject {
         self.data = data
     }
     
-    /* MARK: User methods */
+    /* Builder pattern */
     
-    func updateData(name: String, username: String, picture: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
-        self.data = UserData(copyOf: self.data, name: name, username: username)
-        self.image = picture
-        APIHandler.uploadUser(self) { error in
-            guard error == nil else {
-                completion(error)
-                return
-            }
-            self.updateProfilePicture(picture) { error in
-                guard error == nil else {
-                    completion(error)
-                    return
-                }
-                completion(nil)
-            }
-        }
+    func changeProfilePicture(_ image: UIImage) -> User {
+        self.profilePicture = image
+        return self
     }
     
-    func getProfilePicture(_ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
-        APIHandler.fetchImageFromStorage(user: self.data) { error, image in
+    func changeUsername(_ username: String) -> User {
+        self.data = UserData(copyOf: self.data, name: self.data.name, username: username)
+        return self
+    }
+    
+    func changeName(_ name: String) -> User {
+        self.data = UserData(copyOf: self.data, name: name, username: self.data.username)
+        return self
+    }
+    
+    func addTasks(_ tasks: [Task]) -> User {
+        for task in tasks {
+            self.data.assignedTasks.append(task.data.id)
+            self.assignedTasks.append(task)
+        }
+        return self
+    }
+    
+    func removeTask(_ task: Task) -> User {
+        self.data.assignedTasks.removeAll { $0 == task.data.id }
+        self.assignedTasks.removeAll { $0.data.id == task.data.id }
+        return self
+    }
+    
+    func addOwnedProjects(_ projects: [Project]) -> User {
+        for project in projects {
+            self.data.ownedProjects.append(project.data.id)
+            self.ownedProjects.append(project)
+        }
+        return self
+    }
+    
+    func removeOwnedProject(_ project: Project) -> User {
+        self.data.ownedProjects.removeAll { $0 == project.data.id }
+        self.ownedProjects.removeAll { $0.data.id == project.data.id }
+        return self
+    }
+    
+    /* Storage pull methods */
+
+    func pullProfilePicture(_ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
+        APIHandler.pullProfilePicture(user: self) { error, image in
             guard error == nil else {
                 completion(error, nil)
                 return
             }
-            self.image = image!
+            self.profilePicture = image!
             completion(nil, image)
         }
     }
-        
-    func updateProfilePicture(_ image: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
-        let uploadTask = APIHandler.uploadImageToStorage(image: image, user: self.data) { error, _ in
+    
+    /* Storage push methods */
+    
+    func pushData(_ completion: @escaping(_ error: Error?) -> Void) {
+        APIHandler.pushUserData(self) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            completion(nil)
+        }
+    }
+    
+    func pushProfilePicture(_ image: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
+        let uploadTask = APIHandler.pushProfilePicture(image, user: self) { error, _ in
             guard error == nil else {
                 completion(error)
                 return
@@ -76,8 +119,6 @@ class User: ObservableObject {
         uploadTask.resume()
         completion(nil)
     }
-    
-    
 }
 
 

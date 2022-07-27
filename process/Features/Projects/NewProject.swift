@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewProjectView: View {
     
-    @ObservedObject var model = NewProjectViewModel()
+    @ObservedObject var model: NewProjectViewModel
     
     var body: some View {
         VStack {
@@ -44,9 +44,7 @@ struct NewProjectView: View {
             } label: {
                 HStack {
                     Text("Collaborators:")
-                    
                     Spacer()
-                    
                     Button {
                         model.tappedSave() // FIXME: dsf
                     } label: {
@@ -86,17 +84,56 @@ struct NewProjectView: View {
 
 class NewProjectViewModel: ObservableObject {
     
+    // Text fields
     @Published var titleField: String = ""
     @Published var descriptionField: String = ""
     
-    func tappedSave() {
-        
+    // Projects home view parent model
+    var projectsHomeViewModel: ProjectsHomeViewModel
+    @Published var user: User
+    
+    // Banner state fields
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    @Published var showBanner: Bool = false
+    
+    /* MARK: Methods */
+    
+    init(_ model: ProjectsHomeViewModel) {
+        self.projectsHomeViewModel = model
+        self.user = model.user
     }
     
+    func tappedSave() {
+        let newProject = Project(name: self.titleField,
+                                 owner: user,
+                                 description: self.descriptionField)
+        user.addOwnedProjects([newProject]).pushData { error in
+            guard error == nil else {
+                self.showBannerWithErrorMessage(error?.localizedDescription)
+                return
+            }
+            APIHandler.pushProjectData(newProject) { error in
+                guard error == nil else {
+                    self.showBannerWithErrorMessage(error?.localizedDescription)
+                    return
+                }
+            }
+        }
+    }
+    
+    /* MARK: Helper methods */
+    
+    private func showBannerWithErrorMessage(_ message: String?) {
+        guard let message = message else { return }
+        bannerData.title = GlobalConstant.genericErrorBannerTitle
+        bannerData.detail = message
+        bannerData.type = .Error
+        showBanner = true
+    }
 }
 
 struct NewProjectView_Previews: PreviewProvider {
     static var previews: some View {
-        NewProjectView()
+        HomeView(model: HomeViewModel(RootViewModel()))
     }
 }

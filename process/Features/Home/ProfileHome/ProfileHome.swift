@@ -69,7 +69,7 @@ class ProfileHomeViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // HomeView parent model
-    private var homeViewModel: HomeViewModel
+    var homeViewModel: HomeViewModel
     @Published var user: User
     
     // Navigation
@@ -93,7 +93,7 @@ class ProfileHomeViewModel: ObservableObject {
         self.user = model.user
         self.editorNameField = model.user.data.name
         self.editorUsernameField = model.user.data.username
-        self.profilePictureImage = model.user.image
+        self.profilePictureImage = model.user.profilePicture
     }
     
     /* MARK: User data methods */
@@ -106,7 +106,7 @@ class ProfileHomeViewModel: ObservableObject {
         if self.editing {
             self.editorNameField = self.user.data.name
             self.editorUsernameField = self.user.data.username
-            self.profilePictureImage = self.user.image
+            self.profilePictureImage = self.user.profilePicture
         }
         self.editing.toggle()
     }
@@ -133,7 +133,7 @@ class ProfileHomeViewModel: ObservableObject {
     }
     
     func updateUserModel(_ updatedUser: User) {
-        APIHandler.uploadUser(updatedUser) { error in
+        APIHandler.pushUserData(updatedUser) { error in
             guard error == nil else {
                 self.showBannerWithErrorMessage(error?.localizedDescription)
                 return
@@ -185,7 +185,7 @@ class ProfileHomeViewModel: ObservableObject {
     }
     
     private func uploadProfilePicture(_ image: UIImage) {
-        self.user.updateProfilePicture(image) { error in
+        self.user.pushProfilePicture(image) { error in
             guard error == nil else {
                 self.showBannerWithErrorMessage(error?.localizedDescription)
                 return

@@ -37,13 +37,13 @@ class APIHandler {
     static private let storageRef = storageDB.reference()
     static private let imagesRef = storageRef.child("images")
     
-    /* MARK: Utility methods */
+    /* MARK: User utility methods */
 
     /** Uploads a new User struct model USER to Firestore. Allows for a
      COMPLETION block with an ERROR parameter, which will be nil if the upload
      was successful. If a user with the same ID exists in the database, the
      entry will be replaced. */
-    static func uploadUser(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
+    static func pushUserData(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
         do {
             try realtimeDB.collection("users").document(user.data.id).setData(from: user.data)
             completion(nil)
@@ -121,7 +121,7 @@ class APIHandler {
                 return
             }
             let userDocumentID = querySnapshot!.documents[0].documentID
-            let docRef = realtimeDB.collection("users").document(userDocumentID)
+            let docRef = usersCollection.document(userDocumentID)
             docRef.getDocument(as: UserData.self) { result in
                 switch result {
                 case .success(let userData):
@@ -143,7 +143,7 @@ class APIHandler {
     
     /** Constructs and returns the user model corresopnding to the current
      authenticated user, if there is one. */
-    static func getCurrentUserModel(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+    static func pullUserData(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
         if let email = Auth.auth().currentUser?.email {
             APIHandler.getUserFromEmail(email) { user, error in
                 guard error == nil else {
@@ -171,10 +171,10 @@ class APIHandler {
     /** Uploads an image reference with DATA to the images folder in the
      storage database, with NAME for its path termination. Allows for a
      completion block for errors and metadata. */
-    static func uploadImageToStorage(image: UIImage, user: UserData, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
+    static func pushProfilePicture(_ image: UIImage, user: User, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
         let pictureCopy = image
         let pictureData = pictureCopy.resized(to: CGSize(width: 512, height: 512)).jpegData(compressionQuality: 0.9)! //FIXME: Image resizing doesn't work
-        let pictureRef = APIHandler.imagesRef.child(user.id)
+        let pictureRef = APIHandler.imagesRef.child(user.data.id)
         return pictureRef.putData(pictureData, metadata: StorageMetadata()) { metadata, error in
             guard error == nil else {
                 completion(error, nil)
@@ -200,8 +200,8 @@ class APIHandler {
     
     /** Fetches a user's profile picture from storage. User's profile picctures
      are stored in the images directory, and are named with their IDs. */
-    static func fetchImageFromStorage(user: UserData, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
-        let pictureRef = APIHandler.imagesRef.child(user.id)
+    static func pullProfilePicture(user: User, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
+        let pictureRef = APIHandler.imagesRef.child(user.data.id)
         pictureRef.getData(maxSize: 1 * 2048 * 2048) { data, error in // FIXME: MaxSize too generous, temp fix for disfunctional resizing
             guard error == nil else {
                 completion(error, nil)
@@ -211,7 +211,41 @@ class APIHandler {
         }
     }
     
+    /* MARK: Project utility methods */
     
+    /** Uploads a block of project data to Firestore, allowing for a completion
+     block with an error if there was one in the process. */
+    static func pushProjectData(_ project: Project, _ completion: @escaping(_ error: Error?) -> Void) {
+        do {
+            try realtimeDB.collection("projects").document(project.data.id).setData(from: project.data)
+            completion(nil)
+        } catch let error {
+            completion(error)
+        }
+    }
+    
+    /** Downloads the list of projects owned by USER. */
+    static func pullOwnedProjects(_ user: User) -> [Project] {
+        var projectList: [Project] = []
+        for projectID in user.data.ownedProjects {
+            projectList.append(pullProject(projectID: projectID, owner: user))
+        }
+        return projectList
+    }
+    
+    static func pullProject(projectID: String, owner: User) -> Project {
+        var project = Project()
+        let docRef = projectsCollection.document(projectID)
+        docRef.getDocument(as: ProjectData.self) { result in // FIXME: Falls through closure before updating project
+            switch result {
+            case .failure:
+                return
+            case .success(let projectData):
+                project = Project(data: projectData, owner: owner)
+            }
+        }
+        return project
+    }
 }
 
 /** Extension of UIImage with resizing method. */
