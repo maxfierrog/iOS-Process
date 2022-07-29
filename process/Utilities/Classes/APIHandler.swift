@@ -223,43 +223,47 @@ class APIHandler {
             completion(error)
         }
     }
-    
-    /** Downloads the list of projects owned by USER. */
-    static func pullOwnedProjects(_ user: User) -> [Project] {
-        var projectList: [Project] = []
-        for projectID in user.data.ownedProjects {
-            projectList.append(pullProject(projectID: projectID, owner: user))
-        }
-        return projectList
-    }
-    
-    static func pullProject(projectID: String, owner: User) -> Project {
+
+    /** Returns the generated Project model from ID, stored in Firestore. */
+    static func pullProject(projectID: String, owner: User, _ completion: @escaping(_ project: Project?, _ error: Error?) -> Void){
         var project = Project()
         let docRef = projectsCollection.document(projectID)
-        docRef.getDocument(as: ProjectData.self) { result in // FIXME: Falls through closure before updating project
+        docRef.getDocument(as: ProjectData.self) { result in
             switch result {
-            case .failure:
-                return
+            case .failure(let error):
+                completion(nil, error)
             case .success(let projectData):
                 project = Project(data: projectData, owner: owner)
+                completion(project, nil)
             }
         }
-        return project
     }
-}
+    
+    /* MARK: Task utility methods */
+    
+    /** Uploads a block of project data to Firestore, allowing for a completion
+     block with an error if there was one in the process. */
+    static func pushTaskData(_ task: Task, _ completion: @escaping(_ error: Error?) -> Void) {
+        do {
+            try realtimeDB.collection("tasks").document(task.data.id).setData(from: task.data)
+            completion(nil)
+        } catch let error {
+            completion(error)
+        }
+    }
 
-/** Extension of UIImage with resizing method. */
-extension UIImage {
-    public func resized(to target: CGSize) -> UIImage {
-        let ratio = min(
-            target.height / size.height, target.width / size.width
-        )
-        let new = CGSize(
-            width: size.width * ratio, height: size.height * ratio
-        )
-        let renderer = UIGraphicsImageRenderer(size: new)
-        return renderer.image { _ in
-            self.draw(in: CGRect(origin: .zero, size: new))
+    /** Returns the generated Project model from ID, stored in Firestore. */
+    static func pullTask(taskID: String, assignee: User, _ completion: @escaping(_ task: Task?, _ error: Error?) -> Void){
+        var task = Task()
+        let docRef = tasksCollection.document(taskID)
+        docRef.getDocument(as: TaskData.self) { result in
+            switch result {
+            case .failure(let error):
+                completion(nil, error)
+            case .success(let taskData):
+                task = Task(data: taskData, assignee: assignee)
+                completion(task, nil)
+            }
         }
     }
 }

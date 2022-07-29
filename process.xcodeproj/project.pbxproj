@@ -64,6 +64,12 @@
 		988FD3EE288ED24C0057D49D /* ProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3ED288ED24B0057D49D /* ProfileCardView.swift */; };
 		988FD3F2288EFFF60057D49D /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F1288EFFF60057D49D /* TaskList.swift */; };
 		988FD3F6288FA8CA0057D49D /* NewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F5288FA8CA0057D49D /* NewProject.swift */; };
+		988FD3F92891BD7E0057D49D /* ProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F82891BD7E0057D49D /* ProjectCell.swift */; };
+		988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FA28921EB30057D49D /* TaskCell.swift */; };
+		988FD3FE289347190057D49D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FD289347190057D49D /* SearchBar.swift */; };
+		988FD400289349580057D49D /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FF289349580057D49D /* SegmentedPicker.swift */; };
+		988FD40328934EC80057D49D /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 988FD40228934EC80057D49D /* QGrid */; };
+		988FD405289350B30057D49D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD404289350B30057D49D /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +123,11 @@
 		988FD3ED288ED24B0057D49D /* ProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardView.swift; sourceTree = "<group>"; };
 		988FD3F1288EFFF60057D49D /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		988FD3F5288FA8CA0057D49D /* NewProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProject.swift; sourceTree = "<group>"; };
+		988FD3F82891BD7E0057D49D /* ProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCell.swift; sourceTree = "<group>"; };
+		988FD3FA28921EB30057D49D /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		988FD3FD289347190057D49D /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		988FD3FF289349580057D49D /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
+		988FD404289350B30057D49D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +138,7 @@
 				9879C16328813B5D009A34D3 /* FirebaseAnalyticsSwift in Frameworks */,
 				9879C16528813B5D009A34D3 /* FirebaseAuth in Frameworks */,
 				505D6E13287E9BE3005A28CB /* ActionButton in Frameworks */,
+				988FD40328934EC80057D49D /* QGrid in Frameworks */,
 				9879C16928813B5D009A34D3 /* FirebaseFirestoreSwift in Frameworks */,
 				9863A233287D425E008616B2 /* SwiftUIX in Frameworks */,
 				9879C16B28813B5D009A34D3 /* FirebaseStorage in Frameworks */,
@@ -203,7 +215,7 @@
 				982352912887F84200A565CB /* Errors */,
 				505D6DD2287C2054005A28CB /* ParentViews */,
 				505D6E1C287EC4AC005A28CB /* Components */,
-				505D6E19287EC484005A28CB /* Methods */,
+				505D6E19287EC484005A28CB /* Classes */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -220,13 +232,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		505D6E19287EC484005A28CB /* Methods */ = {
+		505D6E19287EC484005A28CB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				505D6E1A287EC49B005A28CB /* VerificationUtils.swift */,
 				505D6E25287EF262005A28CB /* APIHandler.swift */,
+				988FD404289350B30057D49D /* Extensions.swift */,
 			);
-			path = Methods;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		505D6E1C287EC4AC005A28CB /* Components */ = {
@@ -237,6 +250,8 @@
 				9879C1542880C385009A34D3 /* BannerModifier.swift */,
 				505D6E3B2888575D005A28CB /* RoundButton.swift */,
 				988FD3DE288A911E0057D49D /* ImagePicker.swift */,
+				988FD3FD289347190057D49D /* SearchBar.swift */,
+				988FD3FF289349580057D49D /* SegmentedPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -336,9 +351,10 @@
 			isa = PBXGroup;
 			children = (
 				9879C16E28854896009A34D3 /* Home.swift */,
-				988FD3E8288ED1BA0057D49D /* ProjectsHome */,
-				988FD3E7288ED1A70057D49D /* TasksHome */,
-				988FD3E6288ED1950057D49D /* ProfileHome */,
+				505D6DDF287C2187005A28CB /* ProjectsHome.swift */,
+				505D6DE1287C2190005A28CB /* TasksHome.swift */,
+				505D6DE3287C2199005A28CB /* ProfileHome.swift */,
+				988FD3F72891BD6F0057D49D /* Views */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -365,31 +381,6 @@
 			path = Projects;
 			sourceTree = "<group>";
 		};
-		988FD3E6288ED1950057D49D /* ProfileHome */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DE3287C2199005A28CB /* ProfileHome.swift */,
-				988FD3F0288ED3030057D49D /* Views */,
-			);
-			path = ProfileHome;
-			sourceTree = "<group>";
-		};
-		988FD3E7288ED1A70057D49D /* TasksHome */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DE1287C2190005A28CB /* TasksHome.swift */,
-			);
-			path = TasksHome;
-			sourceTree = "<group>";
-		};
-		988FD3E8288ED1BA0057D49D /* ProjectsHome */ = {
-			isa = PBXGroup;
-			children = (
-				505D6DDF287C2187005A28CB /* ProjectsHome.swift */,
-			);
-			path = ProjectsHome;
-			sourceTree = "<group>";
-		};
 		988FD3EF288ED2CB0057D49D /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,9 +391,11 @@
 			path = Misc;
 			sourceTree = "<group>";
 		};
-		988FD3F0288ED3030057D49D /* Views */ = {
+		988FD3F72891BD6F0057D49D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				988FD3F82891BD7E0057D49D /* ProjectCell.swift */,
+				988FD3FA28921EB30057D49D /* TaskCell.swift */,
 				988FD3E9288ED1F60057D49D /* UserAnalyticsView.swift */,
 				988FD3EB288ED23F0057D49D /* EditProfileCardView.swift */,
 				988FD3ED288ED24B0057D49D /* ProfileCardView.swift */,
@@ -435,6 +428,7 @@
 				9879C16628813B5D009A34D3 /* FirebaseFirestore */,
 				9879C16828813B5D009A34D3 /* FirebaseFirestoreSwift */,
 				9879C16A28813B5D009A34D3 /* FirebaseStorage */,
+				988FD40228934EC80057D49D /* QGrid */,
 			);
 			productName = progress;
 			productReference = 505D6DBA287C1F9E005A28CB /* process.app */;
@@ -468,6 +462,7 @@
 				9863A231287D425E008616B2 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				505D6E11287E9BE3005A28CB /* XCRemoteSwiftPackageReference "action-button" */,
 				9879C15F28813B5D009A34D3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				988FD40128934EC80057D49D /* XCRemoteSwiftPackageReference "QGrid" */,
 			);
 			productRefGroup = 505D6DBB287C1F9E005A28CB /* Products */;
 			projectDirPath = "";
@@ -500,7 +495,9 @@
 				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
 				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
 				988FD3DF288A911E0057D49D /* ImagePicker.swift in Sources */,
+				988FD400289349580057D49D /* SegmentedPicker.swift in Sources */,
 				505D6E36288823FA005A28CB /* RootView.swift in Sources */,
+				988FD3F92891BD7E0057D49D /* ProjectCell.swift in Sources */,
 				9879C16F28854896009A34D3 /* Home.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
 				982352942887F8F600A565CB /* LoginConstant.swift in Sources */,
@@ -523,7 +520,9 @@
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
 				505D6E1B287EC49B005A28CB /* VerificationUtils.swift in Sources */,
+				988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
+				988FD405289350B30057D49D /* Extensions.swift in Sources */,
 				505D6DF2287C2247005A28CB /* EditProject.swift in Sources */,
 				505D6DBE287C1F9E005A28CB /* processApp.swift in Sources */,
 				505D6E2E288808D9005A28CB /* GlobalConstant.swift in Sources */,
@@ -536,6 +535,7 @@
 				988FD3EA288ED1F60057D49D /* UserAnalyticsView.swift in Sources */,
 				505D6E30288809EE005A28CB /* HomeConstants.swift in Sources */,
 				505D6E2C288807F0005A28CB /* ProfileConstant.swift in Sources */,
+				988FD3FE289347190057D49D /* SearchBar.swift in Sources */,
 				505D6DE2287C2190005A28CB /* TasksHome.swift in Sources */,
 				988FD3EE288ED24C0057D49D /* ProfileCardView.swift in Sources */,
 				505D6DED287C2218005A28CB /* Notifications.swift in Sources */,
@@ -768,6 +768,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		988FD40128934EC80057D49D /* XCRemoteSwiftPackageReference "QGrid" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Q-Mobile/QGrid";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -810,6 +818,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9879C15F28813B5D009A34D3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		988FD40228934EC80057D49D /* QGrid */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 988FD40128934EC80057D49D /* XCRemoteSwiftPackageReference "QGrid" */;
+			productName = QGrid;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

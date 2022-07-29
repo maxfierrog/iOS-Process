@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import QGrid
 
 
 /** Allows user to view ongoing and finished projects they created or are
@@ -21,82 +22,27 @@ struct ProjectsHomeView: View {
     var body: some View {
         VStack {
             NavigationLink(destination: NotificationsView(), tag: true, selection: $model.navigateToNotifications) { }
-            NavigationLink(destination: ProjectDetailsView(), tag: true, selection: $model.navigateToProjectDetails) { }
-            HStack {
-                TextField("Search for a project...", text: $model.searchText)
-                        .padding(8)
-                        .padding(.horizontal, 25)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
-                        .overlay(
-                            HStack {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.gray)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 8)
-                         
-                                if model.isEditingSearch {
-                                    Button(action: {
-                                        model.searchText = ""
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.gray)
-                                            .padding(.trailing, 8)
-                                    }
-                                }
-                            }
-                        )
-                        .onTapGesture {
-                            model.isEditingSearch = true
-                        }
-                if model.isEditingSearch {
-                    Button(action: {
-                        model.isEditingSearch = false
-                        model.searchText = ""
-                    }) {
-                        Text("Cancel")
-                    }
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            Picker(ProjectsConstant.pickerAccessibilityText, selection: $model.selectedProjectCategory) {
-                ForEach(model.projectCategories, id: \.self) { category in
-                    Text(category)
-                }
-            }
-            .pickerStyle(.segmented)
+            NavigationLink(destination: ProjectDetailsView(model: ProjectDetailsViewModel(model)), tag: true, selection: $model.navigateToProjectDetails) { }
+            
+            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+            
+            SegmentedPicker(accessibilityText: ProjectsConstant.pickerAccessibilityText,
+                            categories: model.projectCategories,
+                            selectedCategory: $model.selectedProjectCategory)
             .padding(.horizontal)
             .padding(.bottom)
+            
             ScrollView {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
-                    ForEach($model.userProjects.indices, id: \.self) { index in
-                        GroupBox {
-                            HStack {
-                                Text(model.userProjects[index].data.description ?? "")
-                                    .font(.footnote)
-                                Spacer()
-                            }
-                            .padding(.top, 1)
-                            
-                            HStack {
-                                ProgressView(DateFormatter().string(from: model.userProjects[index].data.dateCreated), value: 50, total: 100)
-                                    .progressViewStyle(.linear)
-                                    .font(.caption2)
-                                Spacer()
-                            }
-                            .padding(.top, 8)
-                        } label: {
-                            Text(model.userProjects[index].data.name)
-                        }
-                        .onTapGesture {
-                            model.tappedProject()
-                        }
+                    ForEach($model.user.data.ownedProjects.indices, id: \.self) { index in
+                        ProjectCellView(model: ProjectCellViewModel(projectID: model.user.data.ownedProjects[index],
+                                                                    model: model))
                     }
                 }
             }
             .padding(.horizontal)
-            Spacer()
         }
         .roundButton(
             color: GlobalConstant.accentColor,
@@ -150,10 +96,10 @@ class ProjectsHomeViewModel: ObservableObject {
     @Published var navigateToNewProject: Bool = false
     @Published var navigateToProjectDetails: Bool? = false
     @Published var navigateToNotifications: Bool? = false
+    @Published var selectedProject: Project = Project()
     
     // Projects grid
     @Published var twoColumnGrid: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
-    @Published var userProjects: [Project] = []
     
     // Segmented control
     @Published var projectCategories: [String] = ProjectsConstant.projectCategories
@@ -168,9 +114,9 @@ class ProjectsHomeViewModel: ObservableObject {
     init(_ homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
         self.user = homeViewModel.user
-        self.userProjects = APIHandler.pullOwnedProjects(homeViewModel.user)
-        print(self.userProjects)
     }
+    
+    /* MARK: Action methods */
     
     func tappedLogOut() {
         if (!self.homeViewModel.logOut()) {
@@ -182,11 +128,16 @@ class ProjectsHomeViewModel: ObservableObject {
         self.navigateToNotifications = true
     }
     
+    func dismissNewProjectView() {
+        self.navigateToNewProject = false
+    }
+    
     func tappedNewProject() {
         self.navigateToNewProject = true
     }
     
-    func tappedProject() {
+    func showProjectDetails(project: Project) {
+        self.selectedProject = project
         self.navigateToProjectDetails = true
     }
     

@@ -69,19 +69,16 @@ class RootViewModel: ObservableObject {
     
     func loginWithUserModel(_ user: User) {
         self.user = user
+        self.userSignedIn = true
         self.user.pullProfilePicture() { error, _ in
             guard error == nil else { return }
-            self.userSignedIn = true
         }
     }
     
     func updateUserModel(_ user: User) {
         self.user = user
     }
-    
-    func getUser() -> User {
-        return self.user
-    }
+
 }
 
 struct Content_Previews: PreviewProvider {

@@ -20,80 +20,27 @@ struct TasksHomeView: View {
     var body: some View {
         VStack {
             NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
-            NavigationLink(destination: TaskDetailsView(), tag: true, selection: $model.navigateToTaskDetails) { }
-            HStack {
-                TextField("Search for a task...", text: $model.searchText)
-                        .padding(8)
-                        .padding(.horizontal, 25)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
-                        .overlay(
-                            HStack {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.gray)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 8)
-                         
-                                if model.isEditingSearch {
-                                    Button(action: {
-                                        model.searchText = ""
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.gray)
-                                            .padding(.trailing, 8)
-                                    }
-                                }
-                            }
-                        )
-                        .onTapGesture {
-                            model.isEditingSearch = true
-                        }
-                if model.isEditingSearch {
-                    Button(action: {
-                        model.isEditingSearch = false
-                        model.searchText = ""
-                    }) {
-                        Text("Cancel")
-                    }
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            Picker(TasksConstant.pickerAccessibilityText, selection: $model.selectedTaskCategory) {
-                ForEach(model.taskCategories, id: \.self) { category in
-                    Text(category)
-                }
-            }
-            .pickerStyle(.segmented)
+            NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
+            
+            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+            
+            SegmentedPicker(accessibilityText: TasksConstant.pickerAccessibilityText,
+                            categories: model.taskCategories,
+                            selectedCategory: $model.selectedTaskCategory)
             .padding(.horizontal)
             .padding(.bottom)
+            
             ScrollView(.vertical) {
-                LazyVGrid(columns: model.taskListColumn) {
-                    ForEach((0...20), id: \.self) { _ in
-                        GroupBox {
-                            HStack {
-                                Text("Some details")
-                                    .font(.footnote)
-                            }
-                            .padding(.top, 1)
-                            
-                            HStack {
-                                ProgressView("Due Jul 27, 2022", value: 50, total: 100)
-                                    .progressViewStyle(.linear)
-                                    .font(.caption2)
-                            }
-                            .padding(.top, 8)
-                        } label: {
-                            Text("Task Title")
-                        }
-                        .onTapGesture {
-
-                        }
+                LazyVGrid(columns: model.taskListColumn, spacing: 8) {
+                    ForEach($model.user.data.assignedTasks.indices, id: \.self) { index in
+                        TaskCellView(model: TaskCellViewModel(taskID: model.user.data.assignedTasks[index],
+                                                              model: model))
                     }
                 }
             }
             .padding(.horizontal)
-            Spacer()
         }
         .roundButton(
             color: GlobalConstant.accentColor,
@@ -122,7 +69,7 @@ struct TasksHomeView: View {
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
-                NewTaskView()
+                NewTaskView(model: NewTaskViewModel(model))
             }
         }
     }
@@ -143,6 +90,7 @@ class TasksHomeViewModel: ObservableObject {
     @Published var navigateToNewTask: Bool = false
     @Published var navigateToExport: Bool? = false
     @Published var navigateToTaskDetails: Bool? = false
+    @Published var selectedTask: Task = Task()
     
     // Task list
     @Published var taskListColumn: [GridItem] = [GridItem()]
@@ -172,16 +120,21 @@ class TasksHomeViewModel: ObservableObject {
         }
     }
     
-    func tappedTask() {
-        self.navigateToTaskDetails = true
-    }
-    
     func tappedExport() {
         self.navigateToExport = true
     }
     
     func tappedNewTask() {
         self.navigateToNewTask = true
+    }
+    
+    func dismissNewTaskView() {
+        self.navigateToNewTask = false
+    }
+    
+    func openTaskDetails(task: Task) {
+        self.selectedTask = task
+        self.navigateToTaskDetails = true
     }
     
     /* MARK: Helper methods */

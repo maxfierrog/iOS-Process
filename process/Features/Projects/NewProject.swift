@@ -46,7 +46,7 @@ struct NewProjectView: View {
                     Text("Collaborators:")
                     Spacer()
                     Button {
-                        model.tappedSave() // FIXME: dsf
+                        model.tappedAddCollaborator()
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -72,7 +72,7 @@ struct NewProjectView: View {
             
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
-                    model.tappedSave()
+                    model.tappedCancel()
                 } label: {
                     Text("Cancel")
                 }
@@ -117,8 +117,17 @@ class NewProjectViewModel: ObservableObject {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
+                self.dismissView(successBanner: "We have created and saved your new project!")
             }
         }
+    }
+    
+    func tappedCancel() {
+        self.projectsHomeViewModel.dismissNewProjectView()
+    }
+    
+    func tappedAddCollaborator() {
+        
     }
     
     /* MARK: Helper methods */
@@ -129,6 +138,14 @@ class NewProjectViewModel: ObservableObject {
         bannerData.detail = message
         bannerData.type = .Error
         showBanner = true
+    }
+    
+    private func dismissView(successBanner: String?) {
+        self.projectsHomeViewModel.dismissNewProjectView()
+        guard successBanner == nil else {
+            self.projectsHomeViewModel.showBannerWithSuccessMessage(successBanner)
+            return
+        }
     }
 }
 

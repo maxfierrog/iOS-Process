@@ -62,7 +62,7 @@ class HomeViewModel: ObservableObject {
     
     init(_ superModel: RootViewModel) {
         self.superModel = superModel
-        self.user = superModel.getUser()
+        self.user = superModel.user
     }
     
     func updateUserModel(_ user: User) {
