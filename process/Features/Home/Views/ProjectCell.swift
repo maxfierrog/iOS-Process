@@ -41,11 +41,11 @@ struct ProjectCellView: View {
 class ProjectCellViewModel: ObservableObject {
     
     @Published var projectsHomeViewModel: ProjectsHomeViewModel
-    @Published var project: Project = Project()
+    @Published var project: Project = Project(creatorID: "")
     
     init(projectID: String, model: ProjectsHomeViewModel) {
         self.projectsHomeViewModel = model
-        APIHandler.pullProject(projectID: projectID, owner: model.user) { project, error in
+        Project.pull(projectID) { project, error in
             guard error == nil else { return }
             self.project = project!
         }

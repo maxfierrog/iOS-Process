@@ -112,9 +112,8 @@ class ProfileHomeViewModel: ObservableObject {
     }
     
     func saveUserData() {
-        let updatedUser = getUpdatedUser()
         guard self.user.data.username != self.editorUsernameField else {
-            self.updateUserModel(updatedUser)
+            self.updateUserModel()
             self.editing = false
             return
         }
@@ -127,21 +126,23 @@ class ProfileHomeViewModel: ObservableObject {
                 self.showBannerWithErrorMessage(ProfileConstant.usernameColisionError)
                 return
             }
-            self.updateUserModel(updatedUser)
+            self.updateUserModel()
             self.editing = false
         }
     }
     
-    func updateUserModel(_ updatedUser: User) {
-        APIHandler.pushUserData(updatedUser) { error in
-            guard error == nil else {
-                self.showBannerWithErrorMessage(error?.localizedDescription)
-                return
+    func updateUserModel() {
+        self.user
+            .changeName(self.editorNameField)
+            .changeUsername(self.editorUsernameField)
+            .push { error in
+                guard error == nil else {
+                    self.showBannerWithErrorMessage(error?.localizedDescription)
+                    return
+                }
+                self.uploadProfilePicture(self.profilePictureImage)
+                self.showBannerWithSuccessMessage("We have updated your profile!")
             }
-            self.user = updatedUser
-            self.homeViewModel.updateUserModel(updatedUser)
-            self.uploadProfilePicture(self.profilePictureImage)
-        }
     }
     
     /* MARK: Action methods */
@@ -176,12 +177,6 @@ class ProfileHomeViewModel: ObservableObject {
         bannerData.detail = message
         bannerData.type = .Success
         showBanner = true
-    }
-    
-    private func getUpdatedUser() -> User {
-        return User(UserData(copyOf: self.user.data,
-                             name: self.editorNameField,
-                             username: self.editorUsernameField))
     }
     
     private func uploadProfilePicture(_ image: UIImage) {

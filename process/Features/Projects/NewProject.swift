@@ -104,22 +104,28 @@ class NewProjectViewModel: ObservableObject {
     }
     
     func tappedSave() {
-        let newProject = Project(name: self.titleField,
-                                 owner: user,
-                                 description: self.descriptionField)
-        user.addOwnedProjects([newProject]).pushData { error in
-            guard error == nil else {
-                self.showBannerWithErrorMessage(error?.localizedDescription)
-                return
-            }
-            APIHandler.pushProjectData(newProject) { error in
+        let newProject = Project(creatorID: self.user.data.id)
+        
+        self.user
+            .addOwnedProject(newProject.data.id)
+            .push { error in
                 guard error == nil else {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                self.dismissView(successBanner: "We have created and saved your new project!")
+                
+                newProject
+                    .changeName(self.titleField)
+                    .changeOwner(self.user.data.id)
+                    .changeDescription(self.descriptionField)
+                    .push { error in
+                        guard error == nil else {
+                            self.showBannerWithErrorMessage(error?.localizedDescription)
+                            return
+                        }
+                        self.dismissView(successBanner: "We have created and saved your new project!")
+                    }
             }
-        }
     }
     
     func tappedCancel() {

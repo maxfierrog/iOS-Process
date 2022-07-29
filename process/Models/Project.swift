@@ -12,30 +12,17 @@ import Foundation
 /** Intermediary class for performing operations on projects. Can be seen as a
  singleton class for every relevant project. */
 class Project: Hashable {
-    
-    /* MARK: Project fields */
-    
+        
     var data: ProjectData
-    var tasks: [Task] = []
-    var owner: User = User()
-    var collaborators: [User] = []
+        
+    /* MARK: Initializers */
     
-    /* MARK: Project methods */
-    
-    /* Initializers and protocol methods*/
-    
-    init(name: String, owner: User, description: String?) {
-        self.data = ProjectData(name: name, owner: owner.data.id, description: description)
-        self.owner = owner
-    }
-    
-    init(data: ProjectData, owner: User) {
+    init(_ data: ProjectData) {
         self.data = data
-        self.owner = owner
     }
     
-    init() {
-        self.data = ProjectData(name: "", owner: "", description: nil)
+    init(creatorID: String) {
+        self.data = ProjectData(creatorID: creatorID)
     }
     
     public func hash(into hasher: inout Hasher) {
@@ -46,64 +33,89 @@ class Project: Hashable {
         return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
     
-    /* Builder pattern */
-
-    func addCollaborators(users: [User]) -> Project {
-        for user in users {
-            self.data.collaborators.append(user.data.id)
-            self.collaborators.append(user)
-        }
+    /* MARK: Builder pattern */
+    
+    func finishEdit() { return }
+    
+    func changeName(_ name: String) -> Project {
+        self.data = ProjectData(copyOf: self.data,
+                                name: name,
+                                owner: self.data.owner,
+                                description: self.data.description,
+                                completionDate: self.data.dateCompleted)
         return self
     }
     
-    func removeCollaborator(user: User) -> Project {
-        self.data.collaborators.removeAll { $0 == user.data.id }
-        self.collaborators.removeAll { $0.data.id == user.data.id }
+    func changeOwner(_ userID: String) -> Project {
+        self.data = ProjectData(copyOf: self.data,
+                                name: self.data.name,
+                                owner: userID,
+                                description: self.data.description,
+                                completionDate: self.data.dateCompleted)
         return self
     }
     
-    func addTasks(_ tasks: [Task]) -> Project {
-        for task in tasks {
-            self.data.tasks.append(task.data.id)
-            self.tasks.append(task)
-        }
-        return self
-    }
-    
-    func removeTask(_ task: Task) -> Project {
-        self.data.tasks.removeAll { $0 == task.data.id }
-        self.tasks.removeAll { $0.data.id == task.data.id }
+    func changeDescription(_ description: String) -> Project {
+        self.data = ProjectData(copyOf: self.data,
+                                name: self.data.name,
+                                owner: self.data.owner,
+                                description: description,
+                                completionDate: self.data.dateCompleted)
         return self
     }
     
     func complete() -> Project {
-        self.data = ProjectData(copyOf: self.data, completionDate: Date())
+        self.data = ProjectData(copyOf: self.data,
+                                name: self.data.name,
+                                owner: self.data.owner,
+                                description: self.data.description,
+                                completionDate: Date())
         return self
     }
     
     func reopen() -> Project {
-        self.data = ProjectData(copyOf: self.data, completionDate: nil)
+        self.data = ProjectData(copyOf: self.data,
+                                name: self.data.name,
+                                owner: self.data.owner,
+                                description: self.data.description,
+                                completionDate: nil)
+        return self
+    }
+
+    func addCollaborator(_ userID: String) -> Project {
+        self.data.collaborators.append(userID)
         return self
     }
     
-    /* Storage pull methods */
-        
-    func pullCollaborators(_ completion: (_ error: Error?, _ collaborators: [User]?) -> Void) {
-        
+    func removeCollaborator(_ userID: String) -> Project {
+        self.data.collaborators.removeAll { $0 == userID }
+        return self
     }
     
-    func pullTasks(_ completion: (_ error: Error?, _ collaborators: [Task]?) -> Void) {
-        
+    func addTask(_ taskID: String) -> Project {
+        self.data.tasks.append(taskID)
+        return self
     }
     
-    func pullOwner(_ completion: (_ error: Error?, _ owner: User?) -> Void) {
-        
+    func removeTask(_ taskID: String) -> Project {
+        self.data.tasks.removeAll { $0 == taskID }
+        return self
     }
     
-    /* Storage push methods */
+    /* MARK: Storage methods */
+        
+    static func pull(_ id: String, _ completion: @escaping(_ project: Project?, _ error: Error?) -> Void) {
+        APIHandler.pullProject(projectID: id) { project, error in
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+            completion(project, nil)
+        }
+    }
     
-    func pushData(_ completion: @escaping(_ error: Error?) -> Void) {
-        APIHandler.pushProjectData(self) { error in
+    func push(_ completion: @escaping(_ error: Error?) -> Void) {
+        APIHandler.pushProject(self) { error in
             guard error == nil else {
                 completion(error)
                 return
@@ -111,7 +123,10 @@ class Project: Hashable {
             completion(nil)
         }
     }
+    
+    
 }
+
 
 /** Project  data model deconstructible and reconstructible by Firestore SDK
  methods. Stores project attributes. */
@@ -123,6 +138,7 @@ public struct ProjectData: Codable {
     var id: String
     var name: String
     var owner: String
+    var creator: String
     var description: String?
     var dateCreated: Date
     var dateCompleted: Date?
@@ -135,6 +151,7 @@ public struct ProjectData: Codable {
         case id
         case name
         case owner
+        case creator
         case description
         case dateCreated
         case dateCompleted
@@ -144,28 +161,38 @@ public struct ProjectData: Codable {
     
     /* MARK: Project data initializers */
     
-    /** Used to generate a new unique project. */
-    init(name: String, owner: String, description: String?) {
-        self.name = name
-        self.owner = owner
-        self.description = description
-        self.dateCreated = Date()
+    /** Used to generate placeholder Project data. */
+    init(creatorID: String) {
+        
+        // To be determined
+        self.name = ""
+        self.owner = ""
         self.dateCompleted = nil
+        self.description = nil
+        
+        // Project constants
+        self.creator = creatorID
+        self.dateCreated = Date()
         self.id = UUID().uuidString
         self.collaborators = []
         self.tasks = []
     }
     
     /** Allows for updating a Project object with ProjectData including a  new
-     completion date. */
-    init(copyOf: ProjectData, completionDate: Date?) {
+     and updated fields. */
+    init(copyOf: ProjectData, name: String, owner: String, description: String?, completionDate: Date?) {
+        
+        // Modifiable fields
+        self.name = name
+        self.owner = owner
+        self.description = description
+        self.dateCompleted = completionDate
+        
+        // Project contants
         self.id = copyOf.id
-        self.name = copyOf.name
-        self.owner = copyOf.owner
-        self.description = copyOf.description
-        self.dateCreated = copyOf.dateCreated
+        self.creator = copyOf.creator
         self.collaborators = copyOf.collaborators
         self.tasks = copyOf.tasks
-        self.dateCompleted = completionDate
+        self.dateCreated = copyOf.dateCreated
     }
 }

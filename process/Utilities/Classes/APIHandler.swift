@@ -22,7 +22,7 @@ import FirebaseFirestoreSwift
  5. Task exporting via Google Tasks API */
 class APIHandler {
     
-    /* MARK: Firestore database and collection references */
+    /* MARK: Database references */
     
     // Realtime database
     static private let realtimeDB = Firestore.firestore()
@@ -37,42 +37,31 @@ class APIHandler {
     static private let storageRef = storageDB.reference()
     static private let imagesRef = storageRef.child("images")
     
-    /* MARK: User utility methods */
-
-    /** Uploads a new User struct model USER to Firestore. Allows for a
-     COMPLETION block with an ERROR parameter, which will be nil if the upload
-     was successful. If a user with the same ID exists in the database, the
-     entry will be replaced. */
-    static func pushUserData(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
-        do {
-            try realtimeDB.collection("users").document(user.data.id).setData(from: user.data)
-            completion(nil)
-        } catch let error {
-            completion(error)
-        }
-    }
+    /* MARK: Username colision */
     
-    /** Allows for a COMPLETION block with a QUERYSNAPSHOT parameter. This will
-     contain all documents whose 'username' field match USERNAME. If it errors
-     while running the query the completion block is only passed the error. */
-    static func matchUsernameQuery(_ username: String, _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> Void) {
-        let query = usersCollection.whereField("username", isEqualTo: username)
-        query.getDocuments { querySnapshot, error in
+    /** Generates and passes a unique username RESULT based on a user screen
+     NAME. This is ensured by adding an integer counter which only increases
+     to the end of existing usernames to ensure uniqueness. */
+    static func availableUsernameFromName(_ name: String, _ completion: @escaping(_ result: String?, _ error: Error?) -> Void) {
+        let noWhitespaceName: String = String(name.filter { !" \n\t\r".contains($0) }).lowercased()
+        APIHandler.matchUsernameQuery(noWhitespaceName) { query, error in
             guard error == nil else {
                 completion(nil, error)
                 return
             }
-            completion(querySnapshot, nil)
+            if (!query!.documents.isEmpty) {
+                APIHandler.getUsernameRepeatCount { count, error in
+                    guard error == nil else {
+                        completion(nil, error)
+                        return
+                    }
+                    APIHandler.incrementUsernameRepeatCount()
+                    completion(noWhitespaceName + String(count!), nil)
+                }
+            } else {
+                completion(noWhitespaceName, nil)
+            }
         }
-    }
-    
-    /** Returns the Firebase Authentication service ID of the current user.
-     Throws noAuthenticatedUser error if  there is no user authenticated. */
-    static func currentUserAuthID() throws -> String {
-        guard let user = Auth.auth().currentUser else {
-            throw APIHandlerError.noAuthenticatedUser("No user is currently authenticated.")
-        }
-        return user.uid
     }
     
     /** Pulls the COUNT of times someone has registered with an existing
@@ -99,6 +88,29 @@ class APIHandler {
         utilsCollection.document("username-counter").updateData([
             "counter": FieldValue.increment(Int64(1)) // FIXME: Avoid missing an increase: https://cloud.google.com/firestore/docs/solutions/counters
         ])
+    }
+    
+    /** Allows for a COMPLETION block with a QUERYSNAPSHOT parameter. This will
+     contain all documents whose 'username' field match USERNAME. If it errors
+     while running the query the completion block is only passed the error. */
+    static func matchUsernameQuery(_ username: String, _ completion: @escaping(_ querySnapshot: QuerySnapshot?, _ error: Error?) -> Void) {
+        let query = usersCollection.whereField("username", isEqualTo: username)
+        query.getDocuments { querySnapshot, error in
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+            completion(querySnapshot, nil)
+        }
+    }
+    
+    /* MARK: Authentication */
+    
+    /** Returns true if EMAIL is not malformed. */
+    static func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
     
     /** Provides a COMPLETION block with a USER constructed from the Firestore
@@ -141,22 +153,6 @@ class APIHandler {
         Auth.auth().currentUser?.delete()
     }
     
-    /** Constructs and returns the user model corresopnding to the current
-     authenticated user, if there is one. */
-    static func pullUserData(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
-        if let email = Auth.auth().currentUser?.email {
-            APIHandler.getUserFromEmail(email) { user, error in
-                guard error == nil else {
-                    completion(nil, error)
-                    return
-                }
-                completion(user, nil)
-            }
-        } else {
-            completion(nil, APIHandlerError.noAuthenticatedUser("No user is currently authenticated."))
-        }
-    }
-    
     /** Ends the current API session to complete the log out process. Returns
      true if successful. */
     static func terminateAuthSession() -> Bool {
@@ -168,13 +164,67 @@ class APIHandler {
         }
     }
     
+    /** Returns the Firebase Authentication service ID of the current user.
+     Throws noAuthenticatedUser error if  there is no user authenticated. */
+    static func currentUserAuthID() throws -> String {
+        guard let user = Auth.auth().currentUser else {
+            throw APIHandlerError.noAuthenticatedUser("No user is currently authenticated.")
+        }
+        return user.uid
+    }
+    
+    /* MARK: Push/pull user */
+    
+    /** Uploads a new User struct model USER to Firestore. Allows for a
+     COMPLETION block with an ERROR parameter, which will be nil if the upload
+     was successful. If a user with the same ID exists in the database, the
+     entry will be replaced. */
+    static func pushUser(_ user: User, _ completion: @escaping(_ error: Error?) -> Void) {
+        do {
+            try usersCollection.document(user.data.id).setData(from: user.data)
+            completion(nil)
+        } catch let error {
+            completion(error)
+        }
+    }
+    
+    /** Constructs and returns the user model corresopnding to an ID. */
+    static func pullUser(_ id: String, _ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+        let docRef = usersCollection.document(id)
+        docRef.getDocument(as: UserData.self) { result in
+            switch result {
+            case .failure(let error):
+                completion(nil, error)
+            case .success(let userData):
+                completion(User(userData), nil)
+            }
+        }
+    }
+    
+    /** Constructs and returns the user model corresopnding to the current
+     authenticated user, if there is one. */
+    static func pullAuthenticatedUser(_ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+        if let email = Auth.auth().currentUser?.email {
+            getUserFromEmail(email) { user, error in
+                guard error == nil else {
+                    completion(nil, error)
+                    return
+                }
+                completion(user, nil)
+            }
+        } else {
+            completion(nil, APIHandlerError.noAuthenticatedUser("No user is currently authenticated."))
+        }
+    }
+    
+    /* MARK: Push/pull profile pictures */
+    
     /** Uploads an image reference with DATA to the images folder in the
      storage database, with NAME for its path termination. Allows for a
      completion block for errors and metadata. */
-    static func pushProfilePicture(_ image: UIImage, user: User, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
-        let pictureCopy = image
-        let pictureData = pictureCopy.resized(to: CGSize(width: 512, height: 512)).jpegData(compressionQuality: 0.9)! //FIXME: Image resizing doesn't work
-        let pictureRef = APIHandler.imagesRef.child(user.data.id)
+    static func pushProfilePicture(_ image: UIImage, userID: String, _ completion: @escaping(_ error: Error?, _ metadata: StorageMetadata?) -> Void) -> StorageUploadTask {
+        let pictureData = image.resized(to: CGSize(width: 512, height: 512)).jpegData(compressionQuality: 0.9)! //FIXME: Image resizing doesn't work
+        let pictureRef = APIHandler.imagesRef.child(userID)
         return pictureRef.putData(pictureData, metadata: StorageMetadata()) { metadata, error in
             guard error == nil else {
                 completion(error, nil)
@@ -211,13 +261,13 @@ class APIHandler {
         }
     }
     
-    /* MARK: Project utility methods */
+    /* MARK: Push/pull projects */
     
     /** Uploads a block of project data to Firestore, allowing for a completion
      block with an error if there was one in the process. */
-    static func pushProjectData(_ project: Project, _ completion: @escaping(_ error: Error?) -> Void) {
+    static func pushProject(_ project: Project, _ completion: @escaping(_ error: Error?) -> Void) {
         do {
-            try realtimeDB.collection("projects").document(project.data.id).setData(from: project.data)
+            try projectsCollection.document(project.data.id).setData(from: project.data)
             completion(nil)
         } catch let error {
             completion(error)
@@ -225,27 +275,25 @@ class APIHandler {
     }
 
     /** Returns the generated Project model from ID, stored in Firestore. */
-    static func pullProject(projectID: String, owner: User, _ completion: @escaping(_ project: Project?, _ error: Error?) -> Void){
-        var project = Project()
+    static func pullProject(projectID: String, _ completion: @escaping(_ project: Project?, _ error: Error?) -> Void){
         let docRef = projectsCollection.document(projectID)
         docRef.getDocument(as: ProjectData.self) { result in
             switch result {
             case .failure(let error):
                 completion(nil, error)
             case .success(let projectData):
-                project = Project(data: projectData, owner: owner)
-                completion(project, nil)
+                completion(Project(projectData), nil)
             }
         }
     }
     
-    /* MARK: Task utility methods */
+    /* MARK: Push/pull tasks */
     
     /** Uploads a block of project data to Firestore, allowing for a completion
      block with an error if there was one in the process. */
-    static func pushTaskData(_ task: Task, _ completion: @escaping(_ error: Error?) -> Void) {
+    static func pushTask(_ task: Task, _ completion: @escaping(_ error: Error?) -> Void) {
         do {
-            try realtimeDB.collection("tasks").document(task.data.id).setData(from: task.data)
+            try tasksCollection.document(task.data.id).setData(from: task.data)
             completion(nil)
         } catch let error {
             completion(error)
@@ -253,16 +301,14 @@ class APIHandler {
     }
 
     /** Returns the generated Project model from ID, stored in Firestore. */
-    static func pullTask(taskID: String, assignee: User, _ completion: @escaping(_ task: Task?, _ error: Error?) -> Void){
-        var task = Task()
+    static func pullTask(taskID: String, _ completion: @escaping(_ task: Task?, _ error: Error?) -> Void){
         let docRef = tasksCollection.document(taskID)
         docRef.getDocument(as: TaskData.self) { result in
             switch result {
             case .failure(let error):
                 completion(nil, error)
             case .success(let taskData):
-                task = Task(data: taskData, assignee: assignee)
-                completion(task, nil)
+                completion(Task(taskData), nil)
             }
         }
     }

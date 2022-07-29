@@ -41,20 +41,20 @@ struct TaskCellView: View {
 
 class TaskCellViewModel: ObservableObject {
     
-    var tasksHomeViewModel: TasksHomeViewModel
-    @Published var task: Task = Task()
+    var parentModel: TaskListViewModel
+    @Published var task: Task = Task(creatorID: "")
     @Published var navigateToTaskDetails: Bool? = false
     
-    init(taskID: String, model: TasksHomeViewModel) {
-        self.tasksHomeViewModel = model
-        APIHandler.pullTask(taskID: taskID, assignee: model.user) { task, error in
+    init(taskID: String, model: TaskListViewModel) {
+        self.parentModel = model
+        Task.pull(taskID) { task, error in
             guard error == nil else { return }
             self.task = task!
         }
     }
     
     func tappedTask() {
-        tasksHomeViewModel.openTaskDetails(task: self.task)
+        self.parentModel.openTaskDetails(task: self.task)
     }
     
     func formattedDescription() -> String {

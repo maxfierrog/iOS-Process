@@ -33,7 +33,6 @@
 		505D6E13287E9BE3005A28CB /* ActionButton in Frameworks */ = {isa = PBXBuildFile; productRef = 505D6E12287E9BE3005A28CB /* ActionButton */; };
 		505D6E16287EB061005A28CB /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E15287EB061005A28CB /* PasswordField.swift */; };
 		505D6E18287EB24A005A28CB /* EmailField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E17287EB24A005A28CB /* EmailField.swift */; };
-		505D6E1B287EC49B005A28CB /* VerificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E1A287EC49B005A28CB /* VerificationUtils.swift */; };
 		505D6E21287EEDD3005A28CB /* Invite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E20287EEDD3005A28CB /* Invite.swift */; };
 		505D6E26287EF262005A28CB /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E25287EF262005A28CB /* APIHandler.swift */; };
 		505D6E2828880787005A28CB /* ProjectsConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D6E2728880787005A28CB /* ProjectsConstant.swift */; };
@@ -99,7 +98,6 @@
 		505D6E0F287E9317005A28CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		505D6E15287EB061005A28CB /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
 		505D6E17287EB24A005A28CB /* EmailField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailField.swift; sourceTree = "<group>"; };
-		505D6E1A287EC49B005A28CB /* VerificationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationUtils.swift; sourceTree = "<group>"; };
 		505D6E20287EEDD3005A28CB /* Invite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invite.swift; sourceTree = "<group>"; };
 		505D6E25287EF262005A28CB /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		505D6E2728880787005A28CB /* ProjectsConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsConstant.swift; sourceTree = "<group>"; };
@@ -235,7 +233,6 @@
 		505D6E19287EC484005A28CB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				505D6E1A287EC49B005A28CB /* VerificationUtils.swift */,
 				505D6E25287EF262005A28CB /* APIHandler.swift */,
 				988FD404289350B30057D49D /* Extensions.swift */,
 			);
@@ -519,7 +516,6 @@
 				505D6E3C2888575D005A28CB /* RoundButton.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
-				505D6E1B287EC49B005A28CB /* VerificationUtils.swift in Sources */,
 				988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
 				988FD405289350B30057D49D /* Extensions.swift in Sources */,

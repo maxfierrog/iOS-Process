@@ -109,7 +109,7 @@ class RegistrationViewModel: ObservableObject {
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
             .map { value in
-                VerificationUtils.isValidEmail(value)
+                APIHandler.isValidEmail(value)
             }
             .eraseToAnyPublisher()
     }
@@ -169,18 +169,19 @@ class RegistrationViewModel: ObservableObject {
                     self?.showBannerWithErrorMessage(error!.localizedDescription)
                     return
                 }
-                VerificationUtils.availableUsernameFromName(self!.nameField) { generatedUsername, error in
+                APIHandler.availableUsernameFromName(self!.nameField) { generatedUsername, error in
                     guard error == nil else {
                         self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                         self?.showBannerWithErrorMessage(error!.localizedDescription)
                         APIHandler.attemptToDeleteCurrentUser()
                         return
                     }
-                    let newUser = User(name: self!.nameField,
-                                       username: generatedUsername!,
-                                       email: self!.emailField)
-                    
-                    newUser.pushData() { error in
+                    let newUser = User()
+                    newUser
+                        .changeName(self!.nameField)
+                        .changeUsername(generatedUsername!)
+                        .changeEmail(self!.emailField)
+                        .push { error in
                         guard error == nil else {
                             self?.registerButtonState = RegistrationConstant.failedRegisterButtonState
                             self?.showBannerWithErrorMessage(error!.localizedDescription)

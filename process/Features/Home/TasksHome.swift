@@ -29,13 +29,13 @@ struct TasksHomeView: View {
             SegmentedPicker(accessibilityText: TasksConstant.pickerAccessibilityText,
                             categories: model.taskCategories,
                             selectedCategory: $model.selectedTaskCategory)
-            .padding(.horizontal)
-            .padding(.bottom)
+                .padding(.horizontal)
+                .padding(.bottom)
             
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.user.data.assignedTasks.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(taskID: model.user.data.assignedTasks[index],
+                    ForEach($model.user.data.tasks.indices, id: \.self) { index in
+                        TaskCellView(model: TaskCellViewModel(taskID: model.user.data.tasks[index],
                                                               model: model))
                     }
                 }
@@ -78,7 +78,7 @@ struct TasksHomeView: View {
 
 /** Data model for the Tasks view. Communicates with Home view's model to
  obtain data and to communicate instructions, such as logging out. */
-class TasksHomeViewModel: ObservableObject {
+class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     
     /* MARK: Model fields */
     
@@ -90,7 +90,7 @@ class TasksHomeViewModel: ObservableObject {
     @Published var navigateToNewTask: Bool = false
     @Published var navigateToExport: Bool? = false
     @Published var navigateToTaskDetails: Bool? = false
-    @Published var selectedTask: Task = Task()
+    @Published var selectedTask: Task = Task(creatorID: "")
     
     // Task list
     @Published var taskListColumn: [GridItem] = [GridItem()]

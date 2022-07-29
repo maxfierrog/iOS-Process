@@ -15,44 +15,16 @@ enum TaskSize: Int {
 
 class Task: Hashable {
     
-    /* MARK: Task fields */
-    
     var data: TaskData
-    var assignee: User?
-    var subtasks: [Task] = []
     
-    /* MARK: Task methods */
+    /* MARK: Initializers */
     
-    /* Initializer and protocol methods */
-    
-    init(data: TaskData) {
+    init(_ data: TaskData) {
         self.data = data
     }
     
-    init(data: TaskData, assignee: User?) {
-        self.data = data
-        self.assignee = assignee
-    }
-    
-    init(name: String,
-         size: TaskSize,
-         description: String?,
-         dateDue: Date,
-         assignee: User?,
-         creator: String,
-         project: String?) {
-        self.data = TaskData(name: name,
-                             size: size,
-                             description: description,
-                             dateDue: dateDue,
-                             assignee: assignee == nil ? nil : assignee!.data.id,
-                             creator: creator,
-                             project: project)
-        self.assignee = assignee
-    }
-    
-    init () {
-        self.data = TaskData()
+    init (creatorID: String) {
+        self.data = TaskData(creatorID: creatorID)
     }
     
     public func hash(into hasher: inout Hasher) {
@@ -63,7 +35,145 @@ class Task: Hashable {
         return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
     
-    /* Builder pattern */
+    /* MARK: Builder pattern */
+    
+    func finishEdit() { return }
+    
+    func changeName(_ name: String) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func changeSize(_ size: TaskSize) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: size.rawValue,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func changeDescription(_ description: String?) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func changeDateDue(_ date: Date) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: date,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func changeAssignee(_ assigneeID: String?) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: assigneeID,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func changeProject(_ projectID: String?) -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: projectID,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: self.data.dateCompleted)
+        return self
+    }
+    
+    func addSubtask(_ taskID: String) -> Task {
+        self.data.subtasks.append(taskID)
+        return self
+    }
+    
+    func removeSubtask(_ taskID: String) -> Task {
+        self.data.subtasks.removeAll { $0 == taskID }
+        return self
+    }
+    
+    func complete() -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: Date())
+        return self
+    }
+    
+    func reopen() -> Task {
+        self.data = TaskData(copyOf: self.data,
+                             name: self.data.name,
+                             size: self.data.size,
+                             description: self.data.description,
+                             dateDue: self.data.dateDue,
+                             assignee: self.data.assignee,
+                             project: self.data.project,
+                             subtasks: self.data.subtasks,
+                             dateCompleted: nil)
+        return self
+    }
+    
+    /* MARK: Storage methods */
+    
+    func push(_ completion: @escaping(_ error: Error?) -> Void) {
+        APIHandler.pushTask(self) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            completion(nil)
+        }
+    }
+        
+    static func pull(_ id: String, _ completion: @escaping(_ task: Task?, _ error: Error?) -> Void) {
+        APIHandler.pullTask(taskID: id) { task, error in
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+            completion(task, nil)
+        }
+    }
     
 }
 
@@ -100,117 +210,48 @@ public struct TaskData: Codable {
     /* MARK: Task data initializers */
     
     /** Initializes placeholder task data. */
-    init() {
-        let placeholderUser = User()
-        self.id = UUID().uuidString
+    init(creatorID: String) {
+        
+        // To be determined
         self.name = ""
         self.size = TaskSize.small.rawValue
-        self.description = ""
-        self.dateCreated = Date()
+        self.description = nil
         self.dateDue = Date()
-        self.dateCompleted = nil
-        self.assignee = placeholderUser.data.id
-        self.creator = placeholderUser.data.id
+        self.assignee = nil
         self.project = nil
         self.subtasks = []
-    }
-    
-    /** Allows for generating a copy of COPYOF, but with added subtasks. */
-    init(copyOf: TaskData,
-         subtasks: [String]) {
+        self.dateCompleted = nil
         
-        // Modified field
-        self.subtasks = subtasks
-        
-        // Copied fields
-        self.name = copyOf.name
-        self.size = copyOf.size
-        self.description = copyOf.description
-        self.dateDue = copyOf.dateDue
-        self.dateCompleted = copyOf.dateCompleted
-        self.assignee = copyOf.assignee
-        self.creator = copyOf.creator
-        self.project = copyOf.project
-
         // Task constants
         self.id = UUID().uuidString
+        self.creator = creatorID
         self.dateCreated = Date()
     }
     
-    /** Allows for generating a copy of COPYOF, but with a completion date. */
+    /** Allows for updating a Task object's data.  */
     init(copyOf: TaskData,
-         dateCompleted: Date) {
-        
-        // Modified field
-        self.dateCompleted = dateCompleted
-
-        // Copied fields
-        self.name = copyOf.name
-        self.size = copyOf.size
-        self.description = copyOf.description
-        self.dateDue = copyOf.dateDue
-        self.assignee = copyOf.assignee
-        self.creator = copyOf.creator
-        self.project = copyOf.project
-        self.subtasks = copyOf.subtasks
-
-
-        // Task constants
-        self.id = UUID().uuidString
-        self.dateCreated = Date()
-    }
-    
-    /** Allows for generating a copy of COPYOF with modified attributes. */
-    init(copyOf: TaskData,
-         size: TaskSize,
-         description: String?,
-         dateDue: Date,
-         assignee: String?) {
-        
-        // Modified fields
-        self.size = size.rawValue
-        self.description = description
-        self.dateDue = dateDue
-        self.assignee = assignee
-        
-        // Copied fields
-        self.name = copyOf.name
-        self.creator = copyOf.creator
-        self.project = copyOf.project
-        self.subtasks = copyOf.subtasks
-        self.dateCompleted = copyOf.dateCompleted
-
-
-        // Task constants
-        self.id = UUID().uuidString
-        self.dateCreated = Date()
-    }
-    
-    /** Allows the instantiation of a new task, taking only the parameters
-     necessary for new task creation. */
-    init(name: String,
-         size: TaskSize,
+         name: String,
+         size: Int,
          description: String?,
          dateDue: Date,
          assignee: String?,
-         creator: String,
-         project: String?) {
+         project: String?,
+         subtasks: [String],
+         dateCompleted: Date?) {
         
-        // New task fields
+        // Modifiable fields
         self.name = name
-        self.size = size.rawValue
+        self.size = size
         self.description = description
         self.dateDue = dateDue
         self.assignee = assignee
-        self.creator = creator
         self.project = project
-        
-        // To be determined
-        self.dateCompleted = nil
-        self.subtasks = []
+        self.dateCompleted = dateCompleted
+        self.subtasks = subtasks
 
         // Task constants
-        self.id = UUID().uuidString
-        self.dateCreated = Date()
+        self.creator = copyOf.creator
+        self.id = copyOf.id
+        self.dateCreated = copyOf.dateCreated
     }
 }

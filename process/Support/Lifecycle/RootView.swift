@@ -43,11 +43,15 @@ class RootViewModel: ObservableObject {
     /** Check for existing Authentication session, and extract current user's
      model if there is one. */
     init() {
-        self.user = User(name: "Preview User",
-                         username: "username",
-                         email: "name@email.com")
+        let previewUser = User()
+        previewUser
+            .changeName("Preview User")
+            .changeUsername("username")
+            .changeEmail("name@email.com")
+            .finishEdit()
+        self.user = previewUser
         self.userSignedIn = false
-        APIHandler.pullUserData { user, error in
+        APIHandler.pullAuthenticatedUser { user, error in
             guard error == nil && user != nil else { return }
             self.user = user!
             self.user.pullProfilePicture() { error, _ in
@@ -73,10 +77,6 @@ class RootViewModel: ObservableObject {
         self.user.pullProfilePicture() { error, _ in
             guard error == nil else { return }
         }
-    }
-    
-    func updateUserModel(_ user: User) {
-        self.user = user
     }
 
 }

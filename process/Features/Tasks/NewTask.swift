@@ -71,7 +71,7 @@ class NewTaskViewModel: ObservableObject {
     @Published var toProject: String? = nil // FIXME: !
     
     // Projects home view parent model
-    var tasksHomeViewModel: TasksHomeViewModel
+    var parentModel: TaskListViewModel
     @Published var user: User
     
     // Banner state fields
@@ -80,36 +80,41 @@ class NewTaskViewModel: ObservableObject {
     
     /* MARK: Methods */
     
-    init(_ model: TasksHomeViewModel) {
-        self.tasksHomeViewModel = model
+    init(_ model: TaskListViewModel) {
+        self.parentModel = model
         self.user = model.user
     }
     
     func tappedSave() {
-        let newTask = Task(name: self.titleField,
-                           size: self.size,
-                           description: self.descriptionField,
-                           dateDue: self.dateDue,
-                           assignee: self.user,
-                           creator: self.user.data.id,
-                           project: self.toProject)
-        user.addTasks([newTask]).pushData { error in
-            guard error == nil else {
-                self.showBannerWithErrorMessage(error?.localizedDescription)
-                return
-            }
-            APIHandler.pushTaskData(newTask) { error in
+        let newTask = Task(creatorID: self.user.data.id)
+        
+        self.user
+            .addTask(newTask.data.id)
+            .push { error in
                 guard error == nil else {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                self.dismissView(successBanner: "We have created and saved your new task!")
-            }
-        }
+                
+                newTask
+                    .changeName(self.titleField)
+                    .changeSize(self.size)
+                    .changeDescription(self.descriptionField)
+                    .changeDateDue(self.dateDue)
+                    .changeAssignee(self.user.data.id)
+                    .changeProject(self.toProject)
+                    .push { error in
+                        guard error == nil else {
+                            self.showBannerWithErrorMessage(error?.localizedDescription)
+                            return
+                        }
+                        self.dismissView(successBanner: "We have created and saved your new task!")
+                    }
+                }
     }
     
     func tappedCancel() {
-        self.tasksHomeViewModel.dismissNewTaskView()
+        self.parentModel.dismissNewTaskView()
     }
     
     /* MARK: Helper methods */
@@ -123,9 +128,9 @@ class NewTaskViewModel: ObservableObject {
     }
     
     private func dismissView(successBanner: String?) {
-        self.tasksHomeViewModel.dismissNewTaskView()
+        self.parentModel.dismissNewTaskView()
         guard successBanner == nil else {
-            self.tasksHomeViewModel.showBannerWithSuccessMessage(successBanner)
+            self.parentModel.showBannerWithSuccessMessage(successBanner)
             return
         }
     }

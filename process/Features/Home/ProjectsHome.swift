@@ -31,8 +31,8 @@ struct ProjectsHomeView: View {
             SegmentedPicker(accessibilityText: ProjectsConstant.pickerAccessibilityText,
                             categories: model.projectCategories,
                             selectedCategory: $model.selectedProjectCategory)
-            .padding(.horizontal)
-            .padding(.bottom)
+                .padding(.horizontal)
+                .padding(.bottom)
             
             ScrollView {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
@@ -96,7 +96,7 @@ class ProjectsHomeViewModel: ObservableObject {
     @Published var navigateToNewProject: Bool = false
     @Published var navigateToProjectDetails: Bool? = false
     @Published var navigateToNotifications: Bool? = false
-    @Published var selectedProject: Project = Project()
+    @Published var selectedProject: Project = Project(creatorID: "")
     
     // Projects grid
     @Published var twoColumnGrid: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]

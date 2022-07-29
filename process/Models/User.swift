@@ -13,79 +13,115 @@ import SwiftUI
 /** Singleton class used as a functional intermediary between the UserData
  struct, which stores user data and models. */
 class User: ObservableObject {
-    
-    /* MARK: User class fields */
-    
+        
     var data: UserData
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
-    var assignedTasks: [Task] = []
-    var ownedProjects: [Project] = []
-    var invitedProjects: [Project] = []
-    var receivedInvites: [Invite] = []
     
-    /* MARK: User class methods */
-    
-    /* Initializers */
-    
-    init() {
-        data = UserData()
-    }
-    
-    init(name: String, username: String, email: String) {
-        self.data = UserData(name: name, username: username, email: email)
-    }
+    /* MARK: Initializers */
     
     init(_ data: UserData) {
         self.data = data
     }
     
-    /* Builder pattern */
+    init() {
+        data = UserData()
+    }
+    
+    /* MARK: Builder pattern */
+    
+    func finishEdit() { return }
     
     func changeProfilePicture(_ image: UIImage) -> User {
         self.profilePicture = image
         return self
     }
     
-    func changeUsername(_ username: String) -> User {
-        self.data = UserData(copyOf: self.data, name: self.data.name, username: username)
-        return self
-    }
-    
     func changeName(_ name: String) -> User {
-        self.data = UserData(copyOf: self.data, name: name, username: self.data.username)
+        self.data = UserData(copyOf: self.data,
+                             name: name,
+                             username: self.data.username,
+                             email: self.data.email)
         return self
     }
     
-    func addTasks(_ tasks: [Task]) -> User {
-        for task in tasks {
-            self.data.assignedTasks.append(task.data.id)
-            self.assignedTasks.append(task)
+    func changeUsername(_ username: String) -> User {
+        self.data = UserData(copyOf: self.data,
+                             name: self.data.name,
+                             username: username,
+                             email: self.data.email)
+        return self
+    }
+    
+    func changeEmail(_ email: String) -> User {
+        self.data = UserData(copyOf: self.data,
+                             name: self.data.name,
+                             username: self.data.username,
+                             email: email)
+        return self
+    }
+    
+    func addTask(_ taskID: String) -> User {
+        self.data.tasks.append(taskID)
+        return self
+    }
+    
+    func removeTask(_ taskID: String) -> User {
+        self.data.tasks.removeAll { $0 == taskID }
+        return self
+    }
+    
+    func addOwnedProject(_ projectID: String) -> User {
+        self.data.ownedProjects.append(projectID)
+        return self
+    }
+    
+    func removeOwnedProject(_ projectID: String) -> User {
+        self.data.ownedProjects.removeAll { $0 == projectID }
+        return self
+    }
+    
+    func addInvitedProject(_ projectID: String) -> User {
+        self.data.invitedProjects.append(projectID)
+        return self
+    }
+    
+    func removeInvitedProject(_ projectID: String) -> User {
+        self.data.invitedProjects.removeAll { $0 == projectID }
+        return self
+    }
+    
+    func addInvite(_ inviteID: String) -> User {
+        self.data.receivedInvites.append(inviteID)
+        return self
+    }
+    
+    func removeInvite(_ inviteID: String) -> User {
+        self.data.receivedInvites.removeAll { $0 == inviteID }
+        return self
+    }
+    
+    /* MARK: Storage methods */
+    
+    func pull(_ id: String, _ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+        APIHandler.pullUser(id) { user, error in
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+            completion(user, nil)
         }
-        return self
     }
-    
-    func removeTask(_ task: Task) -> User {
-        self.data.assignedTasks.removeAll { $0 == task.data.id }
-        self.assignedTasks.removeAll { $0.data.id == task.data.id }
-        return self
-    }
-    
-    func addOwnedProjects(_ projects: [Project]) -> User {
-        for project in projects {
-            self.data.ownedProjects.append(project.data.id)
-            self.ownedProjects.append(project)
+        
+    func push(_ completion: @escaping(_ error: Error?) -> Void) {
+        APIHandler.pushUser(self) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            completion(nil)
         }
-        return self
     }
     
-    func removeOwnedProject(_ project: Project) -> User {
-        self.data.ownedProjects.removeAll { $0 == project.data.id }
-        self.ownedProjects.removeAll { $0.data.id == project.data.id }
-        return self
-    }
-    
-    /* Storage pull methods */
-
     func pullProfilePicture(_ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
         APIHandler.pullProfilePicture(user: self) { error, image in
             guard error == nil else {
@@ -97,20 +133,8 @@ class User: ObservableObject {
         }
     }
     
-    /* Storage push methods */
-    
-    func pushData(_ completion: @escaping(_ error: Error?) -> Void) {
-        APIHandler.pushUserData(self) { error in
-            guard error == nil else {
-                completion(error)
-                return
-            }
-            completion(nil)
-        }
-    }
-    
     func pushProfilePicture(_ image: UIImage, _ completion: @escaping(_ error: Error?) -> Void) {
-        let uploadTask = APIHandler.pushProfilePicture(image, user: self) { error, _ in
+        let uploadTask = APIHandler.pushProfilePicture(image, userID: self.data.id) { error, _ in
             guard error == nil else {
                 completion(error)
                 return
@@ -136,7 +160,7 @@ public struct UserData: Codable {
     var email: String
     
     // Functional user data
-    var assignedTasks: Array<String>
+    var tasks: Array<String>
     var ownedProjects: Array<String>
     var invitedProjects: Array<String>
     var receivedInvites: Array<String>
@@ -147,7 +171,7 @@ public struct UserData: Codable {
         case username
         case name
         case email
-        case assignedTasks
+        case tasks
         case ownedProjects
         case invitedProjects
         case receivedInvites
@@ -155,17 +179,20 @@ public struct UserData: Codable {
     
     /* MARK: User data initializers */
     
-    /** Initializes a user data model from a screen NAME, a unique USERNAME,
-     and a unique EMAIL. Used to save new user data during registration. */
-    init(name: String, username: String, email: String) {
-        self.id = UUID().uuidString
-        self.name = name
-        self.email = email
-        self.username = username
-        self.assignedTasks = []
+    /** Initialize a placeholder user data model. */
+    init() {
+        
+        // To be determined
+        self.name = ""
+        self.email = ""
+        self.username = ""
+        
+        // User constants
+        self.tasks = []
         self.ownedProjects = []
         self.invitedProjects = []
         self.receivedInvites = []
+        self.id = UUID().uuidString
         do {
             try self.authID = APIHandler.currentUserAuthID()
         } catch APIHandlerError.noAuthenticatedUser {
@@ -175,30 +202,21 @@ public struct UserData: Codable {
         }
     }
     
-    /** Initializes a COPYOF a user data model, with updates to their screen
-     NAME and USERNAME. */
-    init(copyOf: UserData, name: String, username: String) {
+    /** Allows for creating a copy of a user's data, wtih additional or modfied
+     fields. */
+    init(copyOf: UserData, name: String, username: String, email: String) {
+        
+        // Modifiable fields
         self.name = name
         self.username = username
+        self.email = email
+
+        // User constants
         self.id = copyOf.id
-        self.email = copyOf.email
         self.authID = copyOf.authID
-        self.assignedTasks = copyOf.assignedTasks
+        self.tasks = copyOf.tasks
         self.ownedProjects = copyOf.ownedProjects
         self.invitedProjects = copyOf.invitedProjects
         self.receivedInvites = copyOf.receivedInvites
-    }
-    
-    /** Initialize a placeholder user data model. */
-    init() {
-        self.name = ""
-        self.email = ""
-        self.username = ""
-        self.authID = ""
-        self.id = ""
-        self.assignedTasks = []
-        self.ownedProjects = []
-        self.invitedProjects = []
-        self.receivedInvites = []
     }
 }

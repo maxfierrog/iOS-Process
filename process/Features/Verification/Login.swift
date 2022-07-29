@@ -111,7 +111,7 @@ class LoginViewModel: ObservableObject {
     private var emailIsValidPublisher: AnyPublisher<Bool, Never> {
         $emailField
             .map { value in
-                VerificationUtils.isValidEmail(value)
+                APIHandler.isValidEmail(value)
             }
             .eraseToAnyPublisher()
     }
@@ -168,13 +168,12 @@ class LoginViewModel: ObservableObject {
     }
     
     func sendPasswordResetEmail() {
-        guard VerificationUtils.isValidEmail(emailField) else {
+        guard APIHandler.isValidEmail(emailField) else {
             showBannerWithErrorMessage(LoginConstant.invalidEmailForResetText)
             return
         }
         Auth.auth().sendPasswordReset(withEmail: emailField) { error in
             guard error == nil else {
-                self.showBannerWithErrorMessage(error?.localizedDescription)
                 return
             }
             self.bannerData.title = LoginConstant.recoveryEmailSentBannerTitle

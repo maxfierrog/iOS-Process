@@ -65,15 +65,9 @@ class HomeViewModel: ObservableObject {
         self.user = superModel.user
     }
     
-    func updateUserModel(_ user: User) {
-        self.superModel.updateUserModel(user)
-        self.user = user
-    }
-    
     func logOut() -> Bool {
         return superModel.logOut()
     }
-    
     
 }
 
