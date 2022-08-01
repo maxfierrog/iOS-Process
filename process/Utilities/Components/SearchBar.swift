@@ -11,6 +11,7 @@ struct SearchBar: View {
     
     @Binding var searchText: String
     @Binding var isEditingSearch: Bool
+    @Binding var sortSelection: Sort
     
     var body: some View {
         HStack {
@@ -41,13 +42,28 @@ struct SearchBar: View {
                         isEditingSearch = true
                     }
             if isEditingSearch {
-                Button(action: {
+                Button {
                     isEditingSearch = false
                     searchText = ""
-                }) {
+                } label: {
                     Text("Cancel")
                 }
             }
+        }
+        if isEditingSearch {
+            HStack {
+                Text("Sort by:")
+                GroupBox {
+                    Picker("Sort type", selection: $sortSelection) {
+                        Text("Subtasks first").tag(Sort.topological)
+                        Text("Due date").tag(Sort.dueDate)
+                        Text("Creation date").tag(Sort.creationDate)
+                        Text("Size").tag(Sort.size)
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
+            .padding(.bottom, 4)
         }
     }
 }

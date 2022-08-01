@@ -27,7 +27,7 @@ struct ProjectDetailsView: View {
             .padding(.horizontal)
             .padding(.top, 4)
             
-            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
+            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
             
@@ -95,6 +95,7 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     // Search bar
     @Published var isEditingSearch: Bool = false
     @Published var searchText: String = ""
+    @Published var sortSelection: Sort = .any
     
     // Segmented picker
     @Published var taskCategories: [String] = ["Unassigned", "Assigned", "Done"]

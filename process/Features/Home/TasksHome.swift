@@ -22,7 +22,7 @@ struct TasksHomeView: View {
             NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
             NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
             
-            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
+            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
             
@@ -105,7 +105,8 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     
     // Search bar
     @Published var searchText: String = ""
-    @Published var isEditingSearch = false
+    @Published var isEditingSearch: Bool = false
+    @Published var sortSelection: Sort = .any
     
     /* MARK: Model methods */
     

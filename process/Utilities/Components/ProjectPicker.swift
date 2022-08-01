@@ -15,7 +15,7 @@ struct ProjectsListItemView: View {
         Button {
             model.setToProject()
         } label: {
-            Label(model.project.data.name, systemImage: "")
+            Text(model.project.data.name)
         }
         .buttonStyle(.bordered)
     }

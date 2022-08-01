@@ -24,7 +24,7 @@ struct ProjectsHomeView: View {
             NavigationLink(destination: NotificationsView(), tag: true, selection: $model.navigateToNotifications) { }
             NavigationLink(destination: ProjectDetailsView(model: ProjectDetailsViewModel(model)), tag: true, selection: $model.navigateToProjectDetails) { }
             
-            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
+            SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
             
@@ -90,7 +90,8 @@ class ProjectsHomeViewModel: ObservableObject {
     
     // Search bar
     @Published var searchText: String = ""
-    @Published var isEditingSearch = false
+    @Published var isEditingSearch: Bool = false
+    @Published var sortSelection: Sort = .any
     
     // Navigation
     @Published var navigateToNewProject: Bool = false

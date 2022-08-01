@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum Sort {
+enum Sort: String, CaseIterable, Identifiable {
     case creationDate
     case dueDate
     case size
     case topological
-    case project
     case any
+    var id: Self { self }
 }
 
 /** */
@@ -32,10 +32,6 @@ class TaskCollection {
     
     func list(_ sort: Sort?) -> [Task] {
         switch sort {
-//        case .project:
-//            return Array(self.tasks).sorted { task1, task2 in
-//                return task1.data.project.data.id > task2.data.project.data.id
-//            }
         case .creationDate:
             return Array(self.tasks).sorted { task1, task2 in
                 return task1.data.dateCreated > task2.data.dateCreated // FIXME: Compare dates as strings

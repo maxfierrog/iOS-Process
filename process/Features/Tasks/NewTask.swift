@@ -44,7 +44,7 @@ struct NewTaskView: View {
                     model.toProject = nil
                     model.toProjectName = "None"
                 } label: {
-                    Label("None", systemImage: "")
+                    Text("None")
                 }
                 .buttonStyle(.bordered)
                 ScrollView(.vertical) {
@@ -53,7 +53,7 @@ struct NewTaskView: View {
                     }
                 }
             } label: {
-                Text("Assigned to: \(model.toProjectName)")
+                Text("Assigned to:  \(model.toProjectName)")
             }
             .padding(.top)
             .padding(.leading)
