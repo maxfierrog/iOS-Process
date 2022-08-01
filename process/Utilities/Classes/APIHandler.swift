@@ -250,8 +250,8 @@ class APIHandler {
     
     /** Fetches a user's profile picture from storage. User's profile picctures
      are stored in the images directory, and are named with their IDs. */
-    static func pullProfilePicture(user: User, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
-        let pictureRef = APIHandler.imagesRef.child(user.data.id)
+    static func pullProfilePicture(userID: String, _ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
+        let pictureRef = APIHandler.imagesRef.child(userID)
         pictureRef.getData(maxSize: 1 * 2048 * 2048) { data, error in // FIXME: MaxSize too generous, temp fix for disfunctional resizing
             guard error == nil else {
                 completion(error, nil)
@@ -292,11 +292,23 @@ class APIHandler {
     /** Uploads a block of project data to Firestore, allowing for a completion
      block with an error if there was one in the process. */
     static func pushTask(_ task: Task, _ completion: @escaping(_ error: Error?) -> Void) {
-        do {
-            try tasksCollection.document(task.data.id).setData(from: task.data)
-            completion(nil)
-        } catch let error {
-            completion(error)
+        removeTaskFromProject(taskID: task.data.id) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            addTaskToProject(taskID: task.data.id, projectID: task.data.project) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                do {
+                    try tasksCollection.document(task.data.id).setData(from: task.data)
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            }
         }
     }
 
@@ -310,6 +322,62 @@ class APIHandler {
             case .success(let taskData):
                 completion(Task(taskData), nil)
             }
+        }
+    }
+    
+    /** If a project contains the task with TASKID, then we remove it from its
+     list of tasks and allow for actions through a completion block. If no
+     project contains the task, then the completion block is just executed. */
+    static func removeTaskFromProject(taskID: String, _ completion: @escaping(_ error: Error?) -> Void) {
+        let containedInProject = projectsCollection.whereField("tasks", arrayContains: taskID)
+        containedInProject.getDocuments { querySnapshot, error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            guard querySnapshot!.documents.isEmpty else {
+                do {
+                    let projectData: ProjectData? = try querySnapshot?.documents[0].data(as: ProjectData.self)
+                    let project = Project(projectData!)
+                    project
+                        .removeTask(taskID)
+                        .push { error in
+                            guard error == nil else {
+                                completion(error)
+                                return
+                            }
+                            completion(nil)
+                        }
+                } catch let error {
+                    completion(error)
+                }
+                return
+            }
+            completion(nil)
+        }
+    }
+    
+    /** Adds TASKID to the tasks of the project with PROJECTID, or gives a
+     non-null error in its completion block if there is no such project. */
+    static func addTaskToProject(taskID: String, projectID: String?, _ completion: @escaping(_ error: Error?) -> Void) {
+        guard projectID != nil else {
+            completion(nil)
+            return
+        }
+        pullProject(projectID: projectID!) { project, error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            project?
+                .addTask(taskID)
+                .push { error in
+                    guard error == nil else {
+                        completion(error)
+                        return
+                    }
+                    completion(nil)
+                }
         }
     }
 }

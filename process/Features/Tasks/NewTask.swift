@@ -26,9 +26,12 @@ struct NewTaskView: View {
             .padding(.trailing)
             
             GroupBox {
-                TextEditor(text: $model.descriptionField)
+                TextField("Write a brief summary of your task...", text: $model.descriptionField)
                     .disableAutocorrection(true)
                     .autocapitalization(.sentences)
+                    .font(.body.weight(.semibold))
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
             } label: {
                 Text("Description:")
             }
@@ -36,6 +39,26 @@ struct NewTaskView: View {
             .padding(.leading)
             .padding(.trailing)
             
+            GroupBox {
+                Button {
+                    model.toProject = nil
+                    model.toProjectName = "None"
+                } label: {
+                    Label("None", systemImage: "")
+                }
+                .buttonStyle(.bordered)
+                ScrollView(.vertical) {
+                    ForEach($model.user.data.allProjects.indices, id: \.self) { index in
+                        ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
+                    }
+                }
+            } label: {
+                Text("Assigned to: \(model.toProjectName)")
+            }
+            .padding(.top)
+            .padding(.leading)
+            .padding(.trailing)
+
             Spacer()
         }
         .navigationTitle("New Task")
@@ -61,6 +84,7 @@ struct NewTaskView: View {
     }
 }
 
+
 class NewTaskViewModel: ObservableObject {
     
     // Fields
@@ -69,6 +93,7 @@ class NewTaskViewModel: ObservableObject {
     @Published var size: TaskSize = .small // FIXME: !
     @Published var dateDue: Date = Date() // FIXME: !
     @Published var toProject: String? = nil // FIXME: !
+    @Published var toProjectName: String = "None"
     
     // Projects home view parent model
     var parentModel: TaskListViewModel
@@ -95,7 +120,6 @@ class NewTaskViewModel: ObservableObject {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                
                 newTask
                     .changeName(self.titleField)
                     .changeSize(self.size)
@@ -117,6 +141,11 @@ class NewTaskViewModel: ObservableObject {
         self.parentModel.dismissNewTaskView()
     }
     
+    func setToProject(_ project: Project) {
+        self.toProject = project.data.id
+        self.toProjectName = project.data.name
+    }
+    
     /* MARK: Helper methods */
     
     private func showBannerWithErrorMessage(_ message: String?) {
@@ -130,7 +159,7 @@ class NewTaskViewModel: ObservableObject {
     private func dismissView(successBanner: String?) {
         self.parentModel.dismissNewTaskView()
         guard successBanner == nil else {
-            self.parentModel.showBannerWithSuccessMessage(successBanner)
+//            self.parentModel.showBannerWithSuccessMessage(successBanner) FIXME: This bugs out the UI
             return
         }
     }

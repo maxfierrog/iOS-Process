@@ -20,14 +20,11 @@ struct ProfileCardView: View {
         GroupBox {
             HStack {
                 Spacer()
-                Image(uiImage: model.profilePictureImage)
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .overlay {
-                        Circle().stroke(.gray, lineWidth: 4)
-                    }
-                    .shadow(radius: 7)
+                ProfilePictureView(picture: $model.profilePictureImage,
+                                   width: 100,
+                                   height: 100,
+                                   border: 4,
+                                   shadow: 7)
                     .padding(.init(top: 8, leading: 8, bottom: 8, trailing: 10))
                 VStack {
                     HStack {

@@ -69,6 +69,8 @@
 		988FD400289349580057D49D /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FF289349580057D49D /* SegmentedPicker.swift */; };
 		988FD40328934EC80057D49D /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 988FD40228934EC80057D49D /* QGrid */; };
 		988FD405289350B30057D49D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD404289350B30057D49D /* Extensions.swift */; };
+		988FD4072893DDB80057D49D /* ProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4062893DDB80057D49D /* ProfilePicture.swift */; };
+		988FD4092893F2390057D49D /* ProjectPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4082893F2390057D49D /* ProjectPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,6 +128,8 @@
 		988FD3FD289347190057D49D /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		988FD3FF289349580057D49D /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
 		988FD404289350B30057D49D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		988FD4062893DDB80057D49D /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
+		988FD4082893F2390057D49D /* ProjectPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +253,8 @@
 				988FD3DE288A911E0057D49D /* ImagePicker.swift */,
 				988FD3FD289347190057D49D /* SearchBar.swift */,
 				988FD3FF289349580057D49D /* SegmentedPicker.swift */,
+				988FD4062893DDB80057D49D /* ProfilePicture.swift */,
+				988FD4082893F2390057D49D /* ProjectPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -511,11 +517,13 @@
 				505D6DF4287C2250005A28CB /* ProjectDetails.swift in Sources */,
 				505D6DDA287C2155005A28CB /* SelectCollaborators.swift in Sources */,
 				9879C1552880C385009A34D3 /* BannerModifier.swift in Sources */,
+				988FD4092893F2390057D49D /* ProjectPicker.swift in Sources */,
 				505D6DD6287C2131005A28CB /* EditTaskParentView.swift in Sources */,
 				988FD3EC288ED23F0057D49D /* EditProfileCardView.swift in Sources */,
 				505D6E3C2888575D005A28CB /* RoundButton.swift in Sources */,
 				505D6DD4287C2116005A28CB /* EditProjectParentView.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
+				988FD4072893DDB80057D49D /* ProfilePicture.swift in Sources */,
 				988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
 				988FD405289350B30057D49D /* Extensions.swift in Sources */,

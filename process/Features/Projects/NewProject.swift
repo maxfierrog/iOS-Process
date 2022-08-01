@@ -24,7 +24,6 @@ struct NewProjectView: View {
             .padding(.top)
             .padding(.leading)
             .padding(.trailing)
-            
             GroupBox {
                 TextEditor(text: $model.descriptionField)
                     .disableAutocorrection(true)
@@ -35,28 +34,6 @@ struct NewProjectView: View {
             .padding(.top)
             .padding(.leading)
             .padding(.trailing)
-            
-            GroupBox {
-                List {
-                    Text("Collaborator 1")
-                }
-                .listStyle(.inset)
-            } label: {
-                HStack {
-                    Text("Collaborators:")
-                    Spacer()
-                    Button {
-                        model.tappedAddCollaborator()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .buttonStyle(.bordered)
-                }
-            }
-            .padding(.top)
-            .padding(.leading)
-            .padding(.trailing)
-            
             Spacer()
         }
         .navigationTitle("New Project")
@@ -118,6 +95,7 @@ class NewProjectViewModel: ObservableObject {
                     .changeName(self.titleField)
                     .changeOwner(self.user.data.id)
                     .changeDescription(self.descriptionField)
+                    .addCollaborator(self.user.data.id)
                     .push { error in
                         guard error == nil else {
                             self.showBannerWithErrorMessage(error?.localizedDescription)

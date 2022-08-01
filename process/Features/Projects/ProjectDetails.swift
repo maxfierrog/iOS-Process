@@ -18,6 +18,15 @@ struct ProjectDetailsView: View {
         VStack {
             NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
             
+            HStack {
+                Text(model.project.data.description ?? "")
+                    .multilineTextAlignment(.leading)
+                    .font(.subheadline)
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.top, 4)
+            
             SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
@@ -30,8 +39,8 @@ struct ProjectDetailsView: View {
             
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.user.data.tasks.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(taskID: model.user.data.tasks[index],
+                    ForEach($model.project.data.tasks.indices, id: \.self) { index in
+                        TaskCellView(model: TaskCellViewModel(taskID: model.project.data.tasks[index],
                                                               model: model))
                     }
                 }
@@ -45,6 +54,20 @@ struct ProjectDetailsView: View {
         }
         .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showBanner)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button {
+                    model.tappedAddCollaborator()
+                } label: {
+                    Label("Add collaborator", systemImage: "person.fill.badge.plus")
+                }
+                Button {
+                    model.tappedEditProject()
+                } label: {
+                    Label("Edit project", systemImage: "square.and.pencil")
+                }
+            }
+        }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
                 NewTaskView(model: NewTaskViewModel(model))
@@ -61,6 +84,8 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     // Navigation
     @Published var navigateToTaskDetails: Bool? = false
     @Published var navigateToNewTask: Bool = false
+    @Published var navigateToEditProject: Bool? = false
+    @Published var navigateToAddCollaborator: Bool? = false
     
     // Parent model
     var projectsHomeViewModel: ProjectsHomeViewModel
@@ -72,7 +97,7 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     @Published var searchText: String = ""
     
     // Segmented picker
-    @Published var taskCategories: [String] = ["New", "WIP", "Done"]
+    @Published var taskCategories: [String] = ["Unassigned", "Assigned", "Done"]
     @Published var selectedTaskCategory: Int = 0
     
     // Task list
@@ -104,6 +129,14 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     
     func dismissNewTaskView() {
         self.navigateToNewTask = false
+    }
+    
+    func tappedEditProject() {
+        self.navigateToEditProject = true
+    }
+    
+    func tappedAddCollaborator() {
+        self.navigateToAddCollaborator = true
     }
     
     /* MARK: Model helper methods */

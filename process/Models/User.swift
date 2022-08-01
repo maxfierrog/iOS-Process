@@ -72,21 +72,25 @@ class User: ObservableObject {
     
     func addOwnedProject(_ projectID: String) -> User {
         self.data.ownedProjects.append(projectID)
+        self.data.allProjects.append(projectID)
         return self
     }
     
     func removeOwnedProject(_ projectID: String) -> User {
         self.data.ownedProjects.removeAll { $0 == projectID }
+        self.data.allProjects.removeAll { $0 == projectID }
         return self
     }
     
     func addInvitedProject(_ projectID: String) -> User {
         self.data.invitedProjects.append(projectID)
+        self.data.allProjects.append(projectID)
         return self
     }
     
     func removeInvitedProject(_ projectID: String) -> User {
         self.data.invitedProjects.removeAll { $0 == projectID }
+        self.data.allProjects.removeAll { $0 == projectID }
         return self
     }
     
@@ -123,7 +127,7 @@ class User: ObservableObject {
     }
     
     func pullProfilePicture(_ completion: @escaping(_ error: Error?, _ image: UIImage?) -> Void) {
-        APIHandler.pullProfilePicture(user: self) { error, image in
+        APIHandler.pullProfilePicture(userID: self.data.id) { error, image in
             guard error == nil else {
                 completion(error, nil)
                 return
@@ -163,6 +167,7 @@ public struct UserData: Codable {
     var tasks: Array<String>
     var ownedProjects: Array<String>
     var invitedProjects: Array<String>
+    var allProjects: Array<String>
     var receivedInvites: Array<String>
     
     enum CodingKeys: String, CodingKey {
@@ -173,6 +178,7 @@ public struct UserData: Codable {
         case email
         case tasks
         case ownedProjects
+        case allProjects
         case invitedProjects
         case receivedInvites
     }
@@ -190,6 +196,7 @@ public struct UserData: Codable {
         // User constants
         self.tasks = []
         self.ownedProjects = []
+        self.allProjects = []
         self.invitedProjects = []
         self.receivedInvites = []
         self.id = UUID().uuidString
@@ -216,6 +223,7 @@ public struct UserData: Codable {
         self.authID = copyOf.authID
         self.tasks = copyOf.tasks
         self.ownedProjects = copyOf.ownedProjects
+        self.allProjects = copyOf.allProjects
         self.invitedProjects = copyOf.invitedProjects
         self.receivedInvites = copyOf.receivedInvites
     }

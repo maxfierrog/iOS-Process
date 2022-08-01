@@ -83,7 +83,9 @@ class Project: Hashable {
     }
 
     func addCollaborator(_ userID: String) -> Project {
-        self.data.collaborators.append(userID)
+        if !self.data.collaborators.contains(userID) {
+            self.data.collaborators.append(userID)
+        }
         return self
     }
     
@@ -93,7 +95,9 @@ class Project: Hashable {
     }
     
     func addTask(_ taskID: String) -> Project {
-        self.data.tasks.append(taskID)
+        if !self.data.tasks.contains(taskID) {
+            self.data.tasks.append(taskID)
+        }
         return self
     }
     

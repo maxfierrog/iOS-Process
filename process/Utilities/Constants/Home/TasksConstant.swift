@@ -18,7 +18,7 @@ class TasksConstant: GlobalConstant {
     
     // Segmented picker
     public static let pickerAccessibilityText = "Task category"
-    public static let taskCategories: [String] = ["New", "WIP", "Done"]
+    public static let taskCategories: [String] = ["WIP", "Done"]
     public static let startingTaskCategory: Int = 0
     
     // Navigation bar

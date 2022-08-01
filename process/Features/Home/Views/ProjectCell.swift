@@ -15,19 +15,33 @@ struct ProjectCellView: View {
     
     var body: some View {
         GroupBox {
-            HStack {
-                Text(model.formattedDescription())
-                    .font(.footnote)
+            VStack {
+                HStack {
+                    Text(model.formattedDescription())
+                        .font(.footnote)
+                    Spacer()
+                }
+                .padding(.top, 1)
                 Spacer()
+                HStack {
+                    ForEach($model.collaboratorPictures.indices, id: \.self) { index in
+                        ProfilePictureView(picture: $model.collaboratorPictures[index],
+                                           width: 32,
+                                           height: 32,
+                                           border: 2,
+                                           shadow: 1)
+                            .padding(.init(top: 1, leading: 1, bottom: 1, trailing: 0))
+                    }
+                    Spacer()
+                }
+                HStack {
+                    ProgressView(model.formattedCreationDate(), value: 50, total: 100)
+                        .progressViewStyle(.linear)
+                        .font(.caption2)
+                }
+                .padding(.top, 2)
             }
-            .padding(.top, 1)
-            HStack {
-                ProgressView(model.formattedCreationDate(), value: 50, total: 100)
-                    .progressViewStyle(.linear)
-                    .font(.caption2)
-                Spacer()
-            }
-            .padding(.top, 8)
+            .frame(height: 110)
         } label: {
             Text(model.project.data.name)
         }
@@ -43,11 +57,20 @@ class ProjectCellViewModel: ObservableObject {
     @Published var projectsHomeViewModel: ProjectsHomeViewModel
     @Published var project: Project = Project(creatorID: "")
     
+    @Published var collaboratorPictures: [UIImage] = []
+    
     init(projectID: String, model: ProjectsHomeViewModel) {
         self.projectsHomeViewModel = model
         Project.pull(projectID) { project, error in
             guard error == nil else { return }
             self.project = project!
+            for index in project!.data.collaborators.indices {
+                self.collaboratorPictures.append(UIImage(named: ProfileConstant.defaultProfilePicture)!)
+                APIHandler.pullProfilePicture(userID: project!.data.collaborators[index]) { error, image in
+                    guard error == nil else { return }
+                    self.collaboratorPictures[index] = image!
+                }
+            }
         }
     }
     

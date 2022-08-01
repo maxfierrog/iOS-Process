@@ -36,8 +36,8 @@ struct ProjectsHomeView: View {
             
             ScrollView {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
-                    ForEach($model.user.data.ownedProjects.indices, id: \.self) { index in
-                        ProjectCellView(model: ProjectCellViewModel(projectID: model.user.data.ownedProjects[index],
+                    ForEach($model.user.data.allProjects.indices, id: \.self) { index in
+                        ProjectCellView(model: ProjectCellViewModel(projectID: model.user.data.allProjects[index],
                                                                     model: model))
                     }
                 }

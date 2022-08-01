@@ -7,14 +7,23 @@
 
 import SwiftUI
 
-struct SmallProfilePicture: View {
+struct ProfilePictureView: View {
+    
+    @Binding var picture: UIImage
+    
+    var width: CGFloat
+    var height: CGFloat
+    var border: CGFloat
+    var shadow: CGFloat
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct SmallProfilePicture_Previews: PreviewProvider {
-    static var previews: some View {
-        SmallProfilePicture()
+        Image(uiImage: picture)
+            .resizable()
+            .frame(width: width, height: height)
+            .clipShape(Circle())
+            .overlay {
+                Circle().stroke(.gray, lineWidth: border)
+            }
+            .shadow(radius: shadow)
     }
 }
