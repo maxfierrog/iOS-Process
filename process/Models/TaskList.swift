@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+/** Types of task sorting orders available to users. */
 enum Sort: String, CaseIterable, Identifiable {
     case creationDate
     case dueDate
@@ -17,35 +19,69 @@ enum Sort: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-/** */
+
+/** Utility collection class for facilitating common operatons on task
+ collections such as sorting and insertion. */
 class TaskCollection {
     
     /* MARK: Fields */
     
-    private var tasks: Set<Task> = []
+    var tasks: [TaskCollectionItem] = []
     
     /* MARK: Methods */
     
-    func insertTask(_ task: Task) {
-        tasks.insert(task)
+    init(_ taskIDList: [String]) {
+        for taskID in taskIDList {
+            self.tasks.append(TaskCollectionItem(taskID))
+        }
+
     }
     
-    func list(_ sort: Sort?) -> [Task] {
+    func insertTask(_ taskID: String) {
+        tasks.append(TaskCollectionItem(taskID))
+    }
+    
+    func sort(_ sort: Sort?) {
         switch sort {
         case .creationDate:
-            return Array(self.tasks).sorted { task1, task2 in
-                return task1.data.dateCreated > task2.data.dateCreated // FIXME: Compare dates as strings
+            self.tasks = Array(self.tasks).sorted { i, j in
+                return i.task.data.dateCreated > j.task.data.dateCreated // FIXME: Compare dates as strings
             }
         case .dueDate:
-            return Array(self.tasks).sorted { task1, task2 in
-                return task1.data.dateDue > task2.data.dateDue // FIXME: Compare dates as strings
+            self.tasks = Array(self.tasks).sorted { i, j in
+                return i.task.data.dateDue > j.task.data.dateDue // FIXME: Compare dates as strings
             }
         case .size:
-            return Array(self.tasks).sorted { task1, task2 in
-                return task1.data.size > task2.data.size // FIXME: Might be the wrong way around
+            self.tasks = Array(self.tasks).sorted { i, j in
+                return i.task.data.size > j.task.data.size // FIXME: Might be the wrong way around
             }
         default:
-            return Array(self.tasks)
+            self.tasks = Array(self.tasks)
         }
     }
+    
+}
+
+
+/** Helper class for the task collection, which facilitates downloading many
+ tasks into a single TaskCollections in one go. */
+class TaskCollectionItem: Hashable {
+    
+    var task: Task = Task(creatorID: "")
+    
+    init(_ taskID: String) {
+        Task.pull(taskID) { task, error in
+            guard error == nil else { return }
+            self.task = task!
+        }
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+    
+    public static func ==(lhs: TaskCollectionItem, rhs: TaskCollectionItem) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+    
 }

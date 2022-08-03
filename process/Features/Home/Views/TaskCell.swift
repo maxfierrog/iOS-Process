@@ -53,6 +53,11 @@ class TaskCellViewModel: ObservableObject {
         }
     }
     
+    init(task: Task, model: TaskListViewModel) {
+        self.parentModel = model
+        self.task = task
+    }
+    
     func tappedTask() {
         self.parentModel.openTaskDetails(task: self.task)
     }

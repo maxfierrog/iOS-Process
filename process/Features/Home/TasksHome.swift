@@ -25,6 +25,9 @@ struct TasksHomeView: View {
             SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
+                .onChange(of: model.sortSelection) { newSortSelection in
+                    model.changedTaskSort(sortType: newSortSelection)
+                }
             
             SegmentedPicker(accessibilityText: TasksConstant.pickerAccessibilityText,
                             categories: model.taskCategories,
@@ -34,8 +37,8 @@ struct TasksHomeView: View {
             
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.user.data.tasks.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(taskID: model.user.data.tasks[index],
+                    ForEach($model.user.taskCollection.tasks.indices, id: \.self) { index in
+                        TaskCellView(model: TaskCellViewModel(task: model.user.taskCollection.tasks[index].task,
                                                               model: model))
                     }
                 }
@@ -136,6 +139,10 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     func openTaskDetails(task: Task) {
         self.selectedTask = task
         self.navigateToTaskDetails = true
+    }
+    
+    func changedTaskSort(sortType: Sort) {
+        self.user.taskCollection.sort(sortType)
     }
     
     /* MARK: Helper methods */

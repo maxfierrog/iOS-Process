@@ -132,6 +132,7 @@ class NewTaskViewModel: ObservableObject {
                             self.showBannerWithErrorMessage(error?.localizedDescription)
                             return
                         }
+                        self.user.refreshTaskList().finishEdit()
                         self.dismissView(successBanner: "We have created and saved your new task!")
                     }
                 }
@@ -159,7 +160,7 @@ class NewTaskViewModel: ObservableObject {
     private func dismissView(successBanner: String?) {
         self.parentModel.dismissNewTaskView()
         guard successBanner == nil else {
-//            self.parentModel.showBannerWithSuccessMessage(successBanner) FIXME: This bugs out the UI
+            self.parentModel.showBannerWithSuccessMessage(successBanner)
             return
         }
     }

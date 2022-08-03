@@ -16,20 +16,28 @@ class User: ObservableObject {
         
     var data: UserData
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
+    var taskCollection: TaskCollection
     
     /* MARK: Initializers */
     
     init(_ data: UserData) {
         self.data = data
+        self.taskCollection = TaskCollection(data.tasks)
     }
     
     init() {
-        data = UserData()
+        self.data = UserData()
+        self.taskCollection = TaskCollection([])
     }
     
     /* MARK: Builder pattern */
     
     func finishEdit() { return }
+    
+    func refreshTaskList() -> User {
+        self.taskCollection = TaskCollection(self.data.tasks)
+        return self
+    }
     
     func changeProfilePicture(_ image: UIImage) -> User {
         self.profilePicture = image
