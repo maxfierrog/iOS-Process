@@ -14,15 +14,18 @@ import Foundation
 class Project: Hashable {
         
     var data: ProjectData
+    var taskList: AsyncTaskList
         
     /* MARK: Initializers */
     
     init(_ data: ProjectData) {
         self.data = data
+        self.taskList = AsyncTaskList(data.tasks)
     }
     
     init(creatorID: String) {
         self.data = ProjectData(creatorID: creatorID)
+        self.taskList = AsyncTaskList([])
     }
     
     public func hash(into hasher: inout Hasher) {
@@ -36,6 +39,11 @@ class Project: Hashable {
     /* MARK: Builder pattern */
     
     func finishEdit() { return }
+    
+    func refreshTaskList() -> Project {
+        self.taskList = AsyncTaskList(self.data.tasks)
+        return self
+    }
     
     func changeName(_ name: String) -> Project {
         self.data = ProjectData(copyOf: self.data,

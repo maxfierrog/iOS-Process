@@ -16,15 +16,18 @@ enum TaskSize: Int {
 class Task: Hashable {
     
     var data: TaskData
+    var subtaskList: AsyncTaskList
     
     /* MARK: Initializers */
     
     init(_ data: TaskData) {
         self.data = data
+        self.subtaskList = AsyncTaskList(data.subtasks)
     }
     
     init (creatorID: String) {
         self.data = TaskData(creatorID: creatorID)
+        self.subtaskList = AsyncTaskList([])
     }
     
     public func hash(into hasher: inout Hasher) {
@@ -39,6 +42,11 @@ class Task: Hashable {
     
     func finishEdit() { return }
     
+    func refreshTaskList() -> Task {
+        self.subtaskList = AsyncTaskList(self.data.subtasks)
+        return self
+    }
+    
     func changeName(_ name: String) -> Task {
         self.data = TaskData(copyOf: self.data,
                              name: name,
@@ -52,10 +60,10 @@ class Task: Hashable {
         return self
     }
     
-    func changeSize(_ size: TaskSize) -> Task {
+    func changeSize(_ size: Int) -> Task {
         self.data = TaskData(copyOf: self.data,
                              name: self.data.name,
-                             size: size.rawValue,
+                             size: size,
                              description: self.data.description,
                              dateDue: self.data.dateDue,
                              assignee: self.data.assignee,

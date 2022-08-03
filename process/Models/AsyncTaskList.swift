@@ -1,5 +1,5 @@
 //
-//  TaskList.swift
+//  AsyncTaskList.swift
 //  process
 //
 //  Created by maxfierro on 7/25/22.
@@ -10,53 +10,57 @@ import Foundation
 
 
 /** Types of task sorting orders available to users. */
-enum Sort: String, CaseIterable, Identifiable {
-    case creationDate
-    case dueDate
-    case size
+enum TaskSort: String, CaseIterable, Identifiable {
+    case recentlyCreated
+    case soonestDue
+    case smallest
+    case largest
     case topological
-    case any
+    case none
     var id: Self { self }
 }
 
 
 /** Utility collection class for facilitating common operatons on task
  collections such as sorting and insertion. */
-class TaskCollection {
+class AsyncTaskList {
     
     /* MARK: Fields */
     
-    var tasks: [TaskCollectionItem] = []
+    var items: [TaskListItem] = []
     
     /* MARK: Methods */
     
     init(_ taskIDList: [String]) {
         for taskID in taskIDList {
-            self.tasks.append(TaskCollectionItem(taskID))
+            self.items.append(TaskListItem(taskID))
         }
-
     }
     
     func insertTask(_ taskID: String) {
-        tasks.append(TaskCollectionItem(taskID))
+        items.append(TaskListItem(taskID))
     }
     
-    func sort(_ sort: Sort?) {
+    func sort(_ sort: TaskSort) {
         switch sort {
-        case .creationDate:
-            self.tasks = Array(self.tasks).sorted { i, j in
+        case .recentlyCreated:
+            self.items.sort { i, j in
                 return i.task.data.dateCreated > j.task.data.dateCreated // FIXME: Compare dates as strings
             }
-        case .dueDate:
-            self.tasks = Array(self.tasks).sorted { i, j in
+        case .soonestDue:
+            self.items.sort { i, j in
                 return i.task.data.dateDue > j.task.data.dateDue // FIXME: Compare dates as strings
             }
-        case .size:
-            self.tasks = Array(self.tasks).sorted { i, j in
+        case .smallest:
+            self.items.sort { i, j in
                 return i.task.data.size > j.task.data.size // FIXME: Might be the wrong way around
             }
+        case .largest:
+            self.items.sort { i, j in
+                return i.task.data.size < j.task.data.size // FIXME: Might be the wrong way around
+            }
         default:
-            self.tasks = Array(self.tasks)
+            return
         }
     }
     
@@ -65,7 +69,7 @@ class TaskCollection {
 
 /** Helper class for the task collection, which facilitates downloading many
  tasks into a single TaskCollections in one go. */
-class TaskCollectionItem: Hashable {
+class TaskListItem: Hashable {
     
     var task: Task = Task(creatorID: "")
     
@@ -80,7 +84,7 @@ class TaskCollectionItem: Hashable {
         hasher.combine(ObjectIdentifier(self))
     }
     
-    public static func ==(lhs: TaskCollectionItem, rhs: TaskCollectionItem) -> Bool {
+    public static func ==(lhs: TaskListItem, rhs: TaskListItem) -> Bool {
         return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
     

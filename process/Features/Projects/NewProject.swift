@@ -5,11 +5,17 @@
 //  Created by Maximo Fierro on 7/11/22.
 //
 
+
 import SwiftUI
 
+
+/** Screen enabling users to create a new project by specifing parameters such
+ as a name, description, and title. */
 struct NewProjectView: View {
     
     @ObservedObject var model: NewProjectViewModel
+    
+    /* MARK: View declaration */
     
     var body: some View {
         VStack {
@@ -59,7 +65,10 @@ struct NewProjectView: View {
     }
 }
 
+
 class NewProjectViewModel: ObservableObject {
+    
+    /* MARK: Model fields */
     
     // Text fields
     @Published var titleField: String = ""
@@ -73,7 +82,7 @@ class NewProjectViewModel: ObservableObject {
     @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
     
-    /* MARK: Methods */
+    /* MARK: Model methods */
     
     init(_ model: ProjectsHomeViewModel) {
         self.projectsHomeViewModel = model
@@ -111,7 +120,7 @@ class NewProjectViewModel: ObservableObject {
     }
     
     func tappedAddCollaborator() {
-        
+        // FIXME: Implement adding collaborators
     }
     
     /* MARK: Helper methods */
@@ -132,6 +141,7 @@ class NewProjectViewModel: ObservableObject {
         }
     }
 }
+
 
 struct NewProjectView_Previews: PreviewProvider {
     static var previews: some View {

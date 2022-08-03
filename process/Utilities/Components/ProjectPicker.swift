@@ -23,11 +23,11 @@ struct ProjectsListItemView: View {
 
 class ProjectPickerViewModel: ObservableObject {
     
-    var parentModel: NewTaskViewModel
+    var parentModel: EditTaskViewModel
     @Published var projectID: String
     @Published var project: Project = Project(creatorID: "")
     
-    init(projectID: String, parentModel: NewTaskViewModel) {
+    init(projectID: String, parentModel: EditTaskViewModel) {
         self.projectID = projectID
         self.parentModel = parentModel
         Project.pull(projectID) { project, error in

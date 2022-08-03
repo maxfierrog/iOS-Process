@@ -70,7 +70,7 @@ struct ProjectDetailsView: View {
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
-                NewTaskView(model: NewTaskViewModel(model))
+                EditTaskView(model: EditTaskViewModel(model, isNewTask: true))
             }
         }
         .navigationTitle(model.project.data.name)
@@ -95,7 +95,7 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     // Search bar
     @Published var isEditingSearch: Bool = false
     @Published var searchText: String = ""
-    @Published var sortSelection: Sort = .any
+    @Published var sortSelection: TaskSort = .none
     
     // Segmented picker
     @Published var taskCategories: [String] = ["Unassigned", "Assigned", "Done"]
@@ -119,7 +119,7 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     
     /* MARK: Model action methods */
     
-    func openTaskDetails(task: Task) {
+    func taskSelected(task: Task) {
         self.selectedTask = task
         self.navigateToTaskDetails = true
     }
@@ -128,7 +128,7 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
         self.navigateToNewTask = true
     }
     
-    func dismissNewTaskView() {
+    func dismissEditTaskView() {
         self.navigateToNewTask = false
     }
     

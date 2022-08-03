@@ -9,9 +9,12 @@
 import SwiftUI
 
 
+/** The visual representation of a task. */
 struct TaskCellView: View {
     
     @ObservedObject var model: TaskCellViewModel
+    
+    /* MARK: View declaration */
     
     var body: some View {
         GroupBox {
@@ -41,6 +44,8 @@ struct TaskCellView: View {
 
 class TaskCellViewModel: ObservableObject {
     
+    /* MARK: Model fields */
+    
     var parentModel: TaskListViewModel
     @Published var task: Task = Task(creatorID: "")
     @Published var navigateToTaskDetails: Bool? = false
@@ -53,13 +58,15 @@ class TaskCellViewModel: ObservableObject {
         }
     }
     
+    /* MARK: Model methods */
+    
     init(task: Task, model: TaskListViewModel) {
         self.parentModel = model
         self.task = task
     }
     
     func tappedTask() {
-        self.parentModel.openTaskDetails(task: self.task)
+        self.parentModel.taskSelected(task: self.task)
     }
     
     func formattedDescription() -> String {
@@ -69,6 +76,8 @@ class TaskCellViewModel: ObservableObject {
         }
         return description
     }
+    
+    /* MARK: Helper methods */
     
     func formattedDueDate() -> String {
         let dateFormatter = DateFormatter()

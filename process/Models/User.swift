@@ -16,18 +16,18 @@ class User: ObservableObject {
         
     var data: UserData
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
-    var taskCollection: TaskCollection
+    var taskList: AsyncTaskList
     
     /* MARK: Initializers */
     
     init(_ data: UserData) {
         self.data = data
-        self.taskCollection = TaskCollection(data.tasks)
+        self.taskList = AsyncTaskList(data.tasks)
     }
     
     init() {
         self.data = UserData()
-        self.taskCollection = TaskCollection([])
+        self.taskList = AsyncTaskList([])
     }
     
     /* MARK: Builder pattern */
@@ -35,7 +35,7 @@ class User: ObservableObject {
     func finishEdit() { return }
     
     func refreshTaskList() -> User {
-        self.taskCollection = TaskCollection(self.data.tasks)
+        self.taskList = AsyncTaskList(self.data.tasks)
         return self
     }
     
@@ -69,7 +69,9 @@ class User: ObservableObject {
     }
     
     func addTask(_ taskID: String) -> User {
-        self.data.tasks.append(taskID)
+        if !self.data.tasks.contains(taskID) {
+            self.data.tasks.append(taskID)
+        }
         return self
     }
     

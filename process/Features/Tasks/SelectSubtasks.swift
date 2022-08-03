@@ -8,13 +8,24 @@
 import SwiftUI
 
 struct SelectSubtasksView: View {
+    
+    @ObservedObject var model: SelectSubtasksViewModel
+    
+    /* MARK: View declaration */
+    
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
-struct SelectSubtasksView_Previews: PreviewProvider {
-    static var previews: some View {
-        SelectSubtasksView()
+class SelectSubtasksViewModel: ObservableObject {
+    
+    @Published var task: Task
+    @Published var user: User
+    
+    init(_ model: TaskDetailsViewModel) {
+        self.task = model.selectedTask
+        self.user = model.user
     }
+    
 }

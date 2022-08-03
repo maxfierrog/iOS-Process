@@ -26,6 +26,7 @@ struct TasksHomeView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .onChange(of: model.sortSelection) { newSortSelection in
+                    print(newSortSelection)
                     model.changedTaskSort(sortType: newSortSelection)
                 }
             
@@ -37,8 +38,8 @@ struct TasksHomeView: View {
             
             ScrollView(.vertical) {
                 LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.user.taskCollection.tasks.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(task: model.user.taskCollection.tasks[index].task,
+                    ForEach($model.user.taskList.items.indices, id: \.self) { index in
+                        TaskCellView(model: TaskCellViewModel(task: model.user.taskList.items[index].task,
                                                               model: model))
                     }
                 }
@@ -72,7 +73,7 @@ struct TasksHomeView: View {
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
-                NewTaskView(model: NewTaskViewModel(model))
+                EditTaskView(model: EditTaskViewModel(model, isNewTask: true))
             }
         }
     }
@@ -109,7 +110,7 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     // Search bar
     @Published var searchText: String = ""
     @Published var isEditingSearch: Bool = false
-    @Published var sortSelection: Sort = .any
+    @Published var sortSelection: TaskSort = .none
     
     /* MARK: Model methods */
     
@@ -132,17 +133,17 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
         self.navigateToNewTask = true
     }
     
-    func dismissNewTaskView() {
+    func dismissEditTaskView() {
         self.navigateToNewTask = false
     }
     
-    func openTaskDetails(task: Task) {
+    func taskSelected(task: Task) {
         self.selectedTask = task
         self.navigateToTaskDetails = true
     }
     
-    func changedTaskSort(sortType: Sort) {
-        self.user.taskCollection.sort(sortType)
+    func changedTaskSort(sortType: TaskSort) {
+        self.user.taskList.sort(sortType)
     }
     
     /* MARK: Helper methods */

@@ -11,7 +11,7 @@ struct SearchBar: View {
     
     @Binding var searchText: String
     @Binding var isEditingSearch: Bool
-    @Binding var sortSelection: Sort
+    @Binding var sortSelection: TaskSort
     
     var body: some View {
         HStack {
@@ -55,10 +55,12 @@ struct SearchBar: View {
                 Text("Sort by:")
                 GroupBox {
                     Picker("Sort type", selection: $sortSelection) {
-                        Text("Subtasks first").tag(Sort.topological)
-                        Text("Due date").tag(Sort.dueDate)
-                        Text("Creation date").tag(Sort.creationDate)
-                        Text("Size").tag(Sort.size)
+                        Text("None").tag(TaskSort.none)
+                        Text("Subtasks first").tag(TaskSort.topological)
+                        Text("Due the soonest").tag(TaskSort.soonestDue)
+                        Text("Recently created").tag(TaskSort.recentlyCreated)
+                        Text("Largest").tag(TaskSort.largest)
+                        Text("Smallest").tag(TaskSort.smallest)
                     }
                     .pickerStyle(.menu)
                 }

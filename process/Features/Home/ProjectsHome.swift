@@ -91,7 +91,7 @@ class ProjectsHomeViewModel: ObservableObject {
     // Search bar
     @Published var searchText: String = ""
     @Published var isEditingSearch: Bool = false
-    @Published var sortSelection: Sort = .any
+    @Published var sortSelection: TaskSort = .none
     
     // Navigation
     @Published var navigateToNewProject: Bool = false
