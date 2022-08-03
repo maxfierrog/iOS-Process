@@ -15,6 +15,8 @@ struct EditTaskView: View {
     
     @ObservedObject var model: EditTaskViewModel
     
+    /* MARK: View declaration */
+    
     var body: some View {
         VStack {
             GroupBox {
@@ -30,12 +32,11 @@ struct EditTaskView: View {
             .padding(.trailing)
             
             GroupBox {
-                TextField("Write a brief summary of your task...", text: $model.descriptionField)
+                TextEditor(text: $model.descriptionField)
                     .disableAutocorrection(true)
                     .autocapitalization(.sentences)
-                    .font(.body.weight(.semibold))
-                    .padding(.top, 8)
-                    .padding(.bottom, 8)
+                    .font(.body)
+                    .padding(.top, 4)
             } label: {
                 Text("Description:")
             }
@@ -44,28 +45,47 @@ struct EditTaskView: View {
             .padding(.trailing)
             
             GroupBox {
-                Button {
-                    model.toProject = nil
-                    model.toProjectName = "None"
-                } label: {
-                    Text("None")
+                HStack {
+                    Spacer()
+                    Text("Choose size:")
+                    GroupBox {
+                        Picker("Size", selection: $model.size) {
+                            Text("Small").tag(1)
+                            Text("Medium").tag(2)
+                            Text("Large").tag(3)
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    Spacer()
                 }
-                .buttonStyle(.bordered)
-                ScrollView(.vertical) {
+            }
+            .padding()
+            
+            GroupBox {
+                ScrollView(.horizontal) {
                     ForEach($model.user.data.allProjects.indices, id: \.self) { index in
                         ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
                     }
                 }
             } label: {
-                Text("Assigned to:  \(model.toProjectName)")
+                HStack {
+                    Text("Project:  \(model.toProjectName)")
+                    Spacer()
+                    Button {
+                        model.toProject = nil
+                        model.toProjectName = "None"
+                    } label: {
+                        Text("None")
+                    }
+                    .buttonStyle(.bordered)
+                }
             }
-            .padding(.top)
             .padding(.leading)
             .padding(.trailing)
 
             Spacer()
         }
-        .navigationTitle("New Task")
+        .navigationTitle(model.editingTask != nil ? model.editingTask!.data.name : "New Task")
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button {
@@ -89,7 +109,8 @@ struct EditTaskView: View {
 }
 
 
-/** */
+/** Contains references to the user viewing the task and to the parent model
+ for context. */
 class EditTaskViewModel: ObservableObject {
     
     /* MARK: Model fields */
