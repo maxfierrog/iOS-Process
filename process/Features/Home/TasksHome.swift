@@ -143,6 +143,10 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     }
     
     func changedTaskSort(sortType: TaskSort) {
+        guard sortType != .topological else {
+            self.user.taskList = self.user.taskList.getTopologicalOrdering() // FIXME: Smelly, violating user class' abs. barrier
+            return
+        }
         self.user.taskList.sort(sortType)
     }
     

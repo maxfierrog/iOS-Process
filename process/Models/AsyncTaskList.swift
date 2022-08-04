@@ -99,8 +99,11 @@ class AsyncTaskList {
     /** Non-destructively sorts the current tasks in a possible order of completion
      by taking into consideration that subtasks must get completed before their
      tasks. Returns an AsyncTaskList with the specified ordering, and returns
-     self when there is a cycle as to not disrupt user experience. */
-    func topoSortItems() -> AsyncTaskList {
+     self when there is a cycle as to not disrupt user experience.
+        
+     Where V and E are the count of vertices and edges, the time complexity is
+     in O(V + E). */
+    func getTopologicalOrdering() -> AsyncTaskList {
         
         // Preprocessing, ensure changes since last sort are considered
         self.initializeGraph()
@@ -135,7 +138,7 @@ class AsyncTaskList {
     
     /** Returns a list of nodes with no incoming edges, or whose indegree
      assignment is zero. */
-    func getZeroIndegreeNodes(indegrees: [String: Int]) -> [String] {
+    private func getZeroIndegreeNodes(indegrees: [String: Int]) -> [String] {
         var result: [String] = []
         for node in indegrees.keys {
             if indegrees[node] == 0 {
@@ -148,13 +151,13 @@ class AsyncTaskList {
     /** Returns a dictionary mapping nodes to the amount of edges which are
      directed at them (mapping tasks to the amount of tasks they are a subtask
      of). */
-    func getDigraphIndigrees() -> [String: Int] {
+    private func getDigraphIndigrees() -> [String: Int] {
         var indegree: [String: Int] = [:]
         for task in self.items {
+            indegree[task.getID()] = 0
+        }
+        for task in self.items {
             for subtask in task.getSubtasks() {
-                if !indegree.keys.contains(subtask) {
-                    indegree[subtask] = 0
-                }
                 indegree[subtask]! += 1
             }
         }
@@ -163,7 +166,7 @@ class AsyncTaskList {
     
     /** Returns all nodes visited from a preorder traversal of DICT starting
      at FROMNODE, recursively. */
-    func preorderTraversal(dict: [String: [String]], fromNode: String) -> [String] {
+    private func preorderTraversal(dict: [String: [String]], fromNode: String) -> [String] {
         var result: [String] = []
         result.append(fromNode)
         for child in dict[fromNode]! {
@@ -174,7 +177,7 @@ class AsyncTaskList {
     
     /** Returns the transpose of the current task graph, or in other words, the
      task graph with all edges facing the opposite way. */
-    func getGraphTranspose() -> [String : [String]] {
+    private func getGraphTranspose() -> [String : [String]] {
         var result: [String : [String]] = [:]
         for task in self.digraph.keys {
             for subtask in self.digraph[task]! {
@@ -188,7 +191,7 @@ class AsyncTaskList {
     }
     
     // Quadratic, but only runs once
-    func populateTaskGraph() {
+    private func populateTaskGraph() {
         for item in self.items {
             for subtask in item.getSubtasks() {
                 self.addEdge(from: item.getID(), to: subtask)
@@ -197,7 +200,7 @@ class AsyncTaskList {
     }
     
     // Linear, only runs once
-    func initializeGraph() {
+    private func initializeGraph() {
         self.digraph = [:]
         for item in self.items {
             digraph[item.getID()] = []
@@ -205,7 +208,7 @@ class AsyncTaskList {
     }
     
     // Constant time
-    func addEdge(from: String, to: String) {
+    private func addEdge(from: String, to: String) {
         digraph[from]?.append(to)
     }
 }
