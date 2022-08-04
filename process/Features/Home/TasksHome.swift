@@ -26,7 +26,6 @@ struct TasksHomeView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .onChange(of: model.sortSelection) { newSortSelection in
-                    print(newSortSelection)
                     model.changedTaskSort(sortType: newSortSelection)
                 }
             

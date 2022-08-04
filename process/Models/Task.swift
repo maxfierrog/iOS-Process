@@ -183,7 +183,17 @@ class Task: Hashable {
         }
     }
     
+    func delete(_ completion: @escaping(_ error: Error?) -> Void) {
+        APIHandler.deleteTask(self) { error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            completion(nil)
+        }
+    }
 }
+
 
 public struct TaskData: Codable {
     

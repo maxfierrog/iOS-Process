@@ -325,6 +325,36 @@ class APIHandler {
         }
     }
     
+    /** Removes TASK's document from storage in Firestore, as well as its
+     reference from its assigned project if there is one. */
+    static func deleteTask(_ task: Task, _ completion: @escaping(_ error: Error?) -> Void){
+        let taskCollectionRef = tasksCollection.document(task.data.id)
+        do {
+            let userTaskListRef = try usersCollection.document(APIHandler.currentUserAuthID())
+            taskCollectionRef.delete { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                userTaskListRef.delete() { error in
+                    guard error == nil else {
+                        completion(error)
+                        return
+                    }
+                    APIHandler.removeTaskFromProject(taskID: task.data.id) { error in
+                        guard error == nil else {
+                            completion(error)
+                            return
+                        }
+                        completion(nil)
+                    }
+                }
+            }
+        } catch let error {
+            completion(error)
+        }
+    }
+    
     /** If a project contains the task with TASKID, then we remove it from its
      list of tasks and allow for actions through a completion block. If no
      project contains the task, then the completion block is just executed. */

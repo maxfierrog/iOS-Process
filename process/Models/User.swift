@@ -77,6 +77,7 @@ class User: ObservableObject {
     
     func removeTask(_ taskID: String) -> User {
         self.data.tasks.removeAll { $0 == taskID }
+        self.taskList.items.removeAll { $0.task.data.id == taskID }
         return self
     }
     

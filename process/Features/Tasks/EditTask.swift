@@ -63,8 +63,10 @@ struct EditTaskView: View {
             
             GroupBox {
                 ScrollView(.horizontal) {
-                    ForEach($model.user.data.allProjects.indices, id: \.self) { index in
-                        ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
+                    HStack {
+                        ForEach($model.user.data.allProjects.indices, id: \.self) { index in
+                            ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
+                        }
                     }
                 }
             } label: {
@@ -80,8 +82,17 @@ struct EditTaskView: View {
                     .buttonStyle(.bordered)
                 }
             }
-            .padding(.leading)
-            .padding(.trailing)
+            .padding(.horizontal)
+            
+            if model.editingTask != nil {
+                Button {
+                    model.tappedDelete()
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                        .foregroundColor(.red)
+                }
+                .padding()
+            }
 
             Spacer()
         }
@@ -182,6 +193,19 @@ class EditTaskViewModel: ObservableObject {
     func setToProject(_ project: Project) {
         self.toProject = project.data.id
         self.toProjectName = project.data.name
+    }
+    
+    func tappedDelete() {
+        guard self.editingTask != nil else { return }
+        self.editingTask!.delete() { error in
+            guard error == nil else {
+                self.showBannerWithErrorMessage(error?.localizedDescription)
+                return
+            }
+            self.user.removeTask(self.editingTask!.data.id).finishEdit()
+            self.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
+            self.parentModel.dismissEditTaskView()
+        }
     }
     
     /* MARK: Helper methods */
