@@ -140,6 +140,10 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
         self.navigateToAddCollaborator = true
     }
     
+    func dismissSelectSubtaskView() {
+        return
+    }
+    
     /* MARK: Model helper methods */
     
     func showBannerWithSuccessMessage(_ message: String?) {

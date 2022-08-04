@@ -149,6 +149,10 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
         self.user.taskList.sort(sortType)
     }
     
+    func dismissSelectSubtaskView() {
+        return
+    }
+    
     /* MARK: Helper methods */
     
     func showBannerWithErrorMessage(_ message: String?) {

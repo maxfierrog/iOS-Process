@@ -23,6 +23,7 @@ struct SelectSubtasksView: View {
             }
         }
         .padding(.horizontal)
+        .navigationTitle("Select Subtasks")
     }
 }
 
@@ -54,11 +55,15 @@ class SelectSubtasksViewModel: ObservableObject, TaskListViewModel {
     }
     
     private func dismissView(successBanner: String?) {
-        self.parentModel.dismissEditTaskView()
+        self.parentModel.dismissSelectSubtaskView()
         guard successBanner == nil else {
             self.parentModel.showBannerWithSuccessMessage(successBanner)
             return
         }
+    }
+    
+    func dismissSelectSubtaskView() {
+        
     }
     
     func dismissEditTaskView() {

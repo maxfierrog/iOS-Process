@@ -25,6 +25,9 @@ protocol TaskListViewModel {
     // Should be able to dismiss an edit/new task screen (cancel button)
     func dismissEditTaskView() -> Void
     
+    // Should be bale to dismiss a subtask choosing screen
+    func dismissSelectSubtaskView() -> Void
+    
     // Should be able to communicate events in children views through banners
     func showBannerWithSuccessMessage(_ message: String?) -> Void
 }
@@ -87,7 +90,6 @@ struct TaskDetailsView: View {
                 SelectSubtasksView(model: SelectSubtasksViewModel(model))
             }
         }
-        .navigationTitle("Select Subtasks")
         .sheet(isPresented: $model.navigateToEditTask) {
             NavigationView {
                 EditTaskView(model: EditTaskViewModel(model, isNewTask: false))
@@ -145,6 +147,10 @@ class TaskDetailsViewModel: ObservableObject, TaskListViewModel {
     
     func dismissEditTaskView() {
         self.navigateToEditTask = false
+    }
+    
+    func dismissSelectSubtaskView() {
+        self.navigateToSelectSubtasks = false
     }
     
     func showBannerWithSuccessMessage(_ message: String?) {
