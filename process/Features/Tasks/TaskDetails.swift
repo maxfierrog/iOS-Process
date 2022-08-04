@@ -41,7 +41,6 @@ struct TaskDetailsView: View {
     
     var body: some View {
         VStack {
-            NavigationLink(destination: SelectSubtasksView(model: SelectSubtasksViewModel(model)), tag: true, selection: $model.navigateToSelectSubtasks) { }
             NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
             
             HStack {
@@ -83,6 +82,12 @@ struct TaskDetailsView: View {
                 }
             }
         }
+        .sheet(isPresented: $model.navigateToSelectSubtasks) {
+            NavigationView {
+                SelectSubtasksView(model: SelectSubtasksViewModel(model))
+            }
+        }
+        .navigationTitle("Select Subtasks")
         .sheet(isPresented: $model.navigateToEditTask) {
             NavigationView {
                 EditTaskView(model: EditTaskViewModel(model, isNewTask: false))
@@ -99,7 +104,7 @@ class TaskDetailsViewModel: ObservableObject, TaskListViewModel {
     
     // Navigation
     @Published var navigateToEditTask: Bool = false
-    @Published var navigateToSelectSubtasks: Bool? = false
+    @Published var navigateToSelectSubtasks: Bool = false
     @Published var navigateToTaskDetails: Bool? = false
     
     // Parent model

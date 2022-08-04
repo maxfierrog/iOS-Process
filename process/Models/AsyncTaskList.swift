@@ -72,7 +72,7 @@ class AsyncTaskList {
     /** Non-destructively returns another instance of AsyncTaskList containing
      only tasks which TASK can have as a subtask while avoiding cyclic behavior
      in the task graph. */
-    func getSubtaskOptions(task: TaskListItem) -> AsyncTaskList {
+    func getSubtaskOptions(task: Task) -> AsyncTaskList {
         
         // Preprocessing, ensure changes since last sort are considered
         self.initializeGraph()
@@ -87,7 +87,7 @@ class AsyncTaskList {
         var upstreamTaskSet: Set<String> = []
         
         // Tasks which are 'upstream' of TASK, which cannot be its subtasks
-        upstreamTaskSet = Set(self.preorderTraversal(dict: transpose, fromNode: task.getID()))
+        upstreamTaskSet = Set(self.preorderTraversal(dict: transpose, fromNode: task.data.id))
         
         // The relative complement of all tasks with those 'upstream'
         taskSet.subtract(upstreamTaskSet)
@@ -180,13 +180,15 @@ class AsyncTaskList {
     private func getGraphTranspose() -> [String : [String]] {
         var result: [String : [String]] = [:]
         for task in self.digraph.keys {
+            result[task] = []
+        }
+        for task in self.digraph.keys {
             for subtask in self.digraph[task]! {
-                if result[subtask] == nil {
-                    result[subtask] = []
-                }
                 result[subtask]?.append(task)
             }
         }
+        print("transpose: ")
+        print(result)
         return result
     }
     
@@ -197,6 +199,8 @@ class AsyncTaskList {
                 self.addEdge(from: item.getID(), to: subtask)
             }
         }
+        print("populate: ")
+        print(self.digraph)
     }
     
     // Linear, only runs once
@@ -205,6 +209,8 @@ class AsyncTaskList {
         for item in self.items {
             digraph[item.getID()] = []
         }
+        print("initialize: ")
+        print(self.digraph)
     }
     
     // Constant time
