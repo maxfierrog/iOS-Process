@@ -137,7 +137,7 @@ class APIHandler {
             docRef.getDocument(as: UserData.self) { result in
                 switch result {
                 case .success(let userData):
-                    completion(User(userData), nil)
+                    completion(User.instance(userData), nil)
                 case .failure(let error):
                     completion(nil, error)
                 }
@@ -189,14 +189,14 @@ class APIHandler {
     }
     
     /** Constructs and returns the user model corresopnding to an ID. */
-    static func pullUser(_ id: String, _ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
+    static func pullCurrentUser(_ id: String, _ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
         let docRef = usersCollection.document(id)
         docRef.getDocument(as: UserData.self) { result in
             switch result {
             case .failure(let error):
                 completion(nil, error)
             case .success(let userData):
-                completion(User(userData), nil)
+                completion(User.instance(userData), nil)
             }
         }
     }

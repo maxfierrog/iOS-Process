@@ -18,13 +18,28 @@ class User: ObservableObject {
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
     var taskList: AsyncTaskList
     
-    /* MARK: Initializers */
+    /* MARK: Singleton pattern */
     
-    init(_ data: UserData) {
+    /** Singleton instance. */
+    private static var instance: User?
+    
+    /** Singleton instantiator and instance getter. */
+    public static func instance(_ data: UserData) -> User {
+        if (self.instance == nil) {
+            self.instance = User(data)
+        }
+        return self.instance!
+    }
+    
+    /** Singleton instance initializer. */
+    private init(_ data: UserData) {
         self.data = data
         self.taskList = AsyncTaskList(data.tasks)
     }
     
+    
+    /** Only for placeholder models with no data, so the purpose of the
+     singleton class is not violated. */
     init() {
         self.data = UserData()
         self.taskList = AsyncTaskList([])
@@ -118,7 +133,7 @@ class User: ObservableObject {
     /* MARK: Storage methods */
     
     func pull(_ id: String, _ completion: @escaping(_ user: User?, _ error: Error?) -> Void) {
-        APIHandler.pullUser(id) { user, error in
+        APIHandler.pullCurrentUser(id) { user, error in
             guard error == nil else {
                 completion(nil, error)
                 return
