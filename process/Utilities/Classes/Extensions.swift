@@ -10,6 +10,7 @@ import SwiftUI
 
 /** Extension of UIImage with resizing method. */
 extension UIImage {
+    
     public func resized(to target: CGSize) -> UIImage {
         let ratio = min(
             target.height / size.height, target.width / size.width
@@ -22,12 +23,19 @@ extension UIImage {
             self.draw(in: CGRect(origin: .zero, size: new))
         }
     }
+    
 }
 
 
 extension String: Identifiable {
+    
     public typealias ID = Int
     public var id: Int {
         return hash
     }
+    
+    subscript(index: Int) -> Character {
+        return self[self.index(self.startIndex, offsetBy: index)]
+    }
+
 }

@@ -186,6 +186,12 @@ class EditTaskViewModel: ObservableObject {
                 }
     }
     
+    func getDueDateSuggestion() -> Date {
+        return StringDistance.getDueDateEstimate(taskTitle: self.titleField,
+                                                 taskDescription: self.descriptionField
+                                                 user: self.user)
+    }
+    
     func tappedCancel() {
         self.parentModel.dismissEditTaskView()
     }

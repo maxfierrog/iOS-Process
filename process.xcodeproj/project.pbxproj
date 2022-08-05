@@ -68,6 +68,7 @@
 		988FD405289350B30057D49D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD404289350B30057D49D /* Extensions.swift */; };
 		988FD4072893DDB80057D49D /* ProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4062893DDB80057D49D /* ProfilePicture.swift */; };
 		988FD4092893F2390057D49D /* ProjectPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4082893F2390057D49D /* ProjectPicker.swift */; };
+		988FD40B289D90A50057D49D /* StringDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD40A289D90A50057D49D /* StringDistance.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		988FD404289350B30057D49D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		988FD4062893DDB80057D49D /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
 		988FD4082893F2390057D49D /* ProjectPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPicker.swift; sourceTree = "<group>"; };
+		988FD40A289D90A50057D49D /* StringDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDistance.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 			children = (
 				505D6E25287EF262005A28CB /* APIHandler.swift */,
 				988FD404289350B30057D49D /* Extensions.swift */,
+				988FD40A289D90A50057D49D /* StringDistance.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				505D6DDC287C215E005A28CB /* Login.swift in Sources */,
 				505D6DFB287C2290005A28CB /* TaskDetails.swift in Sources */,
 				988FD3DF288A911E0057D49D /* ImagePicker.swift in Sources */,
+				988FD40B289D90A50057D49D /* StringDistance.swift in Sources */,
 				988FD400289349580057D49D /* SegmentedPicker.swift in Sources */,
 				505D6E36288823FA005A28CB /* RootView.swift in Sources */,
 				988FD3F92891BD7E0057D49D /* ProjectCell.swift in Sources */,
