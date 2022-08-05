@@ -101,6 +101,7 @@ class DueDateUtils {
         /* Compute the average of completion times, weighted by similarity */
         
         var completionTimes: [Float] = []
+        var relativeWeights: [Float] = []
         var weights: [Float] = []
         var weightedSum: Float = 0.0
         var weightSum: Float = 0.0
@@ -130,13 +131,18 @@ class DueDateUtils {
             completionTimes.append(DueDateUtils.secondsToCompletion(task: task))
         }
         
+        // Compute the weights' value relative to each other
+        for weight in weights {
+            relativeWeights.append(weight / weightSum)
+        }
+        
         // Compute weighted sum
         for index in completionTimes.indices {
-            weightedSum += completionTimes[index] * weights[index]
+            weightedSum += completionTimes[index] * relativeWeights[index]
         }
         
         // Estimate in the amount of seconds it will take to finish TASK
-        let secondsToCompletionEstimate: Double = Double(weightedSum / weightSum)
+        let secondsToCompletionEstimate: Double = Double(weightedSum)
         
         return Date(timeIntervalSinceNow: secondsToCompletionEstimate)
     }
