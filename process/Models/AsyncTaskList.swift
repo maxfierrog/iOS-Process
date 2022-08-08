@@ -187,8 +187,6 @@ class AsyncTaskList {
                 result[subtask]?.append(task)
             }
         }
-        print("transpose: ")
-        print(result)
         return result
     }
     
@@ -199,8 +197,6 @@ class AsyncTaskList {
                 self.addEdge(from: item.getID(), to: subtask)
             }
         }
-        print("populate: ")
-        print(self.digraph)
     }
     
     // Linear, only runs once
@@ -209,8 +205,6 @@ class AsyncTaskList {
         for item in self.items {
             digraph[item.getID()] = []
         }
-        print("initialize: ")
-        print(self.digraph)
     }
     
     // Constant time

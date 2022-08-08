@@ -32,7 +32,7 @@ struct EditTaskView: View {
             .padding(.trailing)
             
             GroupBox {
-                TextEditor(text: $model.descriptionField)
+                TextField("", text: $model.descriptionField)
                     .disableAutocorrection(true)
                     .autocapitalization(.sentences)
                     .font(.body)
@@ -62,6 +62,25 @@ struct EditTaskView: View {
             .padding()
             
             GroupBox {
+                HStack {
+                    DatePicker(
+                    "Due Date:",
+                    selection: $model.dateDue,
+                    displayedComponents: [.date]
+                    )
+                    
+                    Button {
+                        model.getDueDateSuggestion()
+                    } label: {
+                        Image(systemName: "wand.and.stars")
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
+            
+            GroupBox {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach($model.user.data.allProjects.indices, id: \.self) { index in
@@ -72,7 +91,9 @@ struct EditTaskView: View {
             } label: {
                 HStack {
                     Text("Project:  \(model.toProjectName)")
+                    
                     Spacer()
+                    
                     Button {
                         model.toProject = nil
                         model.toProjectName = "None"
@@ -85,13 +106,23 @@ struct EditTaskView: View {
             .padding(.horizontal)
             
             if model.editingTask != nil {
-                Button {
-                    model.tappedDelete()
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                        .foregroundColor(.red)
+                HStack {
+                    Button {
+                        model.tappedDelete()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                            .foregroundColor(.red)
+                    }
+                    .padding()
+                    
+                    Button {
+                        model.tappedComplete()
+                    } label: {
+                        Label("Done", systemImage: "checkmark")
+                            .foregroundColor(.green)
+                    }
+                    .padding()
                 }
-                .padding()
             }
 
             Spacer()
@@ -129,9 +160,9 @@ class EditTaskViewModel: ObservableObject {
     // Fields
     @Published var titleField: String = ""
     @Published var descriptionField: String = ""
-    @Published var size: Int = 1 // FIXME: !
-    @Published var dateDue: Date = Date() // FIXME: !
-    @Published var toProject: String? = nil // FIXME: !
+    @Published var size: Int = 1
+    @Published var dateDue: Date = Date()
+    @Published var toProject: String? = nil
     @Published var toProjectName: String = "None"
     
     // Projects home view parent model
@@ -186,10 +217,10 @@ class EditTaskViewModel: ObservableObject {
                 }
     }
     
-    func getDueDateSuggestion() -> Date {
-        return DueDateUtils.getDueDateEstimate(taskTitle: self.titleField,
-                                                 taskDescription: self.descriptionField
-                                                 user: self.user)
+    func getDueDateSuggestion() {
+        self.dateDue = DueDateUtils.getDueDateEstimate(taskTitle: self.titleField,
+                                                       taskDescription: self.descriptionField,
+                                                       user: self.user)
     }
     
     func tappedCancel() {
@@ -212,6 +243,20 @@ class EditTaskViewModel: ObservableObject {
             self.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
             self.parentModel.dismissEditTaskView()
         }
+    }
+    
+    func tappedComplete() {
+        guard self.editingTask != nil else { return }
+        self.editingTask!
+            .complete()
+            .push { error in
+                guard error == nil else {
+                    self.showBannerWithErrorMessage(error?.localizedDescription)
+                    return
+                }
+                self.user.refreshTaskList().finishEdit()
+                self.parentModel.dismissEditTaskView()
+            }
     }
     
     /* MARK: Helper methods */

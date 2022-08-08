@@ -171,6 +171,7 @@
 				505D6E1D287EEBDD005A28CB /* Support */,
 				505D6DFC287C22C4005A28CB /* Utilities */,
 				505D6DFD287C22D8005A28CB /* Models */,
+				505D6E1C287EC4AC005A28CB /* Components */,
 				505D6DCB287C2029005A28CB /* Features */,
 			);
 			path = process;
@@ -200,9 +201,8 @@
 		505D6DFC287C22C4005A28CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				982352922887F8C700A565CB /* Constants */,
 				982352912887F84200A565CB /* Errors */,
-				505D6E1C287EC4AC005A28CB /* Components */,
+				982352922887F8C700A565CB /* Constants */,
 				505D6E19287EC484005A28CB /* Classes */,
 			);
 			path = Utilities;

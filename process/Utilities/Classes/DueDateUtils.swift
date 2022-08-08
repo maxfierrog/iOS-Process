@@ -171,4 +171,5 @@ class DueDateUtils {
         let diffSeconds = completionDate.timeIntervalSinceReferenceDate - startedDate.timeIntervalSinceReferenceDate
         return Float(diffSeconds)
     }
+    
 }
