@@ -20,6 +20,7 @@ struct TasksHomeView: View {
     var body: some View {
         VStack {
             NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
+            
             NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
             
             SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
@@ -35,15 +36,8 @@ struct TasksHomeView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             
-            ScrollView(.vertical) {
-                LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.user.taskList.items.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(task: model.user.taskList.items[index].task,
-                                                              model: model))
-                    }
-                }
-            }
-            .padding(.horizontal)
+            TaskListView(model: TaskListViewModel(model))
+                .padding(.horizontal)
         }
         .roundButton(
             color: GlobalConstant.accentColor,
@@ -72,7 +66,7 @@ struct TasksHomeView: View {
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
-                EditTaskView(model: EditTaskViewModel(model, isNewTask: true))
+                NewTaskView(model: NewTaskViewModel(model))
             }
         }
     }
@@ -81,30 +75,32 @@ struct TasksHomeView: View {
 
 /** Data model for the Tasks view. Communicates with Home view's model to
  obtain data and to communicate instructions, such as logging out. */
-class TasksHomeViewModel: ObservableObject, TaskListViewModel {
+class TasksHomeViewModel: TaskListParent, ObservableObject {
     
     /* MARK: Model fields */
     
+    var parentModel: HomeViewModel
+    
     // HomeView parent model
-    private var homeViewModel: HomeViewModel
     @Published var user: User
+    
+    // Task list parent protocol
+    @Published var taskList: AsyncTaskList
+    @Published var selectedTask: Task = Task(creatorID: "")
     
     // Navigation
     @Published var navigateToNewTask: Bool = false
     @Published var navigateToExport: Bool? = false
     @Published var navigateToTaskDetails: Bool? = false
-    @Published var selectedTask: Task = Task(creatorID: "")
-    
-    // Task list
-    @Published var taskListColumn: [GridItem] = [GridItem()]
     
     // Segmented control
     @Published var taskCategories: [String] = TasksConstant.taskCategories
     @Published var selectedTaskCategory: Int = TasksConstant.startingTaskCategory
     
     // Banner state fields
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier
+        .BannerData(title: "", detail: "", type: .Info)
     
     // Search bar
     @Published var searchText: String = ""
@@ -114,12 +110,13 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
     /* MARK: Model methods */
     
     init(_ parentModel: HomeViewModel) {
-        self.homeViewModel = parentModel
         self.user = parentModel.user
+        self.taskList = parentModel.user.taskList
+        self.parentModel = parentModel
     }
     
     func tappedLogOut() {
-        if (!self.homeViewModel.logOut()) {
+        if (!self.parentModel.logOut()) {
             self.showBannerWithErrorMessage(GlobalConstant.logOutFailedBannerMessage)
         }
     }
@@ -132,25 +129,23 @@ class TasksHomeViewModel: ObservableObject, TaskListViewModel {
         self.navigateToNewTask = true
     }
     
-    func dismissEditTaskView() {
-        self.navigateToNewTask = false
-    }
-    
-    func taskSelected(task: Task) {
-        self.selectedTask = task
+    func tappedTask() {
         self.navigateToTaskDetails = true
     }
     
     func changedTaskSort(sortType: TaskSort) {
-        guard sortType != .topological else {
-            self.user.taskList = self.user.taskList.getTopologicalOrdering() // FIXME: Smelly, violating user class' abs. barrier
-            return
-        }
-        self.user.taskList.sort(sortType)
+        self.user.taskList.sort(sortType) // FIXME: .topological
     }
     
-    func dismissSelectSubtaskView() {
-        return
+    func dismissChildView(_ named: String) {
+        switch named {
+        case "NewTaskView":
+            self.navigateToNewTask = false
+        case "ExportTasksView":
+            self.navigateToExport = false
+        default:
+            return
+        }
     }
     
     /* MARK: Helper methods */

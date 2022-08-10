@@ -2,28 +2,16 @@
 //  NewTask.swift
 //  process
 //
-//  Created by Maximo Fierro on 7/11/22.
+//  Created by maxfierro on 8/9/22.
 //
 
 
 import SwiftUI
 
 
-protocol TaskMeddlerModel {
-    func tappedCancel() -> Void
-    func tappedSave() -> Void
-    func getDueDateSuggestion() -> Void
-    func setToProject(_ project: Project) -> Void
-}
-
-
-/** Screen where users either create a new task or edit an existing one,
- depending on parameters passed in the view constructor. */
-struct EditTaskView: View {
+struct NewTaskView: View {
     
-    @ObservedObject var model: EditTaskViewModel
-    
-    /* MARK: View declaration */
+    @ObservedObject var model: NewTaskViewModel
     
     var body: some View {
         VStack {
@@ -98,7 +86,7 @@ struct EditTaskView: View {
                 }
             } label: {
                 HStack {
-                    Text("Switch to:  \(model.toProjectName)")
+                    Text("Project:  \(model.toProjectName)")
                     
                     Spacer()
                     
@@ -113,27 +101,9 @@ struct EditTaskView: View {
             }
             .padding(.horizontal)
             
-            HStack {
-                Button {
-                    model.tappedDelete()
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                        .foregroundColor(.red)
-                }
-                .padding()
-                
-                Button {
-                    model.tappedComplete()
-                } label: {
-                    Label("Done", systemImage: "checkmark")
-                        .foregroundColor(.green)
-                }
-                .padding()
-            }
-
             Spacer()
         }
-        .navigationTitle(model.task.data.name)
+        .navigationTitle("New Task")
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button {
@@ -157,25 +127,22 @@ struct EditTaskView: View {
 }
 
 
-/** Contains references to the user viewing the task and to the parent model
- for context. */
-class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
+class NewTaskViewModel: TaskMeddlerModel, ObservableObject {
     
     /* MARK: Model fields */
     
-    var parentModel: TaskDetailsViewModel
-    
-    // Task information
-    @Published var titleField: String
-    @Published var descriptionField: String
-    @Published var size: Int
-    @Published var dateDue: Date
-    @Published var toProject: String?
+    // Fields
+    @Published var titleField: String = ""
+    @Published var descriptionField: String = ""
+    @Published var size: Int = 1
+    @Published var dateDue: Date = Date()
+    @Published var toProject: String? = nil
     @Published var toProjectName: String = "None"
     
-    // Fields
+    // Projects home view parent model
+    var parentModel: TaskListParent
     @Published var user: User
-    @Published var task: Task
+    @Published var editingTask: Task?
     
     // Banner state fields
     @Published var showBanner: Bool = false
@@ -184,28 +151,36 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
     
     /* MARK: Model methods */
     
-    init(_ model: TaskDetailsViewModel) {
+    init(_ model: TaskListParent) {
         self.user = model.user
         self.parentModel = model
-        self.task = model.selectedTask
-        self.titleField = model.selectedTask.data.name
-        self.descriptionField = model.selectedTask.data.description ?? ""
-        self.size = model.selectedTask.data.size
-        self.toProject = model.selectedTask.data.project
-        self.dateDue = model.selectedTask.data.dateDue
+    }
+    
+    func setToProject(_ project: Project) {
+        self.toProject = project.data.id
+        self.toProjectName = project.data.name
+    }
+    
+    func getDueDateSuggestion() {
+        self.dateDue = DueDateUtils.getDueDateEstimate(taskTitle: self.titleField,
+                                                       taskDescription: self.descriptionField,
+                                                       user: self.user)
+    }
+    
+    func tappedCancel() {
+        self.parentModel.dismissChildView("NewTaskView")
     }
     
     func tappedSave() {
-        let editingTask = self.task
-        
+        let newTask = Task(creatorID: self.user.data.id)
         self.user
-            .addTask(editingTask.data.id)
+            .addTask(newTask.data.id)
             .push { error in
                 guard error == nil else {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                editingTask
+                newTask
                     .changeName(self.titleField)
                     .changeSize(self.size)
                     .changeDescription(self.descriptionField)
@@ -223,53 +198,6 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
                 }
     }
     
-    func getDueDateSuggestion() {
-        self.dateDue = DueDateUtils.getDueDateEstimate(taskTitle: self.titleField,
-                                                       taskDescription: self.descriptionField,
-                                                       user: self.user)
-    }
-    
-    func tappedCancel() {
-        self.parentModel.dismissChildView("EditTaskView")
-    }
-    
-    func setToProject(_ project: Project) {
-        self.toProject = project.data.id
-        self.toProjectName = project.data.name
-    }
-    
-    func tappedDelete() {
-        self.task.delete() { error in
-            guard error == nil else {
-                self.showBannerWithErrorMessage(error?.localizedDescription)
-                return
-            }
-            self.user
-                .removeTask(self.task.data.id)
-                .push { error in
-                guard error == nil else {
-                    self.showBannerWithErrorMessage(error?.localizedDescription)
-                    return
-                }
-                self.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
-                self.parentModel.dismissChildView("EditTaskView")
-            }
-        }
-    }
-    
-    func tappedComplete() {
-        self.task
-            .complete()
-            .push { error in
-                guard error == nil else {
-                    self.showBannerWithErrorMessage(error?.localizedDescription)
-                    return
-                }
-                self.user.refreshTaskList().finishEdit()
-                self.parentModel.dismissChildView("EditTaskView")
-            }
-    }
-    
     /* MARK: Helper methods */
     
     private func showBannerWithErrorMessage(_ message: String?) {
@@ -281,7 +209,7 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
     }
     
     private func dismissView(successBanner: String?) {
-        self.parentModel.dismissChildView("EditTaskView")
+        self.parentModel.dismissChildView("NewTaskView")
         guard successBanner == nil else {
             self.parentModel.showBannerWithSuccessMessage(successBanner)
             return

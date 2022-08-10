@@ -5,7 +5,9 @@
 //  Created by Maximo Fierro on 7/11/22.
 //
 
+
 import SwiftUI
+
 
 struct SelectSubtasksView: View {
     
@@ -14,65 +16,47 @@ struct SelectSubtasksView: View {
     /* MARK: View declaration */
     
     var body: some View {
-        ScrollView(.vertical) {
-            LazyVGrid(columns: [GridItem()], spacing: 8) {
-                ForEach($model.availableSubtasks.items.indices, id: \.self) { index in
-                    TaskCellView(model: TaskCellViewModel(task: model.availableSubtasks.items[index].task,
-                                                          model: model))
-                }
-            }
-        }
-        .padding(.horizontal)
-        .navigationTitle("Select Subtasks")
+        TaskListView(model: TaskListViewModel(model))
+            .padding(.horizontal)
+            .navigationTitle("Select Subtasks")
     }
 }
 
-class SelectSubtasksViewModel: ObservableObject, TaskListViewModel {
+
+class SelectSubtasksViewModel: TaskListParent, ObservableObject {
     
     @Published var user: User
-    @Published var selectedTask: Task
-    @Published var selectedSubtask: Task = Task(creatorID: "")
-    @Published var availableSubtasks: AsyncTaskList
-    @Published var parentModel: TaskListViewModel
+    @Published var thisTask: Task
+    @Published var selectedTask: Task = Task(creatorID: "")
+    @Published var taskList: AsyncTaskList
+    @Published var parentModel: TaskDetailsViewModel
     
     init(_ model: TaskDetailsViewModel) {
-        self.parentModel = model
-        self.selectedTask = model.selectedTask
         self.user = model.user
-        self.availableSubtasks = model.user.taskList.getSubtaskOptions(task: model.selectedTask)
+        self.parentModel = model
+        self.thisTask = model.thisTask
+        self.taskList = model.user.taskList.getSubtaskOptions(task: model.thisTask)
     }
     
-    func taskSelected(task: Task) {
-        self.selectedTask
-            .addSubtask(task.data.id)
+    func tappedTask() {
+        self.thisTask
+            .addSubtask(selectedTask.data.id)
             .push() { error in
-                guard error == nil else {
-                    // Error banner
-                    return
-                }
+                guard error == nil else { return }
                 self.dismissView(successBanner: nil)
             }
     }
     
     private func dismissView(successBanner: String?) {
-        self.parentModel.dismissSelectSubtaskView()
+        self.parentModel.dismissChildView("SelectSubtasksView")
         guard successBanner == nil else {
             self.parentModel.showBannerWithSuccessMessage(successBanner)
             return
         }
     }
     
-    func dismissSelectSubtaskView() {
-        
-    }
+    func dismissChildView(_ named: String) { return }
     
-    func dismissEditTaskView() {
-        
-    }
-    
-    func showBannerWithSuccessMessage(_ message: String?) {
-        
-    }
-    
+    func showBannerWithSuccessMessage(_ message: String?) { return }
     
 }

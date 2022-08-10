@@ -9,30 +9,6 @@
 import SwiftUI
 
 
-/** The models for views which contain clickable lists of tasks must conform
- to this protocol. */
-protocol TaskListViewModel {
-    
-    // Should know which task was clicked on within the list
-    var selectedTask: Task { get set }
-    
-    // Should know the user interacting with the list
-    var user: User { get set }
-    
-    // Should have an action happen when a task is chosen
-    func taskSelected(task: Task) -> Void
-    
-    // Should be able to dismiss an edit/new task screen (cancel button)
-    func dismissEditTaskView() -> Void
-    
-    // Should be bale to dismiss a subtask choosing screen
-    func dismissSelectSubtaskView() -> Void
-    
-    // Should be able to communicate events in children views through banners
-    func showBannerWithSuccessMessage(_ message: String?) -> Void
-}
-
-
 /** Includes the ability to add subtasks to a task, edit its details, or to
  view details of its subtasks by creating another instance of itself, making
  it a recursive object of sorts. */
@@ -47,7 +23,7 @@ struct TaskDetailsView: View {
             NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
             
             HStack {
-                Text(model.selectedTask.data.description ?? "")
+                Text(model.thisTask.data.description ?? "")
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
                 Spacer()
@@ -56,14 +32,7 @@ struct TaskDetailsView: View {
             .padding(.top, 4)
             
             GroupBox {
-                ScrollView(.vertical) {
-                    LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                        ForEach($model.subtaskList.items.indices, id: \.self) { index in
-                            TaskCellView(model: TaskCellViewModel(task: model.subtaskList.items[index].task,
-                                                                  model: model))
-                        }
-                    }
-                }
+                TaskListView(model: TaskListViewModel(model))
             } label: {
                 Text("Subtasks:")
             }
@@ -92,43 +61,43 @@ struct TaskDetailsView: View {
         }
         .sheet(isPresented: $model.navigateToEditTask) {
             NavigationView {
-                EditTaskView(model: EditTaskViewModel(model, isNewTask: false))
+                EditTaskView(model: EditTaskViewModel(model))
             }
         }
-        .navigationTitle(model.selectedTask.data.name)
+        .navigationTitle(model.thisTask.data.name)
     }
 }
 
 
-class TaskDetailsViewModel: ObservableObject, TaskListViewModel {
+class TaskDetailsViewModel: TaskListParent, ObservableObject {
     
     /* MARK: Model fields */
+    
+    var parentModel: TaskListParent
     
     // Navigation
     @Published var navigateToEditTask: Bool = false
     @Published var navigateToSelectSubtasks: Bool = false
     @Published var navigateToTaskDetails: Bool? = false
     
-    // Parent model
-    var parentModel: TaskListViewModel
-    @Published var selectedTask: Task
-    @Published var user: User = User()
-    
-    // Task list
-    @Published var taskListColumn: [GridItem] = [GridItem()]
-    @Published var subtaskList: AsyncTaskList
+    // Fields
+    @Published var selectedTask: Task = Task(creatorID: "")
+    @Published var thisTask: Task
+    @Published var user: User
+    @Published var taskList: AsyncTaskList
     
     // Banner state fields
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier
+        .BannerData(title: "", detail: "", type: .Info)
     
     /* MARK: Model initializer */
     
-    init(_ model: TaskListViewModel) {
-        self.parentModel = model
+    init(_ model: TaskListParent) {
         self.user = model.user
-        self.selectedTask = model.selectedTask
-        self.subtaskList = AsyncTaskList(model.selectedTask.data.subtasks)
+        self.parentModel = model
+        self.thisTask = model.selectedTask
+        self.taskList = AsyncTaskList(model.selectedTask.data.subtasks)
     }
     
     /* MARK: Action methods */
@@ -141,16 +110,19 @@ class TaskDetailsViewModel: ObservableObject, TaskListViewModel {
         self.navigateToEditTask = true
     }
     
-    func taskSelected(task: Task) {
+    func tappedTask() {
         self.navigateToTaskDetails = true
     }
     
-    func dismissEditTaskView() {
-        self.navigateToEditTask = false
-    }
-    
-    func dismissSelectSubtaskView() {
-        self.navigateToSelectSubtasks = false
+    func dismissChildView(_ named: String) {
+        switch named {
+        case "EditTaskView":
+            self.navigateToEditTask = false
+        case "SelectSubtasksView":
+            self.navigateToSelectSubtasks = false
+        default:
+            return
+        }
     }
     
     func showBannerWithSuccessMessage(_ message: String?) {

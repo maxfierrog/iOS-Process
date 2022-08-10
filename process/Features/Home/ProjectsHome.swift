@@ -22,6 +22,7 @@ struct ProjectsHomeView: View {
     var body: some View {
         VStack {
             NavigationLink(destination: NotificationsView(), tag: true, selection: $model.navigateToNotifications) { }
+            
             NavigationLink(destination: ProjectDetailsView(model: ProjectDetailsViewModel(model)), tag: true, selection: $model.navigateToProjectDetails) { }
             
             SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
@@ -85,7 +86,7 @@ class ProjectsHomeViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // HomeView parent model
-    private var homeViewModel: HomeViewModel
+    private var parentModel: HomeViewModel
     @Published var user: User
     
     // Search bar
@@ -112,15 +113,15 @@ class ProjectsHomeViewModel: ObservableObject {
 
     /* MARK: Model methods */
     
-    init(_ homeViewModel: HomeViewModel) {
-        self.homeViewModel = homeViewModel
-        self.user = homeViewModel.user
+    init(_ parentModel: HomeViewModel) {
+        self.parentModel = parentModel
+        self.user = parentModel.user
     }
     
     /* MARK: Action methods */
     
     func tappedLogOut() {
-        if (!self.homeViewModel.logOut()) {
+        if (!self.parentModel.logOut()) {
             self.showBannerWithErrorMessage(GlobalConstant.logOutFailedBannerMessage)
         }
     }

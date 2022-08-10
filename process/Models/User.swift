@@ -18,21 +18,11 @@ class User: ObservableObject {
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
     var taskList: AsyncTaskList
     
-    /* MARK: Singleton pattern */
+    /* MARK: Initializers */
     
-    /** Singleton instance. */
-    private static var instance: User?
-    
-    /** Singleton instantiator and instance getter. */
-    public static func instance(_ data: UserData) -> User {
-        if (self.instance == nil) {
-            self.instance = User(data)
-        }
-        return self.instance!
-    }
-    
-    /** Singleton instance initializer. */
-    private init(_ data: UserData) {
+    /** Initializes a user object with a data struct including their
+     identifying information. */
+    init(_ data: UserData) {
         self.data = data
         self.taskList = AsyncTaskList(data.tasks)
     }

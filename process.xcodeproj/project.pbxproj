@@ -61,7 +61,6 @@
 		988FD3F2288EFFF60057D49D /* AsyncTaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F1288EFFF60057D49D /* AsyncTaskList.swift */; };
 		988FD3F6288FA8CA0057D49D /* NewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F5288FA8CA0057D49D /* NewProject.swift */; };
 		988FD3F92891BD7E0057D49D /* ProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3F82891BD7E0057D49D /* ProjectCell.swift */; };
-		988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FA28921EB30057D49D /* TaskCell.swift */; };
 		988FD3FE289347190057D49D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FD289347190057D49D /* SearchBar.swift */; };
 		988FD400289349580057D49D /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD3FF289349580057D49D /* SegmentedPicker.swift */; };
 		988FD40328934EC80057D49D /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 988FD40228934EC80057D49D /* QGrid */; };
@@ -69,6 +68,8 @@
 		988FD4072893DDB80057D49D /* ProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4062893DDB80057D49D /* ProfilePicture.swift */; };
 		988FD4092893F2390057D49D /* ProjectPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD4082893F2390057D49D /* ProjectPicker.swift */; };
 		988FD40B289D90A50057D49D /* DueDateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988FD40A289D90A50057D49D /* DueDateUtils.swift */; };
+		98D56A0328A37A78000BF0EE /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D56A0228A37A78000BF0EE /* TaskList.swift */; };
+		98D56A0528A38A5B000BF0EE /* NewTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D56A0428A38A5B000BF0EE /* NewTask.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,13 +120,14 @@
 		988FD3F1288EFFF60057D49D /* AsyncTaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncTaskList.swift; sourceTree = "<group>"; };
 		988FD3F5288FA8CA0057D49D /* NewProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProject.swift; sourceTree = "<group>"; };
 		988FD3F82891BD7E0057D49D /* ProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCell.swift; sourceTree = "<group>"; };
-		988FD3FA28921EB30057D49D /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		988FD3FD289347190057D49D /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		988FD3FF289349580057D49D /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
 		988FD404289350B30057D49D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		988FD4062893DDB80057D49D /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
 		988FD4082893F2390057D49D /* ProjectPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPicker.swift; sourceTree = "<group>"; };
 		988FD40A289D90A50057D49D /* DueDateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DueDateUtils.swift; sourceTree = "<group>"; };
+		98D56A0228A37A78000BF0EE /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
+		98D56A0428A38A5B000BF0EE /* NewTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTask.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +244,7 @@
 				988FD3FF289349580057D49D /* SegmentedPicker.swift */,
 				988FD4062893DDB80057D49D /* ProfilePicture.swift */,
 				988FD4082893F2390057D49D /* ProjectPicker.swift */,
+				98D56A0228A37A78000BF0EE /* TaskList.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				505D6DFA287C2290005A28CB /* TaskDetails.swift */,
 				505D6DD7287C2143005A28CB /* SelectSubtasks.swift */,
 				505D6DF6287C227F005A28CB /* EditTask.swift */,
+				98D56A0428A38A5B000BF0EE /* NewTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -384,7 +388,6 @@
 			isa = PBXGroup;
 			children = (
 				988FD3F82891BD7E0057D49D /* ProjectCell.swift */,
-				988FD3FA28921EB30057D49D /* TaskCell.swift */,
 				988FD3E9288ED1F60057D49D /* UserAnalyticsView.swift */,
 				988FD3EB288ED23F0057D49D /* EditProfileCardView.swift */,
 				988FD3ED288ED24B0057D49D /* ProfileCardView.swift */,
@@ -486,6 +489,7 @@
 				988FD40B289D90A50057D49D /* DueDateUtils.swift in Sources */,
 				988FD400289349580057D49D /* SegmentedPicker.swift in Sources */,
 				505D6E36288823FA005A28CB /* RootView.swift in Sources */,
+				98D56A0528A38A5B000BF0EE /* NewTask.swift in Sources */,
 				988FD3F92891BD7E0057D49D /* ProjectCell.swift in Sources */,
 				9879C16F28854896009A34D3 /* Home.swift in Sources */,
 				505D6E03287C22FF005A28CB /* Task.swift in Sources */,
@@ -495,6 +499,7 @@
 				988FD3F6288FA8CA0057D49D /* NewProject.swift in Sources */,
 				505D6DF7287C227F005A28CB /* EditTask.swift in Sources */,
 				505D6DD8287C2143005A28CB /* SelectSubtasks.swift in Sources */,
+				98D56A0328A37A78000BF0EE /* TaskList.swift in Sources */,
 				505D6E2A288807E2005A28CB /* TasksConstant.swift in Sources */,
 				505D6DEA287C21CC005A28CB /* UserPreferences.swift in Sources */,
 				982352902887F82C00A565CB /* APIHandlerError.swift in Sources */,
@@ -508,7 +513,6 @@
 				505D6E3C2888575D005A28CB /* RoundButton.swift in Sources */,
 				505D6E16287EB061005A28CB /* PasswordField.swift in Sources */,
 				988FD4072893DDB80057D49D /* ProfilePicture.swift in Sources */,
-				988FD3FB28921EB30057D49D /* TaskCell.swift in Sources */,
 				505D6DE0287C2187005A28CB /* ProjectsHome.swift in Sources */,
 				988FD405289350B30057D49D /* Extensions.swift in Sources */,
 				505D6DF2287C2247005A28CB /* EditProject.swift in Sources */,

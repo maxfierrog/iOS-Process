@@ -37,10 +37,12 @@ struct LoginView: View {
                 NavigationLink(destination: RegistrationView(model: RegistrationViewModel(model)),
                                tag: true,
                                selection: $model.navigateToRegister) { }
-                VStack (alignment: .center, spacing: 10, content: {
+                
+                VStack (alignment: .center, spacing: 10) {
                     Image("login-image")
                         .resizable()
                         .scaledToFit()
+                    
                     EmailField(title: "Email", text: $model.emailField)
                         .padding(.bottom, 10)
                         .submitLabel(.next)
@@ -48,20 +50,25 @@ struct LoginView: View {
                         .onSubmit {
                             focus = .passwordField
                         }
+                    
                     PasswordField(title: "Password", text: $model.passwordField)
                         .padding(.bottom, 20)
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
-                })
+                }
+                
                 ActionButton(state: $model.loginButtonState, onTap: {
-                    model.loginUser()
+                    model.authenticateUser()
                 }, backgroundColor: colorScheme == .dark ? .indigo : .primary)
+                
                 Text("or")
                     .bold()
                     .font(.subheadline)
+                
                 ActionButton(state: $model.registerButtonState, onTap: {
                     model.didTapRegister()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
+                
                 Button {
                     model.sendPasswordResetEmail()
                 } label: {
@@ -89,7 +96,7 @@ class LoginViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // SuperView model
-    @Published var superModel: RootViewModel
+    @Published var parentModel: RootViewModel
     
     // Navigation fields
     @Published var navigateToHome: Bool? = false
@@ -104,7 +111,8 @@ class LoginViewModel: ObservableObject {
     @Published var loginButtonState: ActionButtonState = LoginConstant.invalidLoginButtonState
     @Published var registerButtonState: ActionButtonState = .enabled(title: LoginConstant.registerButtonTitle, systemImage: LoginConstant.registerButtonIcon)
     @Published var showErrorBanner: Bool = false
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier
+        .BannerData(title: "", detail: "", type: .Info)
     
     // Publisher fields
     private var cancellables: Set<AnyCancellable> = []
@@ -125,8 +133,8 @@ class LoginViewModel: ObservableObject {
     
     /* MARK: Initializers */
     
-    init(_ superModel: RootViewModel) {
-        self.superModel = superModel
+    init(_ parentModel: RootViewModel) {
+        self.parentModel = parentModel
         emailIsValidPublisher
             .combineLatest(passwordIsValidPublisher)
             .map { emailValid, passwordValid in
@@ -147,7 +155,7 @@ class LoginViewModel: ObservableObject {
     /** First authenticates with email and password credentials, then fetches
      user data model from database, and passes it to SuperModel, who handles
      navigation to home. */
-    func loginUser() {
+    func authenticateUser() {
         loginButtonState = LoginConstant.loadingLoginButtonState
         Auth.auth().signIn(withEmail: emailField, password: passwordField) { [weak self] authResult, error in
             guard error == nil else {
@@ -162,7 +170,7 @@ class LoginViewModel: ObservableObject {
                 }
                 self?.verifiedUser = user!
                 self?.loginButtonState = LoginConstant.successLoginButtonState
-                self?.superLoginUserWithModel(user!)
+                self?.loginUser(user!)
             }
         }
     }
@@ -183,13 +191,13 @@ class LoginViewModel: ObservableObject {
         }
     }
     
+    func loginUser(_ user: User) {
+        self.parentModel.loginUser(user)
+    }
+    
     func didTapRegister() {
         showErrorBanner = false
         navigateToRegister = true
-    }
-    
-    func superLoginUserWithModel(_ user: User) {
-        self.superModel.loginWithUserModel(user)
     }
     
     /* MARK: Model helper methods */

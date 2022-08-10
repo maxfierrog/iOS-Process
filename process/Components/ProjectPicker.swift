@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct ProjectsListItemView: View {
     
     @ObservedObject var model: ProjectPickerViewModel
@@ -21,13 +22,14 @@ struct ProjectsListItemView: View {
     }
 }
 
+
 class ProjectPickerViewModel: ObservableObject {
     
-    var parentModel: EditTaskViewModel
+    var parentModel: TaskMeddlerModel
     @Published var projectID: String
     @Published var project: Project = Project(creatorID: "")
     
-    init(projectID: String, parentModel: EditTaskViewModel) {
+    init(projectID: String, parentModel: TaskMeddlerModel) {
         self.projectID = projectID
         self.parentModel = parentModel
         Project.pull(projectID) { project, error in
@@ -39,4 +41,5 @@ class ProjectPickerViewModel: ObservableObject {
     func setToProject() {
         self.parentModel.setToProject(self.project)
     }
+    
 }

@@ -37,15 +37,8 @@ struct ProjectDetailsView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             
-            ScrollView(.vertical) {
-                LazyVGrid(columns: model.taskListColumn, spacing: 8) {
-                    ForEach($model.project.data.tasks.indices, id: \.self) { index in
-                        TaskCellView(model: TaskCellViewModel(taskID: model.project.data.tasks[index],
-                                                              model: model))
-                    }
-                }
-            }
-            .padding(.horizontal)
+            TaskListView(model: TaskListViewModel(model))
+                .padding(.horizontal)
         }
         .roundButton(
             color: GlobalConstant.accentColor,
@@ -70,16 +63,18 @@ struct ProjectDetailsView: View {
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
-                EditTaskView(model: EditTaskViewModel(model, isNewTask: true))
+                NewTaskView(model: NewTaskViewModel(model))
             }
         }
         .navigationTitle(model.project.data.name)
     }
 }
 
-class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
-    
+class ProjectDetailsViewModel: TaskListParent, ObservableObject {
+        
     /* MARK: Model fields */
+    
+    var parentViewModel: ProjectsHomeViewModel
     
     // Navigation
     @Published var navigateToTaskDetails: Bool? = false
@@ -88,9 +83,8 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     @Published var navigateToAddCollaborator: Bool? = false
     
     // Parent model
-    var projectsHomeViewModel: ProjectsHomeViewModel
     @Published var project: Project = Project(creatorID: "")
-    @Published var user: User = User()
+    @Published var user: User
     
     // Search bar
     @Published var isEditingSearch: Bool = false
@@ -102,34 +96,31 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
     @Published var selectedTaskCategory: Int = 0
     
     // Task list
-    @Published var taskListColumn: [GridItem] = [GridItem()]
     @Published var selectedTask: Task = Task(creatorID: "")
+    @Published var taskList: AsyncTaskList
     
     // Banner state fields
-    @Published var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "", type: .Info)
     @Published var showBanner: Bool = false
+    @Published var bannerData: BannerModifier.BannerData = BannerModifier
+        .BannerData(title: "", detail: "", type: .Info)
     
     /* MARK: Model initializer */
     
     init(_ model: ProjectsHomeViewModel) {
-        self.projectsHomeViewModel = model
-        self.project = model.selectedProject
         self.user = model.user
+        self.parentViewModel = model
+        self.project = model.selectedProject
+        self.taskList = AsyncTaskList(model.selectedProject.data.tasks)
     }
     
     /* MARK: Model action methods */
     
-    func taskSelected(task: Task) {
-        self.selectedTask = task
+    func tappedTask() {
         self.navigateToTaskDetails = true
     }
     
     func tappedNewTask() {
         self.navigateToNewTask = true
-    }
-    
-    func dismissEditTaskView() {
-        self.navigateToNewTask = false
     }
     
     func tappedEditProject() {
@@ -140,8 +131,17 @@ class ProjectDetailsViewModel: ObservableObject, TaskListViewModel {
         self.navigateToAddCollaborator = true
     }
     
-    func dismissSelectSubtaskView() {
-        return
+    func dismissChildView(_ named: String) {
+        switch named {
+        case "NewTaskView":
+            self.navigateToNewTask = false
+        case "EditProjectView":
+            self.navigateToEditProject = false
+        case "AddCollaboratorsView":
+            self.navigateToAddCollaborator = false
+        default:
+            return
+        }
     }
     
     /* MARK: Model helper methods */

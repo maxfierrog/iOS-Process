@@ -20,8 +20,7 @@ struct RootView: View {
         if (model.userSignedIn) {
             HomeView(model: HomeViewModel(model))
                 .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-        }
-        if (!model.userSignedIn) {
+        } else {
             LoginView(model: LoginViewModel(model))
                 .transition(.asymmetric(insertion: .opacity, removal: .opacity))
         }
@@ -49,8 +48,10 @@ class RootViewModel: ObservableObject {
             .changeUsername("username")
             .changeEmail("name@email.com")
             .finishEdit()
+        
         self.user = previewUser
         self.userSignedIn = false
+        
         APIHandler.pullAuthenticatedUser { user, error in
             guard error == nil && user != nil else { return }
             self.user = user!
@@ -71,7 +72,7 @@ class RootViewModel: ObservableObject {
         return true
     }
     
-    func loginWithUserModel(_ user: User) {
+    func loginUser(_ user: User) {
         self.user = user
         self.userSignedIn = true
         self.user.pullProfilePicture() { error, _ in

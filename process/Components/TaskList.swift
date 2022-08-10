@@ -1,12 +1,50 @@
 //
-//  TaskCell.swift
+//  TaskList.swift
 //  process
 //
-//  Created by maxfierro on 7/27/22.
+//  Created by maxfierro on 8/9/22.
 //
 
 
 import SwiftUI
+
+
+struct TaskListView: View {
+    
+    @ObservedObject var model: TaskListViewModel
+    
+    /* MARK: Task List */
+    
+    var body: some View {
+        ScrollView(.vertical) {
+            LazyVGrid(columns: [GridItem()], spacing: 8) {
+                ForEach($model.taskList.items.indices, id: \.self) { index in
+                    TaskCellView(model: TaskCellViewModel(model.taskList.items[index].task))
+                        .onTapGesture {
+                            model.tappedTask(model.taskList.items[index].task)
+                        }
+                }
+            }
+        }
+    }
+}
+
+
+class TaskListViewModel: ObservableObject {
+    
+    var taskList: AsyncTaskList = AsyncTaskList([])
+    var parentModel: TaskListParent
+    
+    init(_ parentModel: TaskListParent) {
+        self.parentModel = parentModel
+        self.taskList = parentModel.taskList
+    }
+    
+    func tappedTask(_ task: Task) -> Void {
+        self.parentModel.selectedTask = task
+        self.parentModel.tappedTask()
+    }
+}
 
 
 /** The visual representation of a task. */
@@ -14,7 +52,7 @@ struct TaskCellView: View {
     
     @ObservedObject var model: TaskCellViewModel
     
-    /* MARK: View declaration */
+    /* MARK: Task Cell */
     
     var body: some View {
         GroupBox {
@@ -35,38 +73,17 @@ struct TaskCellView: View {
         } label: {
             Text(model.task.data.name)
         }
-        .onTapGesture {
-            model.tappedTask()
-        }
     }
 }
 
 
+/** Task cell view model capable of loading its task asynchronously. */
 class TaskCellViewModel: ObservableObject {
-    
-    /* MARK: Model fields */
-    
-    var parentModel: TaskListViewModel
-    @Published var task: Task = Task(creatorID: "")
-    @Published var navigateToTaskDetails: Bool? = false
-    
-    init(taskID: String, model: TaskListViewModel) {
-        self.parentModel = model
-        Task.pull(taskID) { task, error in
-            guard error == nil else { return }
-            self.task = task!
-        }
-    }
-    
-    /* MARK: Model methods */
-    
-    init(task: Task, model: TaskListViewModel) {
-        self.parentModel = model
+        
+    @Published var task: Task
+        
+    init(_ task: Task) {
         self.task = task
-    }
-    
-    func tappedTask() {
-        self.parentModel.taskSelected(task: self.task)
     }
     
     func formattedDescription() -> String {
@@ -76,9 +93,7 @@ class TaskCellViewModel: ObservableObject {
         }
         return description
     }
-    
-    /* MARK: Helper methods */
-    
+        
     func formattedDueDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy"

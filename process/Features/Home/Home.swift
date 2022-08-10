@@ -11,7 +11,7 @@ import SwiftUI
 
 /** Root tab bar controlling access to Projects, Tasks, and Profile views. */
 struct HomeView: View {
-        
+    
     @ObservedObject var model: HomeViewModel
     
     /* MARK: Home view declaration */
@@ -55,18 +55,18 @@ class HomeViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // SuperView model
-    var superModel: RootViewModel
+    var parentModel: RootViewModel
     @Published var user: User
     
     /* MARK: Model methods */
     
-    init(_ superModel: RootViewModel) {
-        self.superModel = superModel
-        self.user = superModel.user
+    init(_ parentModel: RootViewModel) {
+        self.user = parentModel.user
+        self.parentModel = parentModel
     }
     
     func logOut() -> Bool {
-        return superModel.logOut()
+        return parentModel.logOut()
     }
     
 }

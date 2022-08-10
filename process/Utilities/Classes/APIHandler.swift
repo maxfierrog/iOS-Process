@@ -137,7 +137,7 @@ class APIHandler {
             docRef.getDocument(as: UserData.self) { result in
                 switch result {
                 case .success(let userData):
-                    completion(User.instance(userData), nil)
+                    completion(User(userData), nil)
                 case .failure(let error):
                     completion(nil, error)
                 }
@@ -196,7 +196,7 @@ class APIHandler {
             case .failure(let error):
                 completion(nil, error)
             case .success(let userData):
-                completion(User.instance(userData), nil)
+                completion(User(userData), nil)
             }
         }
     }

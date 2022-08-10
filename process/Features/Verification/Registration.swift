@@ -36,12 +36,13 @@ struct RegistrationView: View {
     var body: some View {
         VStack {
             GroupBox {
-                VStack (alignment: .center, spacing: 10, content: {
+                VStack (alignment: .center, spacing: 10) {
                     Image("register-image")
                         .resizable()
                         .scaledToFit()
                         .padding(.bottom, 10)
                         .padding(.top, 15)
+                    
                     TextField(text: $model.nameField, prompt: Text("Name")) {
                         Text("Screen name")
                     }
@@ -53,6 +54,7 @@ struct RegistrationView: View {
                     .onSubmit {
                         focus = .emailField
                     }
+                    
                     EmailField(title: "Email", text: $model.emailField)
                         .padding(.bottom, 10)
                         .submitLabel(.next)
@@ -60,13 +62,15 @@ struct RegistrationView: View {
                         .onSubmit {
                             focus = .passwordField
                         }
+                    
                     PasswordField(title: "Password", text: $model.passwordField)
                         .padding(.bottom, 20)
                         .focused($focus, equals: .passwordField)
                         .submitLabel(.go)
-                })
+                }
+                
                 ActionButton(state: $model.registerButtonState, onTap: {
-                    model.register()
+                    model.registerUser()
                 }, backgroundColor: colorScheme == .dark ? .brown : .primary)
             } label: {
                 Label(RegistrationConstant.welcomeMessage, systemImage: RegistrationConstant.welcomeIcon)
@@ -87,7 +91,7 @@ class RegistrationViewModel: ObservableObject {
     /* MARK: Model fields */
     
     // SuperView model
-    @Published var loginModel: LoginViewModel
+    @Published var parentModel: LoginViewModel
     
     // Navigation fields
     @Published var navigateToHome: Bool? = false
@@ -130,8 +134,8 @@ class RegistrationViewModel: ObservableObject {
     
     /* MARK: Model methods */
     
-    init(_ loginModel: LoginViewModel) {
-        self.loginModel = loginModel
+    init(_ parentModel: LoginViewModel) {
+        self.parentModel = parentModel
         emailIsValidPublisher
             .combineLatest(passwordIsValidPublisher, screenNameIsValidPublisher)
             .map { emailValid, passwordValid, screenNameIsValid in
@@ -155,7 +159,7 @@ class RegistrationViewModel: ObservableObject {
      5. Uploads the user model to the realtime database
      If the last steps fail, the user's entry in the authentication table is
      deleted to maintain data consistency. */
-    func register() {
+    func registerUser() {
         registerButtonState = RegistrationConstant.loadingRegisterButtonState
         Auth.auth().createUser(withEmail: self.emailField, password: self.passwordField) { [weak self] _, error in
             guard error == nil else {
@@ -190,11 +194,15 @@ class RegistrationViewModel: ObservableObject {
                         }
                         self?.registerButtonState = RegistrationConstant.successRegisterButtonState
                         self?.registeredUser = newUser
-                        self?.loginModel.superLoginUserWithModel(newUser)
+                        self?.loginUser(newUser)
                     }
                 }
             }
         }
+    }
+    
+    func loginUser(_ user: User) {
+        self.parentModel.loginUser(user)
     }
     
     /* MARK: Model helper methods */

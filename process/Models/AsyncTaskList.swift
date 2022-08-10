@@ -9,6 +9,30 @@
 import Foundation
 
 
+/** The models for views which contain clickable lists of tasks must conform
+ to this protocol. */
+protocol TaskListParent {
+    
+    // The current user
+    var user: User { get set }
+    
+    // The tasks which this list will display
+    var taskList: AsyncTaskList { get set }
+    
+    // Should know which task was clicked on within the list
+    var selectedTask: Task { get set }
+    
+    // Should have an action happen when a task is chosen
+    func tappedTask() -> Void
+    
+    // Should be able to dismiss an edit/new task screen (cancel button)
+    func dismissChildView(_ named: String) -> Void
+    
+    // Should be able to communicate events in children views through banners
+    func showBannerWithSuccessMessage(_ message: String?) -> Void
+}
+
+
 /** Types of task sorting orders available to users. */
 enum TaskSort: String, CaseIterable, Identifiable {
     case recentlyCreated
@@ -167,6 +191,7 @@ class AsyncTaskList {
     /** Returns all nodes visited from a preorder traversal of DICT starting
      at FROMNODE, recursively. */
     private func preorderTraversal(dict: [String: [String]], fromNode: String) -> [String] {
+        if !dict.keys.contains(fromNode) { return [] }
         var result: [String] = []
         result.append(fromNode)
         for child in dict[fromNode]! {
