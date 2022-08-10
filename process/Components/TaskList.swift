@@ -18,10 +18,10 @@ struct TaskListView: View {
     var body: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: [GridItem()], spacing: 8) {
-                ForEach($model.taskList.items.indices, id: \.self) { index in
-                    TaskCellView(model: TaskCellViewModel(model.taskList.items[index].task))
+                ForEach(model.taskList.items) { item in
+                    TaskCellView(model: TaskCellViewModel(item.task))
                         .onTapGesture {
-                            model.tappedTask(model.taskList.items[index].task)
+                            model.tappedTask(item.task)
                         }
                 }
             }
@@ -32,8 +32,8 @@ struct TaskListView: View {
 
 class TaskListViewModel: ObservableObject {
     
-    var taskList: AsyncTaskList = AsyncTaskList([])
-    var parentModel: TaskListParent
+    @Published var taskList: AsyncTaskList
+    @Published var parentModel: TaskListParent
     
     init(_ parentModel: TaskListParent) {
         self.parentModel = parentModel

@@ -29,7 +29,21 @@ struct TaskDetailsView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .padding(.top, 4)
+            .padding(.vertical, 4)
+            
+            HStack {
+                GroupBox {
+                    Text(model.formattedDueDate())
+                }
+                
+                Spacer()
+                
+                GroupBox {
+                    Text("Size: " + String(model.thisTask.data.size))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 4)
             
             GroupBox {
                 TaskListView(model: TaskListViewModel(model))
@@ -136,6 +150,13 @@ class TaskDetailsViewModel: TaskListParent, ObservableObject {
         bannerData.detail = message
         bannerData.type = .Success
         showBanner = true
+    }
+    
+    func formattedDueDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        dateFormatter.timeZone = NSTimeZone(name: "PST")! as TimeZone
+        return "Due " + dateFormatter.string(from: thisTask.data.dateDue)
     }
     
 }

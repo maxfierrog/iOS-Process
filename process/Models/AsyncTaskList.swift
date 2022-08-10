@@ -244,7 +244,7 @@ class AsyncTaskList: ObservableObject {
 
 /** Helper class for the task collection, which facilitates downloading many
  tasks into a single TaskCollections in one go. */
-class TaskListItem: ObservableObject, Hashable {
+class TaskListItem: ObservableObject, Hashable, Identifiable {
     
     @Published var task: Task = Task(creatorID: "")
     

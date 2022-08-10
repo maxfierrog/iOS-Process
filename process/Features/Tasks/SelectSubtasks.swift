@@ -18,9 +18,28 @@ struct SelectSubtasksView: View {
     var body: some View {
         GroupBox {
             TaskListView(model: TaskListViewModel(model))
-                .navigationTitle("Select Subtasks")
+                .navigationTitle("Select a Subtask")
         }
         .padding()
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button {
+                    model.tappedRefresh()
+                } label: {
+                    Text("Refresh")
+                }
+                .buttonStyle(.bordered)
+            }
+            
+            ToolbarItemGroup(placement: .navigationBarLeading) {
+                Button {
+                    model.tappedCancel()
+                } label: {
+                    Text("Cancel")
+                }
+            }
+        }
+        .accentColor(GlobalConstant.accentColor)
     }
 }
 
@@ -55,6 +74,14 @@ class SelectSubtasksViewModel: TaskListParent, ObservableObject {
             self.parentModel.showBannerWithSuccessMessage(successBanner)
             return
         }
+    }
+    
+    func tappedRefresh() {
+        self.taskList = self.user.taskList.getSubtaskOptions(task: self.thisTask)
+    }
+    
+    func tappedCancel() {
+        self.parentModel.dismissChildView("SelectSubtasksView")
     }
     
     func dismissChildView(_ named: String) { return }
