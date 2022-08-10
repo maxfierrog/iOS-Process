@@ -192,7 +192,7 @@ class NewTaskViewModel: TaskMeddlerModel, ObservableObject {
                             self.showBannerWithErrorMessage(error?.localizedDescription)
                             return
                         }
-                        self.user.refreshTaskList().finishEdit()
+                        self.parentModel.refreshTaskList()
                         self.dismissView(successBanner: "We have created and saved your new task!")
                     }
                 }

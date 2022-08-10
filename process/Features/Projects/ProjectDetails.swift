@@ -46,6 +46,7 @@ struct ProjectDetailsView: View {
             model.tappedNewTask()
         }
         .accentColor(GlobalConstant.accentColor)
+        .onAppear(perform: model.refreshTaskList)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -71,7 +72,7 @@ struct ProjectDetailsView: View {
 }
 
 class ProjectDetailsViewModel: TaskListParent, ObservableObject {
-        
+    
     /* MARK: Model fields */
     
     var parentViewModel: ProjectsHomeViewModel
@@ -145,6 +146,10 @@ class ProjectDetailsViewModel: TaskListParent, ObservableObject {
     }
     
     /* MARK: Model helper methods */
+    
+    func refreshTaskList() {
+        self.taskList = AsyncTaskList(self.project.data.tasks) // FIXME: Might not update properly
+    }
     
     func showBannerWithSuccessMessage(_ message: String?) {
         guard let message = message else { return }

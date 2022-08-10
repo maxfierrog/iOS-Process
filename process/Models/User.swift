@@ -27,7 +27,6 @@ class User: ObservableObject {
         self.taskList = AsyncTaskList(data.tasks)
     }
     
-    
     /** Only for placeholder models with no data, so the purpose of the
      singleton class is not violated. */
     init() {
@@ -38,11 +37,6 @@ class User: ObservableObject {
     /* MARK: Builder pattern */
     
     func finishEdit() { return }
-    
-    func refreshTaskList() -> User {
-        self.taskList = AsyncTaskList(self.data.tasks)
-        return self
-    }
     
     func changeProfilePicture(_ image: UIImage) -> User {
         self.profilePicture = image

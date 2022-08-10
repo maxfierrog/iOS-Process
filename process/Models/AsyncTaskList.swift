@@ -22,6 +22,9 @@ protocol TaskListParent {
     // Should know which task was clicked on within the list
     var selectedTask: Task { get set }
     
+    // Should be able to refresh the task list for changes
+    func refreshTaskList() -> Void
+    
     // Should have an action happen when a task is chosen
     func tappedTask() -> Void
     
@@ -47,11 +50,11 @@ enum TaskSort: String, CaseIterable, Identifiable {
 
 /** Utility collection class for facilitating common operatons on task
  collections such as sorting and insertion. */
-class AsyncTaskList {
+class AsyncTaskList: ObservableObject {
     
     /* MARK: Fields */
     
-    var items: [TaskListItem] = []
+    @Published var items: [TaskListItem] = []
     
     // Adjacency dictionary mapping taskIDs to a list of subtask IDs
     var digraph: [String : [String]] = [:]
@@ -241,9 +244,9 @@ class AsyncTaskList {
 
 /** Helper class for the task collection, which facilitates downloading many
  tasks into a single TaskCollections in one go. */
-class TaskListItem: Hashable {
+class TaskListItem: ObservableObject, Hashable {
     
-    var task: Task = Task(creatorID: "")
+    @Published var task: Task = Task(creatorID: "")
     
     init(_ taskID: String) {
         Task.pull(taskID) { task, error in

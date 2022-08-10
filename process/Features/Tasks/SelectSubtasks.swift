@@ -16,9 +16,11 @@ struct SelectSubtasksView: View {
     /* MARK: View declaration */
     
     var body: some View {
-        TaskListView(model: TaskListViewModel(model))
-            .padding(.horizontal)
-            .navigationTitle("Select Subtasks")
+        GroupBox {
+            TaskListView(model: TaskListViewModel(model))
+                .navigationTitle("Select Subtasks")
+        }
+        .padding()
     }
 }
 
@@ -58,5 +60,9 @@ class SelectSubtasksViewModel: TaskListParent, ObservableObject {
     func dismissChildView(_ named: String) { return }
     
     func showBannerWithSuccessMessage(_ message: String?) { return }
+    
+    func refreshTaskList() {
+        self.taskList = self.user.taskList.getSubtaskOptions(task: self.thisTask)
+    }
     
 }

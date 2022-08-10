@@ -39,6 +39,7 @@ struct TaskDetailsView: View {
             .padding(.horizontal)
         }
         .accentColor(GlobalConstant.accentColor)
+        .onAppear(perform: model.refreshTaskList)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -123,6 +124,10 @@ class TaskDetailsViewModel: TaskListParent, ObservableObject {
         default:
             return
         }
+    }
+    
+    func refreshTaskList() {
+        self.taskList = AsyncTaskList(self.thisTask.data.subtasks)
     }
     
     func showBannerWithSuccessMessage(_ message: String?) {

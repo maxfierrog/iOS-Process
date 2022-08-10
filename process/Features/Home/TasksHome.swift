@@ -12,7 +12,7 @@ import SwiftUI
 /** Facilitates a summary of tasks for the user's convencience. */
 struct TasksHomeView: View {
     
-    @StateObject var model: TasksHomeViewModel
+    @ObservedObject var model: TasksHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
     
     /* MARK: Tasks home view */
@@ -45,6 +45,7 @@ struct TasksHomeView: View {
             model.tappedNewTask()
         }
         .accentColor(GlobalConstant.accentColor)
+        .onAppear(perform: model.refreshTaskList)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -111,7 +112,7 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     
     init(_ parentModel: HomeViewModel) {
         self.user = parentModel.user
-        self.taskList = parentModel.user.taskList
+        self.taskList = AsyncTaskList(parentModel.user.data.tasks)
         self.parentModel = parentModel
     }
     
@@ -134,7 +135,11 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     }
     
     func changedTaskSort(sortType: TaskSort) {
-        self.user.taskList.sort(sortType) // FIXME: .topological
+        if sortType == .topological {
+            self.taskList = self.taskList.getTopologicalOrdering()
+        } else {
+            self.taskList.sort(sortType)
+        }
     }
     
     func dismissChildView(_ named: String) {
@@ -149,6 +154,10 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     }
     
     /* MARK: Helper methods */
+    
+    func refreshTaskList() {
+        self.taskList = AsyncTaskList(parentModel.user.data.tasks)
+    }
     
     func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }

@@ -187,12 +187,12 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
     init(_ model: TaskDetailsViewModel) {
         self.user = model.user
         self.parentModel = model
-        self.task = model.selectedTask
-        self.titleField = model.selectedTask.data.name
-        self.descriptionField = model.selectedTask.data.description ?? ""
-        self.size = model.selectedTask.data.size
-        self.toProject = model.selectedTask.data.project
-        self.dateDue = model.selectedTask.data.dateDue
+        self.task = model.thisTask
+        self.titleField = model.thisTask.data.name
+        self.descriptionField = model.thisTask.data.description ?? ""
+        self.size = model.thisTask.data.size
+        self.toProject = model.thisTask.data.project
+        self.dateDue = model.thisTask.data.dateDue
     }
     
     func tappedSave() {
@@ -217,7 +217,6 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
                             self.showBannerWithErrorMessage(error?.localizedDescription)
                             return
                         }
-                        self.user.refreshTaskList().finishEdit()
                         self.dismissView(successBanner: "We have created and saved your new task!")
                     }
                 }
@@ -265,7 +264,6 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                self.user.refreshTaskList().finishEdit()
                 self.parentModel.dismissChildView("EditTaskView")
             }
     }
