@@ -152,8 +152,8 @@ class DueDateUtils {
     private static func getCompletedTasks(user: User) -> [Task] {
         var taskList: [Task] = []
         var completedTasks: [Task] = []
-        for taskItem in user.taskList.items {
-            taskList.append(taskItem.task)
+        for task in user.taskList.tasks {
+            taskList.append(task)
         }
         for task in taskList {
             if task.data.dateCompleted != nil {

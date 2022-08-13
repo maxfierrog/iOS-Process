@@ -93,13 +93,13 @@ class NewProjectViewModel: ObservableObject {
         let newProject = Project(creatorID: self.user.data.id)
         
         self.user
-            .addOwnedProject(newProject.data.id)
+            .addOwnedProject(newProject)
             .push { error in
                 guard error == nil else {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                
+                 
                 newProject
                     .changeName(self.titleField)
                     .changeOwner(self.user.data.id)

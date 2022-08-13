@@ -112,7 +112,7 @@ class TaskDetailsViewModel: TaskListParent, ObservableObject {
         self.user = model.user
         self.parentModel = model
         self.thisTask = model.selectedTask
-        self.taskList = AsyncTaskList(model.selectedTask.data.subtasks)
+        self.taskList = model.selectedTask.subtaskList
     }
     
     /* MARK: Action methods */
@@ -138,10 +138,12 @@ class TaskDetailsViewModel: TaskListParent, ObservableObject {
         default:
             return
         }
+        self.refreshTaskList()
+        self.objectWillChange.send()
     }
     
     func refreshTaskList() {
-        self.taskList = AsyncTaskList(self.thisTask.data.subtasks)
+        self.taskList = AsyncTaskList(self.thisTask.subtaskList.tasks)
     }
     
     func showBannerWithSuccessMessage(_ message: String?) {

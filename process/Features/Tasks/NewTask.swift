@@ -79,8 +79,8 @@ struct NewTaskView: View {
             GroupBox {
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach($model.user.data.allProjects.indices, id: \.self) { index in
-                            ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
+                        ForEach(model.user.projectList) { project in
+                            ProjectsListItemView(model: ProjectPickerViewModel(project: project, model: model))
                         }
                     }
                 }
@@ -173,29 +173,22 @@ class NewTaskViewModel: TaskMeddlerModel, ObservableObject {
     
     func tappedSave() {
         let newTask = Task(creatorID: self.user.data.id)
-        self.user
-            .addTask(newTask.data.id)
-            .push { error in
-                guard error == nil else {
-                    self.showBannerWithErrorMessage(error?.localizedDescription)
-                    return
-                }
-                newTask
-                    .changeName(self.titleField)
-                    .changeSize(self.size)
-                    .changeDescription(self.descriptionField)
-                    .changeDateDue(self.dateDue)
-                    .changeAssignee(self.user.data.id)
-                    .changeProject(self.toProject)
-                    .push { error in
-                        guard error == nil else {
-                            self.showBannerWithErrorMessage(error?.localizedDescription)
-                            return
-                        }
-                        self.parentModel.refreshTaskList()
-                        self.dismissView(successBanner: "We have created and saved your new task!")
-                    }
-                }
+        
+        newTask
+            .changeName(self.titleField)
+            .changeSize(self.size)
+            .changeDescription(self.descriptionField)
+            .changeDateDue(self.dateDue)
+            .changeAssignee(self.user.data.id)
+            .changeProject(self.toProject)
+            .finishEdit()
+        
+        self.user 
+            .addTask(newTask)
+            .addTaskToMyProject(newTask, nil)
+            .finishEdit()
+        
+        self.dismissView(successBanner: "We have created and saved your new task!")
     }
     
     /* MARK: Helper methods */

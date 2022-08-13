@@ -14,14 +14,18 @@ struct TasksHomeView: View {
     
     @ObservedObject var model: TasksHomeViewModel
     @Environment(\.colorScheme) private var colorScheme
-    
+        
     /* MARK: Tasks home view */
 
     var body: some View {
         VStack {
-            NavigationLink(destination: ExportTasksView(), tag: true, selection: $model.navigateToExport) { }
+            NavigationLink(destination: ExportTasksView(),
+                           tag: true,
+                           selection: $model.navigateToExport) { }
             
-            NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)), tag: true, selection: $model.navigateToTaskDetails) { }
+            NavigationLink(destination: TaskDetailsView(model: TaskDetailsViewModel(model)),
+                           tag: true,
+                           selection: $model.navigateToTaskDetails) { }
             
             SearchBar(searchText: $model.searchText, isEditingSearch: $model.isEditingSearch, sortSelection: $model.sortSelection)
                 .padding(.horizontal)
@@ -30,11 +34,11 @@ struct TasksHomeView: View {
                     model.changedTaskSort(sortType: newSortSelection)
                 }
             
-            SegmentedPicker(accessibilityText: TasksConstant.pickerAccessibilityText,
-                            categories: model.taskCategories,
-                            selectedCategory: $model.selectedTaskCategory)
-                .padding(.horizontal)
-                .padding(.bottom)
+//            SegmentedPicker(accessibilityText: TasksConstant.pickerAccessibilityText,
+//                            categories: model.taskCategories,
+//                            selectedCategory: $model.selectedTaskCategory)
+//                .padding(.horizontal)
+//                .padding(.bottom)
             
             TaskListView(model: TaskListViewModel(model))
                 .padding(.horizontal)
@@ -45,16 +49,15 @@ struct TasksHomeView: View {
             model.tappedNewTask()
         }
         .accentColor(GlobalConstant.accentColor)
-        .onAppear(perform: model.refreshTaskList)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    model.tappedExport()
-                } label: {
-                    Label(TasksConstant.exportAccessibilityText, systemImage: TasksConstant.exportButtonIcon)
-                }
-            }
+//            ToolbarItemGroup(placement: .navigationBarTrailing) {
+//                Button {
+//                    model.tappedExport()
+//                } label: {
+//                    Label(TasksConstant.exportAccessibilityText, systemImage: TasksConstant.exportButtonIcon)
+//                }
+//            }
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
                     withAnimation {
@@ -77,6 +80,10 @@ struct TasksHomeView: View {
 /** Data model for the Tasks view. Communicates with Home view's model to
  obtain data and to communicate instructions, such as logging out. */
 class TasksHomeViewModel: TaskListParent, ObservableObject {
+    
+    func refreshTaskList() {
+        return
+    }
     
     /* MARK: Model fields */
     
@@ -112,7 +119,7 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     
     init(_ parentModel: HomeViewModel) {
         self.user = parentModel.user
-        self.taskList = AsyncTaskList(parentModel.user.data.tasks)
+        self.taskList = parentModel.user.taskList
         self.parentModel = parentModel
     }
     
@@ -136,10 +143,11 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     
     func changedTaskSort(sortType: TaskSort) {
         if sortType == .topological {
-            self.taskList = self.taskList.getTopologicalOrdering()
+            self.taskList.getTopologicalOrdering()
         } else {
             self.taskList.sort(sortType)
         }
+        self.objectWillChange.send()
     }
     
     func dismissChildView(_ named: String) {
@@ -148,6 +156,8 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
             self.navigateToNewTask = false
         case "ExportTasksView":
             self.navigateToExport = false
+        case "TaskDetailsView":
+            self.navigateToTaskDetails = false
         default:
             return
         }
@@ -155,9 +165,9 @@ class TasksHomeViewModel: TaskListParent, ObservableObject {
     
     /* MARK: Helper methods */
     
-    func refreshTaskList() {
-        self.taskList = AsyncTaskList(parentModel.user.data.tasks)
-    }
+//    func refreshTaskList() {
+//        self.taskList = AsyncTaskList(parentModel.user.data.tasks)
+//    }
     
     func showBannerWithErrorMessage(_ message: String?) {
         guard let message = message else { return }

@@ -11,24 +11,23 @@ import SwiftUI
 
 struct TaskListView: View {
     
-    @ObservedObject var model: TaskListViewModel
+    @StateObject var model: TaskListViewModel
     
     /* MARK: Task List */
     
     var body: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: [GridItem()], spacing: 8) {
-                ForEach(model.taskList.items) { item in
-                    TaskCellView(model: TaskCellViewModel(item.task))
+                ForEach(model.taskList.tasks) { item in
+                    TaskCellView(model: TaskCellViewModel(item))
                         .onTapGesture {
-                            model.tappedTask(item.task)
+                            model.tappedTask(item)
                         }
                 }
             }
         }
     }
 }
-
 
 class TaskListViewModel: ObservableObject {
     
@@ -63,15 +62,22 @@ struct TaskCellView: View {
             }
             .padding(.top, 1)
             HStack {
-                Text(model.formattedDueDate())
+                Text(model.formattedDate(string: "Due: ", date: model.task.data.dateDue))
                     .font(.caption2)
                 Spacer()
-                Text(String(model.task.data.size))
+                Text("Size: " + String(model.task.data.size))
                     .font(.caption2)
             }
             .padding(.top, 8)
         } label: {
-            Text(model.task.data.name)
+            HStack {
+                Text(model.task.data.name)
+                if model.task.data.dateCompleted != nil {
+                    Spacer()
+                    Text(model.formattedDate(string: "Completed: ", date: model.task.data.dateCompleted!))
+                        .font(.caption2)
+                }
+            }
         }
     }
 }
@@ -94,11 +100,11 @@ class TaskCellViewModel: ObservableObject {
         return description
     }
         
-    func formattedDueDate() -> String {
+    func formattedDate(string: String, date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy"
         dateFormatter.timeZone = NSTimeZone(name: "PST")! as TimeZone
-        return "Due " + dateFormatter.string(from: task.data.dateDue)
+        return string + dateFormatter.string(from: date)
     }
     
 }

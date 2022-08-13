@@ -35,7 +35,9 @@ struct ProjectCellView: View {
                     Spacer()
                 }
                 HStack {
-                    ProgressView(model.formattedCreationDate(), value: 50, total: 100)
+                    ProgressView(model.formattedCreationDate(),
+                                 value: Float(model.completedTaskCount()),
+                                 total: Float(model.project.taskList.allTasks.count))
                         .progressViewStyle(.linear)
                         .font(.caption2)
                 }
@@ -45,37 +47,24 @@ struct ProjectCellView: View {
         } label: {
             Text(model.project.data.name)
         }
-        .onTapGesture {
-            model.tappedProject()
-        }
     }
 }
 
 
 class ProjectCellViewModel: ObservableObject {
     
-    @Published var projectsHomeViewModel: ProjectsHomeViewModel
     @Published var project: Project = Project(creatorID: "")
-    
     @Published var collaboratorPictures: [UIImage] = []
     
-    init(projectID: String, model: ProjectsHomeViewModel) {
-        self.projectsHomeViewModel = model
-        Project.pull(projectID) { project, error in
-            guard error == nil else { return }
-            self.project = project!
-            for index in project!.data.collaborators.indices {
-                self.collaboratorPictures.append(UIImage(named: ProfileConstant.defaultProfilePicture)!)
-                APIHandler.pullProfilePicture(userID: project!.data.collaborators[index]) { error, image in
-                    guard error == nil else { return }
-                    self.collaboratorPictures[index] = image!
-                }
+    init(project: Project) {
+        self.project = project
+        for index in project.data.collaborators.indices {
+            self.collaboratorPictures.append(UIImage(named: ProfileConstant.defaultProfilePicture)!)
+            APIHandler.pullProfilePicture(userID: project.data.collaborators[index]) { error, image in
+                guard error == nil else { return }
+                self.collaboratorPictures[index] = image!
             }
         }
-    }
-    
-    func tappedProject() {
-        self.projectsHomeViewModel.showProjectDetails(project: self.project)
     }
     
     func formattedDescription() -> String {
@@ -93,6 +82,15 @@ class ProjectCellViewModel: ObservableObject {
         return "Started " + dateFormatter.string(from: project.data.dateCreated)
     }
     
+    func completedTaskCount() -> Int {
+        var count: Int = 0
+        for task in project.taskList.allTasks {
+            if task.data.dateCompleted != nil {
+                count += 1
+            }
+        }
+        return count
+    }
 }
 
 

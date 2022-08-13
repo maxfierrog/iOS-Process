@@ -26,16 +26,11 @@ struct ProjectsListItemView: View {
 class ProjectPickerViewModel: ObservableObject {
     
     var parentModel: TaskMeddlerModel
-    @Published var projectID: String
-    @Published var project: Project = Project(creatorID: "")
+    @Published var project: Project
     
-    init(projectID: String, parentModel: TaskMeddlerModel) {
-        self.projectID = projectID
-        self.parentModel = parentModel
-        Project.pull(projectID) { project, error in
-            guard error == nil else { return }
-            self.project = project!
-        }
+    init(project: Project, model: TaskMeddlerModel) {
+        self.parentModel = model
+        self.project = project
     }
     
     func setToProject() {

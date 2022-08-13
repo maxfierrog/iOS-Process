@@ -49,18 +49,18 @@ struct ProjectDetailsView: View {
         .onAppear(perform: model.refreshTaskList)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    model.tappedAddCollaborator()
-                } label: {
-                    Label("Add collaborator", systemImage: "person.fill.badge.plus")
-                }
-                Button {
-                    model.tappedEditProject()
-                } label: {
-                    Label("Edit project", systemImage: "square.and.pencil")
-                }
-            }
+//            ToolbarItemGroup(placement: .navigationBarTrailing) {
+//                Button {
+//                    model.tappedAddCollaborator()
+//                } label: {
+//                    Label("Add collaborator", systemImage: "person.fill.badge.plus")
+//                }
+//                Button {
+//                    model.tappedEditProject()
+//                } label: {
+//                    Label("Edit project", systemImage: "square.and.pencil")
+//                }
+//            }
         }
         .sheet(isPresented: $model.navigateToNewTask) {
             NavigationView {
@@ -111,7 +111,7 @@ class ProjectDetailsViewModel: TaskListParent, ObservableObject {
         self.user = model.user
         self.parentViewModel = model
         self.project = model.selectedProject
-        self.taskList = AsyncTaskList(model.selectedProject.data.tasks)
+        self.taskList = model.selectedProject.taskList
     }
     
     /* MARK: Model action methods */
@@ -148,7 +148,7 @@ class ProjectDetailsViewModel: TaskListParent, ObservableObject {
     /* MARK: Model helper methods */
     
     func refreshTaskList() {
-        self.taskList = AsyncTaskList(self.project.data.tasks) // FIXME: Might not update properly
+//        self.taskList = AsyncTaskList(self.project.data.tasks) // FIXME: Might not update properly
     }
     
     func showBannerWithSuccessMessage(_ message: String?) {

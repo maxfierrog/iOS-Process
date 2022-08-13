@@ -399,15 +399,15 @@ class APIHandler {
                 completion(error)
                 return
             }
-            project?
-                .addTask(taskID)
-                .push { error in
-                    guard error == nil else {
-                        completion(error)
-                        return
-                    }
-                    completion(nil)
-                }
+//            project?
+//                .addTask(taskID)
+//                .push { error in
+//                    guard error == nil else {
+//                        completion(error)
+//                        return
+//                    }
+//                    completion(nil)
+//                }
         }
     }
 }

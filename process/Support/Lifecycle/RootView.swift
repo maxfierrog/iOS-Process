@@ -12,7 +12,7 @@ import SwiftUI
 /** Root view managing access between verification and home views. */
 struct RootView: View {
         
-    @ObservedObject var model = RootViewModel()
+    @StateObject var model = RootViewModel()
     
     /* MARK: Superview fork */
     
@@ -55,6 +55,7 @@ class RootViewModel: ObservableObject {
         APIHandler.pullAuthenticatedUser { user, error in
             guard error == nil && user != nil else { return }
             self.user = user!
+            User.user = self.user
             self.user.pullProfilePicture() { error, _ in
                 guard error == nil else { return }
                 self.userSignedIn = true

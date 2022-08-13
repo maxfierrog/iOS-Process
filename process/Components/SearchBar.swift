@@ -39,12 +39,16 @@ struct SearchBar: View {
                         }
                     )
                     .onTapGesture {
-                        isEditingSearch = true
+                        withAnimation {
+                            isEditingSearch = true
+                        }
                     }
             if isEditingSearch {
                 Button {
-                    isEditingSearch = false
-                    searchText = ""
+                    withAnimation {
+                        isEditingSearch = false
+                        searchText = ""
+                    }
                 } label: {
                     Text("Cancel")
                 }

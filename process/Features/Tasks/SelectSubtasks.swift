@@ -61,11 +61,8 @@ class SelectSubtasksViewModel: TaskListParent, ObservableObject {
     
     func tappedTask() {
         self.thisTask
-            .addSubtask(selectedTask.data.id)
-            .push() { error in
-                guard error == nil else { return }
-                self.dismissView(successBanner: nil)
-            }
+            .addSubtask(self.selectedTask)
+        self.dismissView(successBanner: nil)
     }
     
     private func dismissView(successBanner: String?) {

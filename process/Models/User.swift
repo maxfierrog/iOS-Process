@@ -13,10 +13,13 @@ import SwiftUI
 /** Singleton class used as a functional intermediary between the UserData
  struct, which stores user data and models. */
 class User: ObservableObject {
-        
+    
+    public static var user: User = User()
+    
     var data: UserData
     var profilePicture: UIImage = UIImage(named: ProfileConstant.defaultProfilePicture)!
     var taskList: AsyncTaskList
+    var projectList: [Project] = []
     
     /* MARK: Initializers */
     
@@ -24,7 +27,7 @@ class User: ObservableObject {
      identifying information. */
     init(_ data: UserData) {
         self.data = data
-        self.taskList = AsyncTaskList(data.tasks)
+        self.taskList = AsyncTaskList([])
     }
     
     /** Only for placeholder models with no data, so the purpose of the
@@ -67,22 +70,47 @@ class User: ObservableObject {
         return self
     }
     
-    func addTask(_ taskID: String) -> User {
-        if !self.data.tasks.contains(taskID) {
-            self.data.tasks.append(taskID)
+    func addTask(_ task: Task) -> User {
+        if !self.data.tasks.contains(task.data.id) {
+            self.data.tasks.append(task.data.id)
+            self.taskList.insertTask(task)
+        }
+        self.objectWillChange.send()
+        return self
+    }
+    
+    func addTaskToMyProject(_ task: Task, _ from: String?) -> User {
+        if from != nil {
+            for project in self.projectList {
+                if project.data.id == from! {
+                    project.removeTask(task.data.id).finishEdit()
+                }
+            }
+        }
+        if task.data.project != nil {
+            let projectID: String = task.data.project!
+            for project in self.projectList {
+                print(project)
+                if project.data.id == projectID {
+                    print(project.data.id)
+                    project.addTask(task).finishEdit()
+                }
+            }
         }
         return self
     }
     
     func removeTask(_ taskID: String) -> User {
         self.data.tasks.removeAll { $0 == taskID }
-        self.taskList.items.removeAll { $0.task.data.id == taskID }
+        self.taskList.tasks.removeAll { $0.data.id == taskID }
+        self.objectWillChange.send()
         return self
     }
     
-    func addOwnedProject(_ projectID: String) -> User {
-        self.data.ownedProjects.append(projectID)
-        self.data.allProjects.append(projectID)
+    func addOwnedProject(_ project: Project) -> User {
+        self.data.ownedProjects.append(project.data.id)
+        self.data.allProjects.append(project.data.id)
+        self.projectList.append(project)
         return self
     }
     

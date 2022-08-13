@@ -29,17 +29,20 @@ struct ProjectsHomeView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
             
-            SegmentedPicker(accessibilityText: ProjectsConstant.pickerAccessibilityText,
-                            categories: model.projectCategories,
-                            selectedCategory: $model.selectedProjectCategory)
-                .padding(.horizontal)
-                .padding(.bottom)
+//            SegmentedPicker(accessibilityText: ProjectsConstant.pickerAccessibilityText,
+//                            categories: model.projectCategories,
+//                            selectedCategory: $model.selectedProjectCategory)
+//                .padding(.horizontal)
+//                .padding(.bottom)
             
             ScrollView {
                 LazyVGrid(columns: model.twoColumnGrid, spacing: 8) {
-                    ForEach($model.user.data.allProjects.indices, id: \.self) { index in
-                        ProjectCellView(model: ProjectCellViewModel(projectID: model.user.data.allProjects[index],
-                                                                    model: model))
+                    ForEach(model.user.projectList) { project in
+                        ProjectCellView(model: ProjectCellViewModel(project: project))
+                            .onTapGesture {
+                                model.selectedProject = project
+                                model.navigateToProjectDetails = true
+                            }
                     }
                 }
             }
@@ -53,13 +56,13 @@ struct ProjectsHomeView: View {
         .banner(data: $model.bannerData, show: $model.showBanner)
         .accentColor(GlobalConstant.accentColor)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    model.tappedNotifications()
-                } label: {
-                    Label(ProjectsConstant.notificationsAccessibilityText, systemImage: ProjectsConstant.notificationsButtonIcon)
-                }
-            }
+//            ToolbarItemGroup(placement: .navigationBarTrailing) {
+//                Button {
+//                    model.tappedNotifications()
+//                } label: {
+//                    Label(ProjectsConstant.notificationsAccessibilityText, systemImage: ProjectsConstant.notificationsButtonIcon)
+//                }
+//            }
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
                     withAnimation {

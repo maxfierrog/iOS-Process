@@ -11,7 +11,7 @@ import Foundation
 
 /** Intermediary class for performing operations on projects. Can be seen as a
  singleton class for every relevant project. */
-class Project: Hashable {
+class Project: Hashable, Identifiable {
         
     var data: ProjectData
     var taskList: AsyncTaskList
@@ -20,7 +20,7 @@ class Project: Hashable {
     
     init(_ data: ProjectData) {
         self.data = data
-        self.taskList = AsyncTaskList(data.tasks)
+        self.taskList = AsyncTaskList([])
     }
     
     init(creatorID: String) {
@@ -40,10 +40,10 @@ class Project: Hashable {
     
     func finishEdit() { return }
     
-    func refreshTaskList() -> Project {
-        self.taskList = AsyncTaskList(self.data.tasks)
-        return self
-    }
+//    func refreshTaskList() -> Project {
+//        self.taskList = AsyncTaskList(self.data.tasks)
+//        return self
+//    }
     
     func changeName(_ name: String) -> Project {
         self.data = ProjectData(copyOf: self.data,
@@ -102,15 +102,17 @@ class Project: Hashable {
         return self
     }
     
-    func addTask(_ taskID: String) -> Project {
-        if !self.data.tasks.contains(taskID) {
-            self.data.tasks.append(taskID)
+    func addTask(_ task: Task) -> Project {
+        if !self.data.tasks.contains(task.data.id) {
+            self.data.tasks.append(task.data.id)
+            self.taskList.insertTask(task)
         }
         return self
     }
     
     func removeTask(_ taskID: String) -> Project {
         self.data.tasks.removeAll { $0 == taskID }
+        self.taskList.allTasks.removeAll { $0.data.id == taskID }
         return self
     }
     

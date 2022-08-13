@@ -30,21 +30,21 @@ struct ProfileHomeView: View {
                         model.tappedEditProfile()
                     }
                 }
-            if (!model.editing) {
-                AnalyticsScrollView(model: model)
-            }
+//            if (!model.editing) {
+//                AnalyticsScrollView(model: model)
+//            }
             Spacer()
         }
         .accentColor(GlobalConstant.accentColor)
         .banner(data: $model.bannerData, show: $model.showBanner)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    model.tappedPreferences()
-                } label: {
-                    Label(ProfileConstant.preferencesAccessibilityText, systemImage: ProfileConstant.preferencesButtonIcon)
-                }
-            }
+//            ToolbarItemGroup(placement: .navigationBarTrailing) {
+//                Button {
+//                    model.tappedPreferences()
+//                } label: {
+//                    Label(ProfileConstant.preferencesAccessibilityText, systemImage: ProfileConstant.preferencesButtonIcon)
+//                }
+//            }
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button {
                     withAnimation {

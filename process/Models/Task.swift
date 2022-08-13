@@ -13,16 +13,15 @@ enum TaskSize: Int {
     case big = 3
 }
 
-class Task: Hashable {
+class Task: Hashable, Identifiable {
     
     var data: TaskData
-    var subtaskList: AsyncTaskList
+    var subtaskList: AsyncTaskList = AsyncTaskList([])
     
     /* MARK: Initializers */
     
     init(_ data: TaskData) {
         self.data = data
-        self.subtaskList = AsyncTaskList(data.subtasks)
     }
     
     init (creatorID: String) {
@@ -42,10 +41,10 @@ class Task: Hashable {
     
     func finishEdit() { return }
     
-    func refreshTaskList() -> Task {
-        self.subtaskList = AsyncTaskList(self.data.subtasks)
-        return self
-    }
+//    func refreshTaskList() -> Task {
+//        self.subtaskList = AsyncTaskList(self.data.subtasks)
+//        return self
+//    }
     
     func changeName(_ name: String) -> Task {
         self.data = TaskData(copyOf: self.data,
@@ -125,8 +124,9 @@ class Task: Hashable {
         return self
     }
     
-    func addSubtask(_ taskID: String) -> Task {
-        self.data.subtasks.append(taskID)
+    func addSubtask(_ task: Task) -> Task {
+        self.subtaskList.tasks.append(task)
+        self.data.subtasks.append(task.data.id)
         return self
     }
     

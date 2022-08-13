@@ -91,8 +91,8 @@ struct EditTaskView: View {
             GroupBox {
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach($model.user.data.allProjects.indices, id: \.self) { index in
-                            ProjectsListItemView(model: ProjectPickerViewModel(projectID: model.user.data.allProjects[index], parentModel: model))
+                        ForEach(model.user.projectList) { project in
+                            ProjectsListItemView(model: ProjectPickerViewModel(project: project, model: model))
                         }
                     }
                 }
@@ -196,30 +196,22 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
     }
     
     func tappedSave() {
-        let editingTask = self.task
+        var fromProject: String? = self.task.data.project
+        
+        self.task
+            .changeName(self.titleField)
+            .changeSize(self.size)
+            .changeDescription(self.descriptionField)
+            .changeDateDue(self.dateDue)
+            .changeAssignee(self.user.data.id)
+            .changeProject(self.toProject)
+            .finishEdit()
         
         self.user
-            .addTask(editingTask.data.id)
-            .push { error in
-                guard error == nil else {
-                    self.showBannerWithErrorMessage(error?.localizedDescription)
-                    return
-                }
-                editingTask
-                    .changeName(self.titleField)
-                    .changeSize(self.size)
-                    .changeDescription(self.descriptionField)
-                    .changeDateDue(self.dateDue)
-                    .changeAssignee(self.user.data.id)
-                    .changeProject(self.toProject)
-                    .push { error in
-                        guard error == nil else {
-                            self.showBannerWithErrorMessage(error?.localizedDescription)
-                            return
-                        }
-                        self.dismissView(successBanner: "We have created and saved your new task!")
-                    }
-                }
+            .addTaskToMyProject(self.task, fromProject)
+            .finishEdit()
+        
+        self.dismissView(successBanner: "We have saved your task!")
     }
     
     func getDueDateSuggestion() {
@@ -250,22 +242,30 @@ class EditTaskViewModel: TaskMeddlerModel, ObservableObject {
                     self.showBannerWithErrorMessage(error?.localizedDescription)
                     return
                 }
-                self.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
                 self.parentModel.dismissChildView("EditTaskView")
+                self.parentModel.parentModel.dismissChildView("TaskDetailsView")
+                self.parentModel.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
             }
         }
     }
     
     func tappedComplete() {
-        self.task
+        let task1 = self.task
+        task1
             .complete()
+            .finishEdit()
+        self.user
+            .removeTask(self.task.data.id)
+            .addTask(task1)
             .push { error in
-                guard error == nil else {
-                    self.showBannerWithErrorMessage(error?.localizedDescription)
-                    return
-                }
-                self.parentModel.dismissChildView("EditTaskView")
+            guard error == nil else {
+                self.showBannerWithErrorMessage(error?.localizedDescription)
+                return
             }
+            self.parentModel.dismissChildView("EditTaskView")
+            self.parentModel.parentModel.dismissChildView("TaskDetailsView")
+            self.parentModel.parentModel.showBannerWithSuccessMessage("We have erased your task from existence.")
+        }
     }
     
     /* MARK: Helper methods */
