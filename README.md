@@ -3,7 +3,7 @@ A project management app designed to allow users to collaborate on multiple proj
 
 # Video Explanation of Technical Features
 
-Here is a snippet of a little presentation I made for this app. You can view/download it in better quality through [this Google Drive link]().
+Here is a snippet of a little presentation I made for this app (don't be scared by the moldy thumbnail, quality gets better after a few seconds). You can view/download it in better quality through [this Google Drive link](https://drive.google.com/file/d/1J0gPdP4TA8VprA-1Qt904_b0OT0EuprH/view?usp=sharing).
 
 
 https://user-images.githubusercontent.com/69845191/187618176-063ef314-bef3-44c2-a81f-7092969559ef.mp4
